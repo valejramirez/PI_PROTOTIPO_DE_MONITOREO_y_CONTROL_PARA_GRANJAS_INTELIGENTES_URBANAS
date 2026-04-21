@@ -115,7 +115,7 @@ direccion = 0x5C
 
 [macetas.maceta2.dht]
 enabled = false
-tipo = "DHT22"
+tipo = "DHT11"
 gpio = 6
 
 [macetas.maceta2.actuadores.luz]
