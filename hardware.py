@@ -90,7 +90,10 @@ class HardwareManager:
 
             try:
                 pin = self._mapear_pin_board(maceta.dht.gpio)
-                self.dht[nombre_maceta] = adafruit_dht.DHT22(pin, use_pulseio=False)
+                if maceta.dht.tipo.upper() == "DHT11":
+                    self.dht[nombre_maceta] = adafruit_dht.DHT11(pin, use_pulseio=False)
+                else:
+                    self.dht[nombre_maceta] = adafruit_dht.DHT22(pin, use_pulseio=False)            
             except Exception:
                 self.dht[nombre_maceta] = None
 
@@ -226,4 +229,4 @@ class HardwareManager:
                 except Exception:
                     pass
 
-        GPIO.cleanup([5, 19, 26, 27])
+        GPIO.cleanup([5, 19, 21, 26, 27])
