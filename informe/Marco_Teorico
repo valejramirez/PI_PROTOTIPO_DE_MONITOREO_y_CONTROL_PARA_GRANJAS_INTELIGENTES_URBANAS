@@ -1,5 +1,5 @@
 % ============================================================
-% CAPÍTULO 2 - MARCO TEÓRICO
+% PARTE I - MARCO TEÓRICO (3 capítulos independientes)
 % ============================================================
 % NOTA PARA EL AUTOR: el comando \FALTACITA{tema} resalta en rojo,
 % dentro del PDF compilado, cada afirmación que necesita una cita
@@ -8,37 +8,16 @@
 % o secciones/bibliografia.tex, según corresponda.
 \newcommand{\FALTACITA}[1]{\textcolor{red}{\textbf{[CITA: #1]}}}
 
-\chapter{Marco Teórico}
-\label{cha:marco_teorico}
+% ================================================================
+% CAPÍTULO 2
+% ================================================================
+\chapter{Fundamentos Fisiológicos y Ambientales del Cultivo en Sustrato}
+\label{cha:cultivo}
 
-El presente capítulo desarrolla los fundamentos conceptuales que sustentan el diseño del sistema de monitoreo y control descripto en este trabajo. Se abordan, en orden: el contexto de la agricultura urbana y la agricultura de precisión (Sección \ref{sec:agricultura_precision}); los fundamentos fisiológicos y ambientales del cultivo en sustrato (Sección \ref{sec:cultivo_sustrato}); los principios de funcionamiento de la instrumentación empleada (Sección \ref{sec:instrumentacion}); los sistemas de actuación de tipo on/off (Sección \ref{sec:actuacion}); y, finalmente, la lógica de control por umbral e histéresis que gobierna las decisiones del sistema (Sección \ref{sec:control_histeresis}).
+Este capítulo desarrolla los fundamentos biológicos y ambientales que determinan qué variables deben medirse y controlarse en el prototipo: se explica el proceso de fotosíntesis y su dependencia de la temperatura (Secciones \ref{sec:fotosintesis} y \ref{sec:c3c4cam}), las magnitudes que cuantifican la luz recibida por el cultivo (Secciones \ref{sec:par} y \ref{sec:ppfd_dli}), la justificación del cultivo en sustrato frente a la hidroponía predominante en la literatura (Sección \ref{subsec:sustrato_vs_hidroponia}), y los requerimientos puntuales de los cultivos seleccionados en el contexto climático de Córdoba (Secciones \ref{subsec:requerimientos_cultivos} y \ref{subsec:clima_cordoba}).
 
-% ============================================================
-\section{Agricultura Urbana Inteligente y Agricultura de Precisión}
-\label{sec:agricultura_precision}
-
-\subsection{Introducción}
-
-El crecimiento sostenido de la población urbana plantea un desafío directo para los sistemas de producción de alimentos tradicionales. \FALTACITA{dato FAO urbanización -- actualmente más de la mitad de la población mundial vive en zonas urbanas, con proyección de alcanzar cerca del 70\% hacia 2050}, lo que presiona sobre la disponibilidad de tierra cultivable cercana a los centros de consumo y sobre la huella logística de la cadena alimentaria. En este escenario, la producción de alimentos dentro o cerca de las ciudades --conocida como agricultura urbana-- busca acercar la producción al punto de consumo, reduciendo distancias de transporte y aprovechando espacios ociosos o de reducida superficie.
-
-Dentro de este marco se ubica la \textbf{Agricultura en Ambiente Controlado} (\textit{Controlled Environment Agriculture}, CEA), un concepto que agrupa a todo sistema de cultivo que aísla parcial o totalmente a la planta del clima exterior, sustituyendo las variables ambientales naturales por un conjunto de sensores y actuadores que las regulan de forma activa \FALTACITA{definición CEA}. La agricultura vertical y los cultivos en interior con iluminación artificial son, en este sentido, casos particulares de CEA: se controla temperatura, humedad relativa e iluminación --y, en sistemas hidropónicos, adicionalmente la solución nutritiva-- para sostener el desarrollo del cultivo con independencia de la estación del año o de las condiciones climáticas externas.
-
-Es importante remarcar una distinción conceptual: buena parte de la literatura sobre CEA y agricultura vertical asume, de forma implícita, un sistema hidropónico. Sin embargo, el principio de control ambiental activo (temperatura, luz, humedad) es independiente del medio de cultivo empleado --sustrato sólido o solución nutritiva circulante--; lo que cambia es exclusivamente el mecanismo de entrega de agua y nutrientes a la raíz. Este punto se retoma con mayor detalle en la Sección \ref{sec:cultivo_sustrato}, donde se justifica la elección de sustrato para el presente trabajo.
-
-\subsection{Agricultura de Precisión e Internet de las Cosas (IoT)}
-
-La \textbf{agricultura de precisión} es la estrategia de gestión agrícola que recolecta datos temporales y espaciales de las variables del cultivo --mediante sensores-- para sustentar decisiones de manejo basadas en la condición real y no en supuestos genéricos \FALTACITA{definición agricultura de precisión}. Aplicada a un sistema de pequeña escala, esto se traduce en reemplazar el riego y el control ambiental por calendario fijo por decisiones basadas en la lectura directa de humedad de sustrato, temperatura, humedad ambiente e iluminación.
-
-El \textbf{Internet de las Cosas (IoT)} provee la infraestructura de comunicación que conecta estos sensores, generalmente de bajo costo y bajo consumo, con plataformas de almacenamiento y visualización remota \FALTACITA{definición IoT agrícola}. La arquitectura típica de un sistema IoT agrícola consta de tres capas: adquisición (sensores físicos que transducen variables ambientales en señales eléctricas), procesamiento y decisión local (ejecución de la lógica de control) y comunicación/visualización remota (envío de datos a un servidor o plataforma en la nube).
-
-La adopción de IoT en agricultura no está exenta de desventajas prácticas: costo inicial, necesidad de calibración periódica de sensores y dependencia de conectividad \FALTACITA{desafíos IoT agrícola}. Estos desafíos se retoman en el Marco Metodológico al justificar las decisiones de diseño adoptadas en el presente trabajo.
-
-% ============================================================
-\section{Cultivo en Sustrato: Fundamentos Fisiológicos y Ambientales}
-\label{sec:cultivo_sustrato}
-
-\subsection{Fotosíntesis: Transformación de Energía Lumínica en Energía Química}
-\label{subsec:fotosintesis}
+\section{Fotosíntesis: Transformación de Energía Lumínica en Energía Química}
+\label{sec:fotosintesis}
 
 La fotosíntesis es el proceso físico-químico mediante el cual las plantas, algas y bacterias fotosintéticas convierten dióxido de carbono (CO\textsubscript{2}) y agua (H\textsubscript{2}O) en carbohidratos, empleando la energía de la luz solar y liberando oxígeno como subproducto \cite{ramos2015}. Es, en cierto sentido, el proceso inverso a la respiración celular: mientras que la respiración consume oxígeno y libera energía a partir de carbohidratos, la fotosíntesis almacena energía lumínica en forma de enlaces químicos.
 
@@ -60,8 +39,8 @@ Toda esta química ocurre dentro del \textbf{cloroplasto}, un orgánulo delimita
 
 La captura de la energía lumínica depende de pigmentos fotosintéticos ubicados en las membranas tilacoides. La \textbf{clorofila A} presenta su pico de absorción en la región roja ($\approx$\SI{660}{\nano\meter}) y un segundo pico en la región azul (\SIrange{400}{450}{\nano\meter}); la \textbf{clorofila B} absorbe en longitudes de onda ligeramente distintas, con picos cercanos a \SI{640}{\nano\meter} (rojo) y \SIrange{425}{475}{\nano\meter} (azul) \cite{ramos2015}. Existen además pigmentos accesorios (carotenoides, criptocromos, fitocromos) que capturan longitudes de onda adicionales y cumplen funciones regulatorias sobre procesos como la germinación y la floración, más allá de la fotosíntesis en sí \FALTACITA{pigmentos accesorios y fitocromos}.
 
-\subsection{Vías Metabólicas de Fijación del Carbono: C3, C4 y CAM}
-\label{subsec:c3c4cam}
+\section{Vías Metabólicas de Fijación del Carbono: C3, C4 y CAM}
+\label{sec:c3c4cam}
 
 No todas las plantas fijan el carbono de la misma manera: la vía metabólica empleada es, en gran medida, una adaptación evolutiva a la disponibilidad de agua y a la temperatura del ambiente en que crece la especie \cite{ramos2015}. Esta distinción es relevante para el presente trabajo porque explica, a nivel bioquímico, por qué la tolerancia térmica de un cultivo no es un dato arbitrario sino una consecuencia directa de su metabolismo fotosintético.
 
@@ -73,12 +52,13 @@ No todas las plantas fijan el carbono de la misma manera: la vía metabólica em
 
 El estrés térmico moderado reduce de forma reversible la actividad fotosintética de las plantas C3; el estrés térmico sostenido, en cambio, puede provocar daños irreversibles en el aparato fotosintético que limitan permanentemente el crecimiento y la productividad del cultivo \cite{ramos2015}. Esta sensibilidad térmica --propia del metabolismo C3 de los cultivos seleccionados-- es la que fundamenta, a nivel bioquímico, la necesidad de un control activo de temperatura descripta en la Sección \ref{subsec:clima_cordoba}.
 
-\subsection{Radiación Fotosintéticamente Activa (PAR)}
+\section{Radiación Fotosintéticamente Activa (PAR)}
+\label{sec:par}
 
 El rango espectral entre \SI{400}{\nano\meter} y \SI{700}{\nano\meter} --que coincide aproximadamente con el espectro visible-- se conoce como \textbf{Radiación Fotosintéticamente Activa} (PAR, por sus siglas en inglés), y corresponde a la porción del espectro solar que los organismos fotosintéticos pueden aprovechar, siendo relevante tanto para la fotosíntesis como para la fotomorfogénesis (desarrollo mediado por la luz) y el fototropismo (crecimiento direccional) \cite{deocampo2017}. Se estima que la PAR representa aproximadamente el \SI{50}{\percent} de la energía total de la radiación solar incidente, y su comportamiento temporal se ajusta bien a la escala en la que la fotosíntesis responde a los cambios de intensidad lumínica \cite{najera2023}.
 
-\subsection{PPFD y DLI}
-\label{subsec:ppfd_dli}
+\section{PPFD y DLI}
+\label{sec:ppfd_dli}
 
 Para cuantificar cuánta luz PAR recibe efectivamente el cultivo se emplean dos magnitudes complementarias:
 
@@ -103,7 +83,7 @@ La medición directa de PPFD requiere instrumentos especializados (radiómetros 
     \label{eq:ppfd_lux}
 \end{equation}
 
-\noindent Esta estrategia de estimación indirecta ha sido validada experimentalmente: un modelo de adquisición de datos de bajo costo, basado en una resistencia dependiente de la luz (LDR) caracterizada frente a un luxómetro de referencia, logró estimar el DLI diario con un error relativo medio de apenas \SI{1.78}{\percent} respecto de la medición de referencia \cite{deocampo2017}. El mismo trabajo advierte que estimar el DLI a partir de mediciones horarias de iluminancia --una práctica común en campo-- introduce un error de cuantización considerable, y recomienda muestrear con una frecuencia mucho mayor (del orden de una vez por segundo) para reducir ese error \cite{deocampo2017}; este mismo principio --muestrear con mayor frecuencia para reducir el error de una magnitud integrada en el tiempo-- es el que motiva, de forma más general, el uso de sobremuestreo y filtrado descripto en la Sección \ref{subsec:redundancia}. Esta estrategia de estimación indirecta --medir lux con un sensor económico y convertirlo a PPFD mediante un factor de luminaria calibrado-- es la que se adopta en el desarrollo de este trabajo para el control dinámico de la iluminación artificial, tal como se detalla en el Marco Metodológico.
+\noindent Esta estrategia de estimación indirecta ha sido validada experimentalmente: un modelo de adquisición de datos de bajo costo, basado en una resistencia dependiente de la luz (LDR) caracterizada frente a un luxómetro de referencia, logró estimar el DLI diario con un error relativo medio de apenas \SI{1.78}{\percent} respecto de la medición de referencia \cite{deocampo2017}. El mismo trabajo advierte que estimar el DLI a partir de mediciones horarias de iluminancia --una práctica común en campo-- introduce un error de cuantización considerable, y recomienda muestrear con una frecuencia mucho mayor (del orden de una vez por segundo) para reducir ese error \cite{deocampo2017}; este mismo principio --muestrear con mayor frecuencia para reducir el error de una magnitud integrada en el tiempo-- es el que motiva, de forma más general, el uso de sobremuestreo y filtrado descripto en el Capítulo \ref{cha:control_onoff}. Esta estrategia de estimación indirecta --medir lux con un sensor económico y convertirlo a PPFD mediante un factor de luminaria calibrado-- es la que se adopta en el desarrollo de este trabajo para el control dinámico de la iluminación artificial, tal como se detalla en el Marco Metodológico.
 
 \paragraph{Ejemplo ilustrativo de aplicación.} A modo demostrativo --con valores arbitrarios, no necesariamente los del sistema desarrollado, cuya calibración específica se documenta en el Marco Metodológico--, supóngase una luminaria con un factor de conversión estimado $F_L = 0{,}17$ y una lectura de iluminancia constante de $\SI{2000}{lux}$ sostenida durante un fotoperíodo $T_i = \SI{12}{\hour}$. Aplicando la Ecuación~\ref{eq:ppfd_lux}:
 \begin{equation*}
@@ -115,10 +95,10 @@ y aplicando la Ecuación~\ref{eq:dli_ppfd}:
 \end{equation*}
 valor que se encuentra dentro del orden de magnitud requerido por los cultivos de hoja considerados en este trabajo (véase Sección \ref{subsec:requerimientos_cultivos}).
 
-\subsection{Justificación del Cultivo en Sustrato frente a Hidroponía}
+\section{Justificación del Cultivo en Sustrato frente a Hidroponía}
 \label{subsec:sustrato_vs_hidroponia}
 
-La literatura sobre agricultura vertical y CEA suele orientarse mayoritariamente hacia sistemas hidropónicos, que ofrecen ventajas documentadas en cuanto a eficiencia hídrica y control preciso de nutrientes. La Tabla \ref{tab:sustrato_vs_hidroponia} resume la comparación relevante para el presente trabajo.
+La literatura sobre agricultura vertical y CEA (\textit{Controlled Environment Agriculture}, Agricultura en Ambiente Controlado) suele orientarse mayoritariamente hacia sistemas hidropónicos, que ofrecen ventajas documentadas en cuanto a eficiencia hídrica y control preciso de nutrientes \FALTACITA{definición CEA}. La Tabla \ref{tab:sustrato_vs_hidroponia} resume la comparación relevante para el presente trabajo.
 
 \begin{table}[H]
 \centering
@@ -142,7 +122,7 @@ Esta preferencia por la hidroponía se refleja cuantitativamente en la literatur
 
 Estas ventajas de la hidroponía tienen un costo de instrumentación y complejidad que no siempre se justifica en un prototipo de bajo costo orientado al usuario urbano no especializado. El cultivo en sustrato, en particular, conserva un ambiente propicio para el establecimiento de una microflora radicular beneficiosa (rizosfera) que favorece la absorción de nutrientes y aporta cierta capacidad de amortiguación natural frente a variaciones momentáneas de riego o nutrientes. Esto reduce la exigencia de instrumentación crítica: a diferencia de la hidroponía, en sustrato estas variables son gestionadas en gran medida por el propio medio, lo que permite prescindir de sensores de pH y EC --de costo considerablemente mayor al del resto de la instrumentación-- sin comprometer significativamente el desarrollo del cultivo. Esta es la razón conceptual por la que este trabajo, a diferencia de antecedentes previos del laboratorio orientados a hidroponía \cite{irazuzta2023}, adopta el cultivo en sustrato como medio: prioriza la robustez y el bajo costo por sobre la precisión nutricional máxima.
 
-\subsection{Requerimientos Ambientales de los Cultivos Seleccionados}
+\section{Requerimientos Ambientales de los Cultivos Seleccionados}
 \label{subsec:requerimientos_cultivos}
 
 Dado que ambos cultivos se desarrollan en interior, con acceso reducido o nulo a luz solar directa, las variables ambientales relevantes se reducen a temperatura, humedad relativa y cantidad de luz --descartándose pH y EC por lo expuesto en la Sección \ref{subsec:sustrato_vs_hidroponia}--. La Tabla \ref{tab:cultivos} resume los requerimientos relevados para los dos cultivos seleccionados.
@@ -168,7 +148,7 @@ Ambos cultivos comparten ciclos de cosecha continua (corte de hojas exteriores s
 
 Para la espinaca en particular, distintos estudios muestran un compromiso claro entre cantidad y calidad: combinaciones de mayor PPFD con fotoperíodos más cortos (por ejemplo, \SI{150}{\micro\mole\per\square\meter\per\second} durante \SI{9}{\hour}) favorecen una mejor calidad de hoja, mientras que fotoperíodos más largos con menor PPFD tienden a favorecer un mayor rendimiento en biomasa \cite{najera2023}. Esta relación es relevante al momento de fijar el objetivo de DLI del sistema, ya que un mismo valor de DLI puede alcanzarse con distintas combinaciones de intensidad y duración, cada una con un efecto distinto sobre el cultivo.
 
-\subsection{Contexto Climático de Córdoba}
+\section{Contexto Climático de Córdoba}
 \label{subsec:clima_cordoba}
 
 El clima de Córdoba capital presenta una variación estacional marcada, con datos históricos correspondientes a la estación meteorológica del Aeropuerto Internacional ``Ingeniero Aeronáutico Ambrosio L.V. Taravella'' \FALTACITA{WeatherSpark, datos históricos meteorológicos de Córdoba}. La Tabla \ref{tab:clima_cordoba} resume las temperaturas medias mensuales.
@@ -192,11 +172,18 @@ Mínima [\si{\celsius}] & 19 & 18 & 16 & 13 & 10 & 6 & 5 & 7 & 10 & 13 & 16 & 18
 
 A esta variación térmica se suma una variación de horas de luz solar natural de entre \SI{10}{\hour} y \SI{14}{\hour} a lo largo del año \FALTACITA{horas de luz natural Córdoba, WeatherSpark}. Esta doble variabilidad --térmica y lumínica-- es la que fundamenta la necesidad de un sistema de control activo capaz de sostener condiciones estables durante todo el año, en lugar de depender exclusivamente de las condiciones ambientales externas, tal como se plantea en los objetivos del proyecto (Sección 1.5).
 
-% ============================================================
+% ================================================================
+% CAPÍTULO 3
+% ================================================================
+\chapter{Control On/Off: Instrumentación, Actuación y Lógica de Decisión}
+\label{cha:control_onoff}
+
+Este capítulo desarrolla, de punta a punta, la cadena teórica que sustenta el control on/off del prototipo: primero los principios de funcionamiento de los sensores empleados para medir las variables ambientales (Sección \ref{sec:instrumentacion}); luego la interfaz de potencia que permite accionar bombas, válvulas, luces y ventiladores a partir de esas lecturas (Sección \ref{sec:actuacion}); y finalmente la lógica de decisión --con histéresis, filtrado y redundancia-- que determina cuándo activar cada actuador (Sección \ref{sec:control_histeresis}).
+
 \section{Instrumentación}
 \label{sec:instrumentacion}
 
-Salvo el sensor de humedad de sustrato (que es analógico), el resto de la instrumentación descripta en este marco se comunica mediante el bus I2C, por lo que antes de describir cada sensor conviene establecer el principio de funcionamiento de este bus compartido.
+Salvo el sensor de humedad de sustrato (que es analógico), el resto de la instrumentación descripta en este capítulo se comunica mediante el bus I2C, por lo que antes de describir cada sensor conviene establecer el principio de funcionamiento de este bus compartido.
 
 \subsection{Bus de Comunicación I2C}
 \label{subsec:i2c}
@@ -212,37 +199,30 @@ Existen dos principios de transducción para medir humedad de sustrato de bajo c
 
 \begin{itemize}
     \item \textbf{Sensor resistivo:} consta de dos electrodos expuestos que se insertan en el sustrato. Al aplicar una tensión entre ambos, la corriente que circula depende de la conductividad del sustrato, la cual aumenta con el contenido de agua \FALTACITA{principio resistivo}. Su desventaja principal es la corrosión galvánica de los electrodos por efecto de la corriente circulando en un medio húmedo, lo que degrada la lectura con el tiempo y acorta su vida útil.
-    \item \textbf{Sensor capacitivo:} en lugar de medir conductividad, mide la variación de la \textbf{permitividad dieléctrica} del sustrato, que también depende del contenido de agua. Al no requerir contacto galvánico directo con electrodos expuestos, no sufre el problema de corrosión del tipo resistivo, lo que le da mayor vida útil de servicio \cite{dfrobot_sen0193}. Entrega una salida analógica que, para ser leída por un microcontrolador o microcomputadora sin entradas analógicas nativas, requiere necesariamente un conversor A/D externo.
+    \item \textbf{Sensor capacitivo:} en lugar de medir conductividad, mide la variación de la \textbf{permitividad dieléctrica} del sustrato, que también depende del contenido de agua. Al no requerir contacto galvánico directo con electrodos expuestos, no sufre el problema de corrosión del tipo resistivo, lo que le da mayor vida útil de servicio \FALTACITA{principio capacitivo}. Entrega una salida analógica que, para ser leída por un microcontrolador o microcomputadora sin entradas analógicas nativas, requiere necesariamente un conversor A/D externo.
 \end{itemize}
 
 El empleo de dos sensores de humedad independientes por unidad de cultivo --una práctica de instrumentación redundante-- permite no solo tolerar la falla de uno de los dos, sino también detectar discrepancias anómalas entre ambas lecturas, compensando así la menor fiabilidad individual típica de sensores analógicos de bajo costo. La implementación concreta de esta redundancia se describe en el Marco Metodológico.
 
-\subsection{Conversión Analógica-Digital: el Conversor PCF8591}
-\label{subsec:pcf8591}
+\subsection{Conversión Analógica-Digital}
+\label{subsec:conversion_ad}
 
-El \textbf{PCF8591} es un circuito integrado de adquisición de datos de bajo consumo que integra, en un solo chip, cuatro entradas analógicas multiplexadas, un conversor A/D de 8 bits por aproximaciones sucesivas (SAR), una salida D/A también de 8 bits, y una interfaz I2C \cite{nxp2013pcf8591}. Su dirección de bus se configura por hardware mediante tres pines (A0-A2), lo que permite tener hasta ocho unidades PCF8591 en el mismo bus sin conflicto de direcciones \cite{nxp2013pcf8591} -- mecanismo especialmente útil cuando se requiere más de una unidad conversora en un mismo diseño, como se detalla en el Marco Metodológico.
+Cuando un sensor entrega una señal analógica y el sistema de control se ejecuta en un microcontrolador o microcomputadora digital, es necesaria una etapa de \textbf{conversión analógica-digital (A/D)} intermedia. Entre las arquitecturas de conversión más habituales para aplicaciones de bajo costo y baja velocidad se encuentra el conversor de \textbf{aproximaciones sucesivas (SAR)}, que determina el código digital de salida comparando la señal de entrada contra una serie de tensiones de referencia generadas internamente, en un número de pasos igual a la resolución en bits del conversor \FALTACITA{principio de conversión SAR}.
 
-La resolución de 8 bits implica $2^8 = 256$ niveles de cuantización sobre el rango de tensión de referencia, lo que fija el piso de resolución de todo el sistema de medición de humedad de sustrato.
+La resolución de un conversor A/D, expresada en bits, determina la cantidad de niveles de cuantización disponibles ($2^n$ niveles para una resolución de $n$ bits) sobre el rango de tensión de referencia, lo que fija el piso de resolución de todo el sistema de medición. Cuanto menor es la resolución nativa del conversor, mayor es el error de cuantización relativo de cada lectura individual.
 
-Un detalle relevante del PCF8591 documentado en su datasheet es que, tras una condición de \textit{power-on reset}, el primer byte transmitido en un ciclo de lectura corresponde a la conversión \textit{anterior} (almacenada en el registro de salida), no a la lectura actual del canal seleccionado -- después de un \textit{reset} el primer byte leído es siempre \texttt{80h}, y el valor real recién se refleja a partir de la segunda lectura \cite{nxp2013pcf8591}. Este comportamiento debe ser contemplado explícitamente en el firmware de adquisición, descartando la primera lectura de cada ciclo antes de tomar las muestras válidas, tal como se detalla en el Marco Metodológico.
+El promediado de múltiples muestras por lectura cumple una función de sobremuestreo (\textit{oversampling}): al promediar $N$ muestras independientes de un conversor con ruido de cuantización, el error relativo se reduce en un factor $\sqrt{N}$ \FALTACITA{teoría de sobremuestreo en conversión A/D}, lo cual resulta particularmente valioso cuando se emplean conversores de baja resolución nativa. Esta técnica se retoma en la Sección \ref{sec:control_histeresis} como parte del filtrado de señal aplicado a las lecturas de humedad de sustrato.
 
-El promediado de múltiples muestras por lectura cumple además una función de sobremuestreo (\textit{oversampling}): al promediar $N$ muestras independientes de un conversor con ruido de cuantización, el error relativo se reduce en un factor $\sqrt{N}$ \FALTACITA{teoría de sobremuestreo en conversión A/D}, lo cual es particularmente relevante dado que la resolución nativa de 8 bits del PCF8591 es baja comparada con conversores de mayor resolución. Esta técnica se aplica en el desarrollo del presente sistema, como se describe en el Marco Metodológico.
+\subsection{Sensores Digitales de Iluminancia}
+\label{subsec:sensores_luz}
 
-\subsection{Sensor de Iluminancia Digital: BH1750}
-\label{subsec:bh1750}
+Existen dos enfoques para medir iluminancia de forma económica. El primero es la \textbf{fotorresistencia} (LDR), un componente puramente analógico cuya resistencia varía con la luz incidente; entrega una señal que depende de la tensión de alimentación del circuito y requiere una curva de calibración propia para cada instalación. El segundo enfoque es el \textbf{sensor de iluminancia digital}, que integra en un mismo encapsulado el fotodiodo, la etapa de amplificación y un conversor A/D, entregando directamente un valor calibrado de iluminancia (en lux) a través de un bus digital, sin requerir que el usuario aplique conversión o calibración externa \FALTACITA{sensores digitales de iluminancia}. Este segundo enfoque simplifica el diseño del firmware de adquisición, al trasladar la tarea de conversión y calibración al propio sensor.
 
-El \textbf{BH1750} es un sensor de luz ambiente digital que integra internamente el fotodiodo, la etapa de amplificación y un conversor A/D de 16 bits, entregando directamente el valor de iluminancia en lux a través de I2C, sin requerir que el usuario aplique conversión o calibración externa \cite{rohm2011bh1750}. Esto lo diferencia de una fotorresistencia (LDR) convencional, que entrega una señal analógica dependiente de la tensión de alimentación y requiere una curva de calibración propia. Su rango de medición va de \SI{1}{} a \SI{65535}{lux}, con una respuesta espectral aproximada a la curva de sensibilidad del ojo humano \cite{rohm2011bh1750}.
+\subsection{Sensores Digitales de Temperatura y Humedad Ambiente}
+\label{subsec:sensores_temp_hum}
 
-Al igual que el conversor A/D descripto en la sección anterior, su dirección I2C es configurable por hardware (\texttt{0x23} por defecto, \texttt{0x5C} como alternativa), lo que en sistemas con más de una unidad de cultivo permite instalar un sensor BH1750 independiente por unidad sobre el mismo bus, según se detalla en el Marco Metodológico.
+Para medir simultáneamente temperatura y humedad relativa del aire con un único componente, es habitual recurrir a módulos que combinan un \textbf{sensor capacitivo de humedad relativa} con un \textbf{termistor NTC} para temperatura, integrando además un pequeño microcontrolador que digitaliza y calibra ambas señales de fábrica antes de entregarlas por un protocolo digital \FALTACITA{sensores digitales combinados de temperatura y humedad}. Este enfoque evita que el diseñador deba implementar la linealización y calibración de cada sensor por separado, a costa de una frecuencia de muestreo más limitada que la de un sensor puramente analógico. El rango de operación de este tipo de sensores debe contemplarse al definir los límites de validación de las lecturas en el firmware, descartando valores fuera del rango físicamente posible antes de que alimenten la lógica de control.
 
-\subsection{Sensor de Temperatura y Humedad Ambiente: DHT22}
-\label{subsec:dht22}
-
-El \textbf{DHT22} (también comercializado como AM2302) combina un sensor capacitivo de humedad relativa y un termistor NTC para temperatura, con un microcontrolador interno de 8 bits que digitaliza y calibra ambas señales de fábrica, transmitiéndolas mediante un protocolo digital propietario de un solo hilo (\textit{single-wire}), a razón de una lectura cada aproximadamente \SI{2}{\second} \cite{aosong2014am2302}. Su rango de medición es de \SIrange{-40}{80}{\celsius} ($\pm\SI{0.5}{\celsius}$ de precisión) y de \SIrange{0}{100}{\percent} de humedad relativa ($\pm\SI{2}{\percent}$ de precisión) \cite{aosong2014am2302}. Este rango de operación es el que debe contemplarse al definir los límites de validación de las lecturas en el firmware, descartando valores fuera del rango físicamente posible del sensor antes de que alimenten la lógica de control.
-
-A diferencia del BH1750 y el PCF8591, el DHT22 no utiliza I2C sino un pin GPIO digital dedicado por sensor, dado que su protocolo de un solo hilo no es compatible con un bus compartido de direccionamiento múltiple.
-
-% ============================================================
 \section{Sistemas de Actuación On/Off}
 \label{sec:actuacion}
 
@@ -258,19 +238,19 @@ El \textbf{relé} es un dispositivo que permite controlar un circuito de potenci
     \item \textbf{Relé de estado sólido (SSR):} reemplaza los contactos mecánicos por dispositivos semiconductores de conmutación, manteniendo el aislamiento galvánico mediante un optoacoplador. Al no tener partes móviles, conmuta más rápido, sin ruido audible ni desgaste por contacto \FALTACITA{principio relé de estado sólido}.
 \end{itemize}
 
-Para las cargas de este tipo de prototipos --motores de baja potencia, electroválvulas, iluminación LED-- el relé electromecánico de bajo costo con aislamiento optoacoplado es la solución más habitual, dado que la frecuencia de conmutación es baja (del orden de minutos u horas) y no se exige la velocidad de conmutación de un SSR.
+La elección entre uno u otro tipo depende de la frecuencia de conmutación requerida y del presupuesto disponible: para cargas que conmutan con poca frecuencia (del orden de minutos u horas), como las de este tipo de prototipos --motores de baja potencia, electroválvulas, iluminación LED--, ambas alternativas resultan viables; el relé de estado sólido aporta además silencio de operación y ausencia de desgaste mecánico, a cambio de un costo unitario mayor que el de un relé electromecánico equivalente.
 
 \subsection{Lógica de Activación por Nivel Bajo}
 \label{subsec:activo_bajo}
 
-Los módulos de relé optoacoplados de uso común incorporan, en un mismo circuito, el LED emisor del optoacoplador, el fototransistor receptor, un transistor de conmutación (habitualmente NPN) y el diodo de protección, dispuestos de forma que la entrada de control \textbf{activa el relé al recibir un nivel lógico bajo} en vez de uno alto \FALTACITA{activación por nivel bajo en módulos de relé optoacoplados}. Esto se debe a la topología interna del optoacoplador y la etapa de conmutación: el LED de entrada conduce (y por lo tanto activa el fototransistor y el relé) cuando el pin de control se lleva a masa, mientras que en reposo (nivel alto o pin flotante) el relé permanece desactivado. Esta particularidad debe contemplarse explícitamente al programar la lógica de control, ya que invertir la interpretación de ``encendido'' y ``apagado'' en el firmware sin considerar esta lógica invertida produce un comportamiento contrario al esperado.
+Los módulos de relé optoacoplados de uso común incorporan, en un mismo circuito, el LED emisor del optoacoplador, el fototransistor receptor y una etapa de conmutación --un transistor que excita la bobina en variantes electromecánicas, o un elemento semiconductor de potencia (por ejemplo, un triac) en variantes de estado sólido--, dispuestos de forma que la entrada de control \textbf{activa el relé al recibir un nivel lógico bajo} en vez de uno alto \FALTACITA{activación por nivel bajo en módulos de relé optoacoplados}. Esto se debe a la topología interna del optoacoplador y la etapa de conmutación: el LED de entrada conduce (y por lo tanto activa la etapa de salida) cuando el pin de control se lleva a masa, mientras que en reposo (nivel alto o pin flotante) el relé permanece desactivado. Esta particularidad debe contemplarse explícitamente al programar la lógica de control, ya que invertir la interpretación de ``encendido'' y ``apagado'' en el firmware sin considerar esta lógica invertida produce un comportamiento contrario al esperado.
 
-\subsection{Protección de Cargas Inductivas: el Diodo de Rueda Libre}
-\label{subsec:flyback}
+\subsection{Consideraciones sobre Cargas Inductivas}
+\label{subsec:cargas_inductivas}
 
-Tanto la bobina del propio relé como las cargas que este conmuta --motores de bomba, electroválvulas de solenoide, motores de ventilador-- son cargas \textbf{inductivas}. Al interrumpir abruptamente la corriente que circula por un inductor, el colapso del campo magnético induce una fuerza electromotriz de polaridad inversa a la original, que puede alcanzar picos de tensión varias veces superiores a la tensión de alimentación nominal de la bobina \FALTACITA{origen del pico de tensión inductivo, back-EMF}. Sin protección, este pico puede dañar los transistores de conmutación o introducir ruido eléctrico severo en el resto del circuito de control.
+Las cargas que conmutan los actuadores de este tipo de sistemas --motores de bomba, electroválvulas de solenoide, motores de ventilador-- son cargas \textbf{inductivas}. Al interrumpir abruptamente la corriente que circula por un inductor, el colapso del campo magnético induce una fuerza electromotriz de polaridad inversa a la original, que puede alcanzar picos de tensión varias veces superiores a la tensión de alimentación nominal \FALTACITA{origen del pico de tensión inductivo, back-EMF}. Sin protección, este pico puede introducir ruido eléctrico severo en el circuito de control o dañar los elementos de conmutación.
 
-La solución estándar es el \textbf{diodo de rueda libre} (o diodo \textit{flyback}), conectado en paralelo a la carga inductiva y en polarización inversa respecto de la alimentación normal. Durante la conducción normal el diodo permanece polarizado en inverso y no conduce; al desconectar la alimentación, el diodo ofrece una trayectoria de baja resistencia para que la corriente inducida se disipe gradualmente, evitando el pico de tensión \FALTACITA{principio del diodo de rueda libre / flyback}. Este componente debe estar presente en cada etapa de conmutación de carga inductiva del sistema, ya sea integrado en el propio módulo de relé o agregado de forma discreta.
+La técnica de protección concreta depende del tipo de interfaz de potencia empleada: en relés electromecánicos, la protección típica es un diodo de rueda libre (o diodo \textit{flyback}) en paralelo con la bobina, que ofrece una trayectoria de baja resistencia para disipar la energía almacenada al desenergizarla \FALTACITA{principio del diodo de rueda libre / flyback}. En interfaces de estado sólido, en cambio, la ausencia de una bobina electromagnética elimina ese mecanismo particular de pico de tensión, aunque la carga conmutada (el motor o solenoide en sí) puede seguir requiriendo una red de protección --por ejemplo, una red RC amortiguadora (\textit{snubber})-- según el tipo de carga y de conmutación empleada \FALTACITA{protección de cargas inductivas en interfaces de estado sólido}.
 
 \subsection{Justificación del Control On/Off frente a Modulación de Potencia}
 \label{subsec:onoff_vs_pwm}
@@ -279,7 +259,6 @@ Es posible, en sistemas de mayor complejidad, modular la potencia entregada a un
 
 En el caso de una electroválvula de riego o una bomba de agua, el actuador es intrínsecamente \textbf{binario}: la válvula está abierta o cerrada, la bomba está encendida o apagada, sin un estado intermedio útil para el proceso de riego. Lo mismo aplica a la ventilación forzada cuando el objetivo de control es disipar un exceso puntual de temperatura o humedad más que sostener un caudal de aire preciso. En estos casos, un control \textbf{on/off} (también llamado control de dos posiciones o \textit{bang-bang}) resulta suficiente y evita la complejidad adicional --y el costo de componentes de conmutación de mayor velocidad-- que exige una etapa moduladora. Esta decisión de diseño, y la lógica de decisión temporal e histerética que gobierna cuándo conmutar cada actuador, se desarrolla en la Sección \ref{sec:control_histeresis}.
 
-% ============================================================
 \section{Lógica de Control por Umbral e Histéresis}
 \label{sec:control_histeresis}
 
@@ -308,11 +287,82 @@ Cuando la fiabilidad de un sensor individual es limitada --como suele ocurrir co
 \subsection{Control por Presupuesto Acumulado de un Recurso}
 \label{subsec:control_presupuesto}
 
-Un caso particular de control que no se resuelve con un umbral fijo instantáneo es aquel en que el objetivo no es mantener una variable dentro de un rango en todo momento, sino \textbf{entregar una cantidad total acumulada de un recurso a lo largo de un período de tiempo determinado}, sin excederla. Esto ocurre, por ejemplo, cuando el objetivo es suministrar una dosis diaria de luz (DLI, Sección \ref{subsec:ppfd_dli}) y no simplemente mantener una iluminancia instantánea constante.
+Un caso particular de control que no se resuelve con un umbral fijo instantáneo es aquel en que el objetivo no es mantener una variable dentro de un rango en todo momento, sino \textbf{entregar una cantidad total acumulada de un recurso a lo largo de un período de tiempo determinado}, sin excederla. Esto ocurre, por ejemplo, cuando el objetivo es suministrar una dosis diaria de luz (DLI, Sección \ref{sec:ppfd_dli}) y no simplemente mantener una iluminancia instantánea constante.
 
 En este esquema, la decisión de activar el actuador en un instante dado no depende únicamente de si la variable está por debajo de un umbral, sino de una comparación entre lo que ya se acumuló hasta el momento, cuánto falta para alcanzar el objetivo, y cuánto tiempo resta dentro de la ventana temporal habilitada para hacerlo. Si la contribución que el actuador brindaría durante el tiempo restante ya alcanza o excede lo que falta para completar el objetivo, no es necesario activarlo de inmediato; en caso contrario, se activa. Este principio --integrar la variable de interés en el tiempo y comparar el remanente contra la capacidad de aporte disponible en lo que resta del período-- constituye una forma simple de control anticipativo, en contraste con el control reactivo puro de las secciones anteriores, que solo responde al estado instantáneo de la variable.
 
-% ============================================================
-\section{Síntesis del Capítulo}
+% ================================================================
+% CAPÍTULO 4
+% ================================================================
+\chapter{Arquitectura de Software para Sistemas IoT en Capas}
+\label{cha:arquitectura_iot}
 
-Este capítulo estableció los fundamentos teóricos que sustentan el diseño desarrollado en la Parte II de este trabajo: el contexto de la agricultura urbana y de precisión que motiva el uso de IoT (Sección \ref{sec:agricultura_precision}); los fundamentos fisiológicos y ambientales que determinan qué variables deben medirse y controlarse, y por qué el cultivo en sustrato es una alternativa válida a la hidroponía predominante en la literatura (Sección \ref{sec:cultivo_sustrato}); los principios de funcionamiento de cada sensor empleado (Sección \ref{sec:instrumentacion}); los fundamentos de la interfaz de potencia y la conveniencia del control on/off frente a esquemas de modulación más complejos (Sección \ref{sec:actuacion}); y, finalmente, la lógica de control por histéresis, filtrado y redundancia que gobierna las decisiones del sistema (Sección \ref{sec:control_histeresis}). El Marco Metodológico retoma cada uno de estos fundamentos para justificar las decisiones concretas de diseño e implementación del prototipo desarrollado.
+Los dos capítulos anteriores establecieron, respectivamente, qué variables biológicas y ambientales deben controlarse (Capítulo \ref{cha:cultivo}) y cómo se mide y decide sobre ellas a nivel de sensores, actuadores y lógica de control (Capítulo \ref{cha:control_onoff}). Este capítulo cierra el marco teórico describiendo la arquitectura de software que organiza a ese sistema de control dentro de un esquema más amplio de agricultura de precisión e Internet de las Cosas (IoT): la organización en capas y en módulos independientes (Secciones \ref{sec:arquitectura_capas} y \ref{sec:modularidad}), la externalización de la configuración y el registro persistente de datos (Sección \ref{sec:config_persistencia}), y los mecanismos que habilitan la visualización y supervisión remota del sistema (Secciones \ref{sec:cliente_servidor} a \ref{sec:telemetria_nube}).
+
+\section{Agricultura de Precisión e Internet de las Cosas}
+\label{sec:agricultura_precision}
+
+El crecimiento sostenido de la población urbana plantea un desafío directo para los sistemas de producción de alimentos tradicionales \FALTACITA{dato FAO urbanización -- actualmente más de la mitad de la población mundial vive en zonas urbanas, con proyección de alcanzar cerca del 70\% hacia 2050}, lo que presiona sobre la disponibilidad de tierra cultivable cercana a los centros de consumo y sobre la huella logística de la cadena alimentaria. En este escenario, la producción de alimentos dentro o cerca de las ciudades --conocida como agricultura urbana-- busca acercar la producción al punto de consumo, reduciendo distancias de transporte y aprovechando espacios ociosos o de reducida superficie.
+
+La \textbf{agricultura de precisión} es la estrategia de gestión agrícola que recolecta datos temporales y espaciales de las variables del cultivo --mediante sensores-- para sustentar decisiones de manejo basadas en la condición real y no en supuestos genéricos \FALTACITA{definición agricultura de precisión}. Aplicada a un sistema de pequeña escala, esto se traduce en reemplazar el riego y el control ambiental por calendario fijo por decisiones basadas en la lectura directa de humedad de sustrato, temperatura, humedad ambiente e iluminación --tal como se describió en los Capítulos \ref{cha:cultivo} y \ref{cha:control_onoff}--.
+
+El \textbf{Internet de las Cosas (IoT)} provee la infraestructura de comunicación que conecta estos sensores, generalmente de bajo costo y bajo consumo, con plataformas de almacenamiento y visualización remota \FALTACITA{definición IoT agrícola}. La adopción de IoT en agricultura no está exenta de desventajas prácticas: costo inicial, necesidad de calibración periódica de sensores y dependencia de conectividad \FALTACITA{desafíos IoT agrícola}. Estos desafíos se retoman en el Marco Metodológico al justificar las decisiones de diseño adoptadas en el presente trabajo.
+
+\section{Arquitectura en Capas: Adquisición, Procesamiento y Comunicación}
+\label{sec:arquitectura_capas}
+
+La arquitectura típica de un sistema IoT agrícola consta de tres capas funcionales, cada una con una responsabilidad bien delimitada \FALTACITA{arquitectura IoT en capas}:
+
+\begin{itemize}
+    \item \textbf{Capa de adquisición:} comprende los sensores físicos que transducen variables ambientales (temperatura, humedad, luz) en señales eléctricas, y la instrumentación de acondicionamiento y conversión analógica-digital descripta en el Capítulo \ref{cha:control_onoff}.
+    \item \textbf{Capa de procesamiento y decisión local:} ejecuta la lógica de control --filtrado, histéresis, redundancia-- sobre las lecturas adquiridas, y determina el estado de cada actuador sin depender de una conexión externa activa. Esta capa debe poder operar de forma autónoma aun ante una eventual interrupción de conectividad, dado que las decisiones de riego o ventilación no pueden quedar supeditadas a la disponibilidad de una red externa.
+    \item \textbf{Capa de comunicación y visualización remota:} envía los datos adquiridos y las decisiones tomadas hacia un servidor o plataforma en la nube, y expone una interfaz --local o remota-- para que el usuario supervise el estado del sistema.
+\end{itemize}
+
+Esta separación en capas independientes es lo que permite, por ejemplo, reemplazar la plataforma de visualización remota sin afectar la lógica de control, o modificar la lógica de decisión sin tener que rediseñar la capa de adquisición --una propiedad deseable en un prototipo que se espera evolucione con el tiempo.
+
+\section{Organización Modular del Software: Separación de Responsabilidades}
+\label{sec:modularidad}
+
+Más allá de las tres capas funcionales descriptas en la Sección \ref{sec:arquitectura_capas}, un principio de diseño de software ampliamente adoptado --tanto en sistemas embebidos como en aplicaciones de escritorio o web-- es la \textbf{separación de responsabilidades} (\textit{separation of concerns}): organizar el programa en bloques o módulos independientes, cada uno encargado de una única función bien delimitada, en lugar de concentrar toda la lógica en un único bloque monolítico \FALTACITA{principio de separación de responsabilidades en diseño de software}. Aplicado a un sistema de monitoreo y control como el de este trabajo, esta organización modular típicamente separa, como bloques independientes:
+
+\begin{itemize}
+    \item la \textbf{configuración} del sistema (parámetros y umbrales, externalizados en un archivo en lugar de codificados directamente en el programa);
+    \item la \textbf{representación del estado} del sistema (una estructura de datos que agrupa las lecturas y el estado de los actuadores en un momento dado);
+    \item la \textbf{abstracción de hardware} (el bloque que traduce operaciones de alto nivel --``leer humedad'', ``encender luz''-- a las operaciones concretas de bus y de pines correspondientes);
+    \item la \textbf{lógica de control} propiamente dicha (las reglas de decisión descriptas en el Capítulo \ref{cha:control_onoff});
+    \item la \textbf{orquestación} (el ciclo principal que coordina, en cada iteración, la lectura, la decisión y la actuación); y
+    \item las \textbf{interfaces de salida} (persistencia local, telemetría hacia la nube, y visualización remota).
+\end{itemize}
+
+Esta separación aporta dos beneficios concretos: por un lado, permite modificar o reemplazar un bloque --por ejemplo, cambiar la plataforma de telemetría en la nube-- sin tener que tocar la lógica de control ni la abstracción de hardware; por otro, facilita las pruebas y la depuración, dado que cada bloque puede analizarse de forma relativamente aislada del resto \FALTACITA{beneficios de la modularidad: mantenibilidad y testeo}.
+
+\section{Configuración Externalizada y Persistencia de Datos}
+\label{sec:config_persistencia}
+
+Un patrón de diseño relacionado es el de \textbf{externalizar la configuración}: en lugar de codificar los umbrales y parámetros del sistema directamente en el programa, estos se definen en un archivo de configuración externo (por ejemplo, en formato de texto estructurado) que el programa lee al iniciar \FALTACITA{configuración externalizada, principio de diseño}. Esto permite ajustar el comportamiento del sistema --por ejemplo, cambiar un umbral de riego-- sin necesidad de modificar ni recompilar el código fuente, lo cual resulta especialmente valioso cuando la interfaz de usuario (Sección \ref{sec:cliente_servidor}) expone esos mismos parámetros para su edición remota.
+
+De forma análoga, es una práctica habitual en sistemas de adquisición de datos registrar de forma persistente --típicamente en un archivo local con formato tabular-- cada lectura y decisión tomada por el sistema, independientemente de si existe conectividad hacia una plataforma remota en ese momento \FALTACITA{registro persistente local de datos de adquisición}. Este registro local funciona como respaldo ante interrupciones de conectividad (Sección \ref{sec:telemetria_nube}) y como fuente de datos históricos para análisis posterior, sin comprometer la operación autónoma de la capa de decisión local descripta en la Sección \ref{sec:arquitectura_capas}.
+
+\section{El Patrón Cliente-Servidor en la Visualización Remota}
+\label{sec:cliente_servidor}
+
+La capa de comunicación y visualización remota suele implementarse siguiendo el \textbf{patrón cliente-servidor}: un servidor concentra el estado del sistema y expone dicho estado a través de una interfaz de red, mientras que uno o más clientes --por ejemplo, un navegador web-- solicitan esa información y la presentan al usuario, sin necesidad de ejecutar la lógica de adquisición o control localmente \FALTACITA{patrón cliente-servidor}. Esta separación entre la lógica de control (que corre en el dispositivo de campo) y la presentación de la información (que puede correr en cualquier dispositivo con navegador) es la que permite supervisar --y, en sistemas que lo permiten, reconfigurar-- el sistema de forma remota sin exponer directamente el hardware de control a la red.
+
+\section{Acceso Remoto mediante Túneles Inversos}
+\label{sec:tunel_inverso}
+
+Un servidor alojado en una red doméstica o de baja infraestructura --como suele ser el caso de un prototipo montado sobre una computadora de placa reducida-- típicamente no es accesible desde internet de forma directa, dado que se encuentra detrás de un enrutador con traducción de direcciones de red (NAT) y sin una dirección IP pública propia \FALTACITA{NAT y accesibilidad de servidores en redes domésticas}. Habilitar el acceso externo por los medios tradicionales --reenvío de puertos (\textit{port forwarding}) en el enrutador-- exige privilegios de administración sobre la red y expone directamente el dispositivo a internet, lo cual no siempre es deseable ni posible.
+
+Una alternativa ampliamente utilizada es el \textbf{túnel inverso}: el servidor local inicia una conexión saliente hacia un servicio intermediario, que actúa como \textit{proxy} inverso y asigna una dirección pública temporal desde la cual redirige el tráfico entrante hacia el servidor local a través de ese mismo túnel \cite{ngrok_tunneling}. De esta forma, el servidor queda accesible desde internet sin necesidad de modificar la configuración del enrutador ni de exponer directamente sus puertos. \textbf{Ngrok} es un servicio de este tipo, ampliamente utilizado en contextos de desarrollo y prototipado para exponer temporalmente un servidor que corre en una máquina local.
+
+\section{Plataformas de Telemetría en la Nube (IoT)}
+\label{sec:telemetria_nube}
+
+Además de la visualización local mediante el patrón cliente-servidor (Sección \ref{sec:cliente_servidor}), es una práctica habitual en sistemas IoT de bajo costo delegar el almacenamiento histórico y la visualización de series temporales a una \textbf{plataforma de telemetría en la nube}, en lugar de desarrollar una base de datos y un panel de visualización propios \FALTACITA{plataformas de telemetría IoT en la nube}. Este tipo de plataformas suele organizar los datos en \textit{canales}, cada uno con varios \textit{campos} numéricos correspondientes a las distintas variables medidas, y aceptan la carga periódica de datos mediante solicitudes HTTP simples identificadas por una clave de API asociada al canal.
+
+\textbf{ThingSpeak} es una plataforma de este tipo: permite crear canales con múltiples campos, recibir actualizaciones periódicas vía una API basada en HTTP, y generar automáticamente gráficos de la evolución temporal de cada campo sin necesidad de implementar esa visualización del lado del dispositivo \FALTACITA{ThingSpeak, plataforma de telemetría IoT}. Su capa gratuita impone límites de frecuencia de actualización, un aspecto que debe contemplarse al definir cada cuánto tiempo el sistema envía datos hacia la plataforma.
+
+\section{Síntesis de la Parte I}
+
+Los tres capítulos de esta parte establecieron, en conjunto, los fundamentos teóricos que sustentan el diseño desarrollado en la Parte II de este trabajo: los fundamentos fisiológicos y ambientales que determinan qué variables deben medirse y controlarse, y por qué el cultivo en sustrato es una alternativa válida a la hidroponía predominante en la literatura (Capítulo \ref{cha:cultivo}); los principios de funcionamiento de cada sensor empleado, la interfaz de potencia y la lógica de control por histéresis, filtrado y redundancia que gobierna las decisiones del sistema (Capítulo \ref{cha:control_onoff}); y, finalmente, el contexto de agricultura de precisión e IoT que motiva la arquitectura de software en capas del prototipo (Capítulo \ref{cha:arquitectura_iot}). El Marco Metodológico retoma cada uno de estos fundamentos para justificar las decisiones concretas de diseño e implementación del prototipo desarrollado.
