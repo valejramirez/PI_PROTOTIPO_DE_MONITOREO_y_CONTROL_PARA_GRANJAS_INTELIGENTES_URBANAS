@@ -1,25 +1,51 @@
-\bibitem{fao_urbanizacion} % ⚠️ verificar autor/año en la página
+\chapter*{Referencias}
+\addcontentsline{toc}{chapter}{Referencias}
+
+\begin{thebibliography}{99}
+
+\bibitem{onu2015agenda}
+Organización de las Naciones Unidas (ONU). (2015). \textit{Transformar nuestro mundo: la Agenda 2030 para el Desarrollo Sostenible}. Resolución A/RES/70/1 aprobada por la Asamblea General el 25 de septiembre de 2015.
+
+\bibitem{migliore2024}
+Migliore, E. (2024). \textit{Diseño e implementación de un sistema de control para un módulo de agricultura vertical} (Proyecto Integrador de Grado). Facultad de Ciencias Exactas, Físicas y Naturales, Universidad Nacional de Córdoba.
+
+\bibitem{irazuzta2023}
+Irazuzta, N. (2023). \textit{Monitoreo de invernadero hidropónico mediante IoT} (Proyecto Integrador de Grado). Facultad de Ciencias Exactas, Físicas y Naturales, Universidad Nacional de Córdoba.
+
+\bibitem{pieckenstainer2024}
+Pieckenstainer, M. (2024). \textit{Actividades realizadas en la Práctica Profesional Supervisada desarrollada en el L.I.A.D.E. relacionada con la investigación y desarrollo de granjas urbanas inteligentes} (Informe de PPS). Facultad de Ciencias Exactas, Físicas y Naturales, Universidad Nacional de Córdoba.
+
+\bibitem{ramos2015}
+Ramos Gonzalías, Y. F. (2015). \textit{Diseño e implementación de un sistema de control para maximizar la capacidad productiva de las plantas en granjas verticales por medio de luz artificial} (Proyecto de grado, Ingeniería Electrónica y Telecomunicaciones). Universidad Autónoma de Occidente, Santiago de Cali, Colombia.
+
+\bibitem{deocampo2017}
+de Ocampo, A. L. P. (2017). Development of Data Acquisition Model for Daily Light Integral Measurement. \textit{Asia Pacific Higher Education Research Journal}, 4(2).
+
+\bibitem{najera2023}
+Nájera, C., Gallegos-Cedillo, V. M., Ros, M., y Pascual, J. A. (2023). Role of Spectrum-Light on Productivity, and Plant Quality over Vertical Farming Systems: Bibliometric Analysis. \textit{Horticulturae}, 9(1), 63. https://doi.org/10.3390/horticulturae9010063
+
+\bibitem{fao_urbanizacion} % verificar autor/año en la página
 Plataforma Tierra. (s.f.). \textit{La agricultura urbana como solución sostenible}. https://www.plataformatierra.es/innovacion/agricultura-urbana-como-solucion-sostenible
 
-\bibitem{cea_definicion} % ⚠️ verificar autor/año
+\bibitem{cea_definicion} % verificar autor/año
 DryGair. (s.f.). \textit{¿Qué es la agricultura en ambiente controlado (CEA)?}. https://drygair.com/es/blog-es/que-es-la-agricultura-en-ambiente-controlado/
 
 \bibitem{agricultura_precision_def}
 CINTEL. (2025). \textit{Agricultura de precisión: Monitoreo inteligente con sensores}. https://cintel.co/wp-content/uploads/2025/02/AGRICULTURA-DE-PRECISION-Monitoreo-inteligente-con-sensores\_v2.pdf
 
-\bibitem{iot_agricola_rmic} % ⚠️ verificar autor/volumen exacto
+\bibitem{iot_agricola_rmic} % verificar autor/volumen exacto
 Revista Mexicana de Ingeniería y Ciencias. (s.f.). \textit{Inteligencia Artificial e IoT para el monitoreo agrícola: una revisión de tendencias actuales}. https://rmic.uat.edu.mx/index.php/MI/article/view/4
 
 \bibitem{iot_desafios}
 AgroTech Campus. (s.f.). \textit{Agricultura e Internet de las Cosas}. https://agrotechcampus.com/blog/agricultura-e-internet-de-las-cosas/
 
-\bibitem{hidroponia_rizosfera} % ⚠️ verificar título exacto de la página
+\bibitem{hidroponia_rizosfera} % verificar título exacto de la página
 ADR Formación. (s.f.). \textit{El sustrato en los cultivos hidropónicos}. https://www.adrformacion.com/knowledge/agricultura-y-jardineria/el\_sustrato\_en\_los\_cultivos\_hidroponicos.html
 
-\bibitem{rucula_mdpi} % ⚠️ verificar autores exactos del paper
+\bibitem{rucula_mdpi} % verificar autores exactos del paper
 MDPI. (2025). Artículo sobre cultivo de rúcula. \textit{Foods}, 14(23), 4148. https://www.mdpi.com/2304-8158/14/23/4148
 
-\bibitem{espinaca_dli_ouci} % ⚠️ verificar autores exactos
+\bibitem{espinaca_dli_ouci} % verificar autores exactos
 OUCI. \textit{Iluminación LED en DLI para producción hidropónica de espinaca}. https://ouci.dntb.gov.ua/en/works/7nxWWJyl/
 
 \bibitem{weatherspark_cordoba}
@@ -32,10 +58,10 @@ Ardumania. (s.f.). \textit{¿Qué es I2C?}. https://ardumania.es/que-es-i2c/
 NiuBoL. (s.f.). \textit{Sensor de humedad del suelo capacitivo vs. resistivo}. https://www.niuboltech.com/Product-knowledge/capacitive-vs-resistive-soil-moisture-sensor.html
 
 \bibitem{sar_adc_libretexts}
-Kuphaldt, T. R. (s.f.). \textit{Aproximación sucesiva ADC}. En \textit{Circuitos Eléctricos IV: Circuitos Digitales}. LibreTexts en Español. https://espanol.libretexts.org/Vocacional/Tecnologia\_Electronica/Libro:\_Circuitos\_Electricos\_IV\_-\_Circuitos\_Digitales\_(Kuphaldt)/13:\_Conversi\%C3\%B3n\_Digital-Anal\%C3\%B3gico/13.06:\_Aproximaci\%C3\%B3n\_sucesiva\_ADC
+Kuphaldt, T. R. (s.f.). Aproximación sucesiva ADC. En \textit{Circuitos Eléctricos IV: Circuitos Digitales}. LibreTexts en Español. https://espanol.libretexts.org/Vocacional/Tecnologia\_Electronica/Libro:\_Circuitos\_Electricos\_IV\_-\_Circuitos\_Digitales\_(Kuphaldt)/13:\_Conversi\%C3\%B3n\_Digital-Anal\%C3\%B3gico/13.06:\_Aproximaci\%C3\%B3n\_sucesiva\_ADC
 
-\bibitem{sobremuestreo_wikipedia}
-Wikipedia. (s.f.). \textit{Sobremuestreo}. https://es.wikipedia.org/wiki/Sobremuestreo
+\bibitem{sobremuestreo_researchgate}
+Autores varios. (2015). \textit{Técnicas de procesamiento digital de señales para reducción de ruido de señales de múltiples sensores asíncronos}. https://www.researchgate.net/publication/278667857
 
 \bibitem{rele_ssr_geya}
 GEYA. (s.f.). \textit{Relé de estado sólido vs. relé mecánico: ¿qué es diferente?}. https://www.geya.net/es/solid-state-relay-vs-mechanical-relay-what-is-different/
@@ -55,17 +81,13 @@ Universitat Politècnica de València. (s.f.). \textit{Control Tolerante a Fallo
 \bibitem{redundancia_mfgrobots}
 MFG Robots. (s.f.). \textit{Tolerancia a fallas y su impacto en la confiabilidad del sistema}. https://es.mfgrobots.com/repair/1003007861.html
 
-\bibitem{soc_wikipedia}
-Wikipedia. (s.f.). \textit{Separación de intereses}. https://es.wikipedia.org/wiki/Separaci\%C3\%B3n\_de\_intereses
+\bibitem{parnas1972}
+Parnas, D. L. (1972). On the criteria to be used in decomposing systems into modules. \textit{Communications of the ACM}, 15(12), 1053--1058.
 
-\bibitem{cliente_servidor_wikipedia}
-Wikipedia. (s.f.). \textit{Cliente-servidor}. https://es.wikipedia.org/wiki/Cliente-servidor
-
-\bibitem{nat_wikipedia}
-Wikipedia. (s.f.). \textit{Traducción de direcciones de red}. https://es.wikipedia.org/wiki/Traducci\%C3\%B3n\_de\_direcciones\_de\_red
+\bibitem{ngrok_docs}
+ngrok Inc. (s.f.). \textit{What is ngrok?}. https://ngrok.com/docs/what-is-ngrok
 
 \bibitem{thingspeak_mathworks}
 MathWorks. (s.f.). \textit{ThingSpeak API Reference}. https://www.mathworks.com/help/thingspeak/channels-and-charts-api.html
 
-\bibitem{ngrok_docs}
-ngrok Inc. (s.f.). \textit{What is ngrok?}. https://ngrok.com/docs/what-is-ngrok
+\end{thebibliography}
