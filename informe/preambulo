@@ -1,0 +1,120 @@
+% ====================== CODIFICACIÓN E IDIOMA ======================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+
+% ====================== FUENTE ======================
+% Aproximación a Times New Roman
+\usepackage{newtxtext,newtxmath}
+
+% ====================== GEOMETRÍA ======================
+% Normas APA: papel A4, márgenes de 2,54 cm en los 4 lados
+\usepackage[a4paper,left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm]{geometry}
+
+% ====================== INTERLINEADO ======================
+% Normas APA: interlineado doble (2.0)
+\usepackage{setspace}
+\doublespacing
+
+% ====================== ALINEACIÓN Y SANGRÍA (NORMAS APA) ======================
+% Texto alineado a la izquierda, SIN justificar (margen derecho irregular)
+\usepackage{ragged2e}
+\RaggedRight
+
+% Sangría de primera línea de párrafo equivalente a 5 espacios (0,5 in / 1,27 cm, estándar APA)
+\setlength{\parindent}{1.27cm}
+% Sin espacio adicional entre párrafos (la separación es solo por la sangría)
+\setlength{\parskip}{0pt}
+
+% ====================== MATEMÁTICA Y UNIDADES ======================
+\let\Bbbk\relax
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{siunitx}
+
+% ====================== IMÁGENES Y TABLAS ======================
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[table]{xcolor}
+\usepackage{longtable}
+\usepackage{caption}
+\captionsetup{font=normalsize,labelfont=bf}
+
+% ====================== HIPERVÍNCULOS ======================
+\usepackage[hidelinks]{hyperref}
+
+% ====================== LISTADOS ======================
+\usepackage{listings}
+\usepackage{upquote}
+\lstset{
+    basicstyle=\ttfamily\small,
+    breaklines=true,
+    frame=single,
+    numbers=left,
+    numberstyle=\tiny,
+    stepnumber=1,
+    numbersep=8pt,
+    showstringspaces=false,
+    tabsize=4,
+    captionpos=b
+}
+
+% ====================== ENCABEZADO Y PIE ======================
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\lfoot{\autoresPie}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% ====================== TÍTULOS ======================
+\usepackage{titlesec}
+
+% Centrado, en una sola línea "Capítulo N: Título", igual que la tesis de referencia (Migliore)
+\titleformat{\chapter}[block]
+    {\centering\bfseries\fontsize{14}{16}\selectfont}
+    {Capítulo \thechapter:}
+    {0.5em}
+    {}
+
+\titleformat{\section}
+    {\bfseries\fontsize{12}{14}\selectfont}
+    {\thesection}
+    {1em}
+    {}
+
+\titleformat{\subsection}
+    {\normalfont\fontsize{12}{14}\selectfont}
+    {\thesubsection}
+    {1em}
+    {}
+
+% {comando}{espacio_izq}{espacio_antes}{espacio_despues}
+\titlespacing*{\chapter}{0pt}{0pt}{3\baselineskip}
+\titlespacing*{\section}{0pt}{1.5\baselineskip}{1\baselineskip}
+\titlespacing*{\subsection}{0pt}{1.2\baselineskip}{0.8\baselineskip}
+
+% ====================== ESPACIADO EN BIBLIOGRAFÍA ======================
+\newcommand{\biblioitem}[1]{\par\noindent #1 \par\vspace{0.75\baselineskip}}
+
+% ====================== COMANDOS ÚTILES ======================
+\newcommand{\Fuente}[1]{%
+    \vspace{-0.5cm}
+    \begin{center}
+        \small Fuente: #1
+    \end{center}
+}
+%\newcommand{\Fuente}[1]{\vspace{0pt}\par\centering\small Fuente: #1\par\vspace{10pt}}
+
+\newcommand{\tituloPI}{``PROTOTIPO DE MONITOREO Y CONTROL DE LAS
+CONDICIONES DE CULTIVOS PARA GRANJAS INTELIGENTES URBANAS''}
+\newcommand{\alumnoA}{Beierbach Rodriguez, Alejo Adrian}
+\newcommand{\alumnoB}{Ramirez, Valentin Jose}
+\newcommand{\directorPI}{Ing. Orellano, Mayco Nahuel}
+\newcommand{\codirectorPI}{Ing. Prados, Lautaro}
+\newcommand{\mesanio}{Mes / Año}
+
+% Texto que va en el pie de página de cada hoja (como "Migliore Emiliano" en la tesis de referencia)
+\newcommand{\autoresPie}{Beierbach Rodriguez - Ramirez}
