@@ -105,15 +105,12 @@ La literatura sobre agricultura vertical y CEA (\textit{Controlled Environment A
 \caption{Comparación entre cultivo hidropónico y cultivo en sustrato}
 \label{tab:sustrato_vs_hidroponia}
 \begin{tabular}{@{}p{3cm}p{5.3cm}p{5.3cm}@{}}
-\toprule
 \textbf{Aspecto} & \textbf{Hidroponía} & \textbf{Sustrato} \\
-\midrule
 Eficiencia hídrica & Muy alta; entre \SI{70}{\percent} y \SI{95}{\percent} menos consumo de agua que el cultivo tradicional \cite{hidroponia_rizosfera} & Menor eficiencia hídrica relativa, aunque muy superior a la del cultivo a cielo abierto \\
 Control de nutrientes & Preciso, mediante monitoreo continuo de conductividad eléctrica (EC) y pH de la solución \FALTACITA{control EC/pH en hidroponía} & Gestionado en gran medida por el propio medio, sin monitoreo continuo de EC/pH \\
 Instrumentación requerida & Sensores de EC y pH, de costo considerablemente mayor al resto de la instrumentación & No requiere sensores de EC/pH; instrumentación limitada a variables ambientales \\
 Tolerancia a variaciones & Baja: cualquier desvío en la solución afecta directamente y sin amortiguación a la raíz & Mayor: la rizosfera aporta cierta capacidad de amortiguación (\textit{buffering}) natural \cite{hidroponia_rizosfera} \\
 Riesgo asociado & Fallas del sistema de bombeo/dosificación comprometen rápidamente al cultivo & Encharcamiento o sustrato mal drenado favorece patógenos de raíz \\
-\bottomrule
 \end{tabular}
 \Fuente{Elaboración propia a partir de la bibliografía citada en la tabla.}
 \end{table}
@@ -133,13 +130,10 @@ Dado que ambos cultivos se desarrollan en interior, con acceso reducido o nulo a
 \caption{Requerimientos ambientales de los cultivos seleccionados}
 \label{tab:cultivos}
 \begin{tabular}{@{}p{2.3cm}p{2.3cm}p{2cm}p{3.5cm}p{3.2cm}@{}}
-\toprule
 \textbf{Cultivo} & \textbf{Temperatura} & \textbf{Foto-período} & \textbf{Intensidad lumínica} & \textbf{Notas de sustrato} \\
-\midrule
 Rúcula (\textit{Eruca sativa} Mill.) & Ideal \SI{24}{\celsius}; temperaturas mayores inducen espigado y amargor \cite{rucula_mdpi} & \SIrange{12}{14}{\hour}; no exceder para evitar floración & $\approx \SI{230}{\micro\mole\per\square\meter\per\second}$ de PPFD & Sustrato siempre húmedo, sin encharcar; ideal en macetas de poca profundidad \\
 \addlinespace
 Espinaca (var. Monstruosa de Viroflay) & Favorecida por temperaturas bajas; el calor deteriora la calidad de hoja \cite{espinaca_dli_ouci} & \SIrange{9}{16}{\hour} según el objetivo (calidad vs. rendimiento) \cite{najera2023} & $\approx$\SIrange{100}{150}{\micro\mole\per\square\meter\per\second} de PPFD en distintos cultivares \cite{najera2023}; DLI óptimo de referencia (hidropónico) de \SI{17,3}{\mole\per\square\meter\per\day} \cite{espinaca_dli_ouci}, moderadamente inferior en sustrato & Requiere buena ventilación y sustrato muy bien drenado; el encharcamiento favorece hongos en la base del tallo \\
-\bottomrule
 \end{tabular}
 \Fuente{Elaboración propia a partir de la bibliografía citada en la tabla.}
 \end{table}
@@ -159,13 +153,10 @@ El clima de Córdoba capital presenta una variación estacional marcada, con dat
 \caption{Temperaturas medias mensuales en Córdoba capital}
 \label{tab:clima_cordoba}
 \begin{tabular}{@{}lccccccccccccc@{}}
-\toprule
 & \textbf{Ene} & \textbf{Feb} & \textbf{Mar} & \textbf{Abr} & \textbf{May} & \textbf{Jun} & \textbf{Jul} & \textbf{Ago} & \textbf{Sep} & \textbf{Oct} & \textbf{Nov} & \textbf{Dic} \\
-\midrule
 Máxima [\si{\celsius}] & 30 & 28 & 27 & 24 & 20 & 18 & 18 & 20 & 23 & 25 & 28 & 29 \\
 Promedio [\si{\celsius}] & 24 & 23 & 21 & 18 & 14 & 11 & 11 & 13 & 15 & 19 & 21 & 23 \\
 Mínima [\si{\celsius}] & 19 & 18 & 16 & 13 & 10 & 6 & 5 & 7 & 10 & 13 & 16 & 18 \\
-\bottomrule
 \end{tabular}
 \Fuente{Elaboración propia a partir de WeatherSpark, datos históricos de Córdoba, Argentina.}
 \end{table}
