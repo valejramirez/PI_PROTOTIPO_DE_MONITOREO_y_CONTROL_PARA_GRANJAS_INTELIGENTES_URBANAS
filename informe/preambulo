@@ -6,6 +6,9 @@
 % ====================== FUENTE ======================
 % Aproximación a Times New Roman
 \usepackage{newtxtext,newtxmath}
+% --- Paquetes necesarios para la figura en TikZ ---
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows, positioning}
 
 % ====================== GEOMETRÍA ======================
 % Normas APA: papel A4, márgenes de 2,54 cm en los 4 lados
@@ -39,8 +42,20 @@
 \usepackage[table]{xcolor}
 \usepackage{longtable}
 \usepackage{caption}
-\captionsetup{font=normalsize,labelfont=bf}
+\usepackage{tabularx}
 
+\captionsetup{
+    font=normalsize,
+    labelfont=bf
+}
+
+% Coloca el título de las tablas debajo de la tabla
+\captionsetup[table]{position=bottom}
+
+% Cambia "Cuadro" por "Tabla"
+\addto\captionsspanish{%
+    \renewcommand{\tablename}{Tabla}
+}
 % ====================== HIPERVÍNCULOS ======================
 \usepackage[hidelinks]{hyperref}
 
@@ -69,44 +84,67 @@
 \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0pt}
 
-% ====================== TÍTULOS ======================
+% ====================== TÍTULOS: JERARQUÍA APA (5 NIVELES) ======================
 \usepackage{titlesec}
 
-% Centrado, en una sola línea "Capítulo N: Título", igual que la tesis de referencia (Migliore)
+% Profundidad de numeración: numera hasta el nivel 4 (\paragraph = Nivel 5 de APA)
+\setcounter{secnumdepth}{4}
+
+% --- Nivel 1 (\chapter): centrado, negrita ---
+% "Capítulo N: Título" en una sola línea, igual que la tesis de referencia (Migliore)
 \titleformat{\chapter}[block]
     {\centering\bfseries\fontsize{14}{16}\selectfont}
     {Capítulo \thechapter:}
     {0.5em}
     {}
 
+% --- Nivel 2 (\section): alineado a la izquierda, negrita ---
 \titleformat{\section}
     {\bfseries\fontsize{12}{14}\selectfont}
     {\thesection}
     {1em}
     {}
 
-\titleformat{\subsection}
-    {\normalfont\fontsize{12}{14}\selectfont}
+% --- Nivel 3 (\subsection): con sangría, negrita, punto final, texto continúa en la misma línea ---
+\titleformat{\subsection}[runin]
+    {\normalfont\bfseries\fontsize{12}{14}\selectfont}
     {\thesubsection}
-    {1em}
+    {0.5em}
     {}
+    [.]
+
+% --- Nivel 4 (\subsubsection): con sangría, negrita cursiva, punto final, texto continúa en la misma línea ---
+\titleformat{\subsubsection}[runin]
+    {\normalfont\bfseries\itshape\fontsize{12}{14}\selectfont}
+    {\thesubsubsection}
+    {0.5em}
+    {}
+    [.]
+
+% --- Nivel 5 (\paragraph): con sangría, cursiva (sin negrita), punto final, texto continúa en la misma línea ---
+\titleformat{\paragraph}[runin]
+    {\normalfont\itshape\fontsize{12}{14}\selectfont}
+    {\theparagraph}
+    {0.5em}
+    {}
+    [.]
 
 % {comando}{espacio_izq}{espacio_antes}{espacio_despues}
 \titlespacing*{\chapter}{0pt}{0pt}{3\baselineskip}
 \titlespacing*{\section}{0pt}{1.5\baselineskip}{1\baselineskip}
-\titlespacing*{\subsection}{0pt}{1.2\baselineskip}{0.8\baselineskip}
+\titlespacing*{\subsection}{\parindent}{1.2\baselineskip}{1em}
+\titlespacing*{\subsubsection}{\parindent}{1.2\baselineskip}{1em}
+\titlespacing*{\paragraph}{\parindent}{1.2\baselineskip}{1em}
 
 % ====================== ESPACIADO EN BIBLIOGRAFÍA ======================
 \newcommand{\biblioitem}[1]{\par\noindent #1 \par\vspace{0.75\baselineskip}}
 
 % ====================== COMANDOS ÚTILES ======================
 \newcommand{\Fuente}[1]{%
-    \vspace{-0.5cm}
     \begin{center}
         \small Fuente: #1
     \end{center}
 }
-%\newcommand{\Fuente}[1]{\vspace{0pt}\par\centering\small Fuente: #1\par\vspace{10pt}}
 
 \newcommand{\tituloPI}{``PROTOTIPO DE MONITOREO Y CONTROL DE LAS
 CONDICIONES DE CULTIVOS PARA GRANJAS INTELIGENTES URBANAS''}
@@ -116,5 +154,5 @@ CONDICIONES DE CULTIVOS PARA GRANJAS INTELIGENTES URBANAS''}
 \newcommand{\codirectorPI}{Ing. Prados, Lautaro}
 \newcommand{\mesanio}{Mes / Año}
 
-% Texto que va en el pie de página de cada hoja (como "Migliore Emiliano" en la tesis de referencia)
+% Texto que va en el pie de página de cada hoja
 \newcommand{\autoresPie}{Beierbach Rodriguez - Ramirez}
