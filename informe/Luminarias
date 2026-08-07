@@ -20,12 +20,14 @@ Dado que cada maceta tiene una superficie de $100\text{ cm} \times 50\text{ cm}$
 \subsection{Conversión de iluminancia a DLI: validación numérica}
 \label{subsec:validacion_dli}
 
+La calibración del factor de luminaria del panel LED se realizó mediante una medición directa con el sensor BH1750, colocando la luminaria a una altura de 27 cm respecto del dosel vegetal --dentro del rango de instalación de 20 a 30 cm establecido en la Sección \ref{subsec:diseno_geometrico_luz}--. La lectura obtenida en esa configuración, de $6500\ \si{lux}$, se adoptó como el valor de referencia de iluminancia del foco ($lux_{foco}$) empleado en el algoritmo de control (Sección \ref{subsec:algoritmo_control_dli}). A partir de esta calibración, y dado que la luz solar posee una composición espectral distinta a la del panel LED, se determinaron dos factores de luminaria independientes: $F_L = 0{,}0887$ para el foco artificial, y $F_{L,\text{ambiente}} = 0{,}0185$ para la luz natural.
+
 Antes de su implementación en el software de control, la conversión de lux a PPFD y su posterior integración a DLI (Ecuaciones \ref{eq:ppfd_lux} y \ref{eq:dli_ppfd} del Marco Teórico) se validó numéricamente mediante un script de cálculo, tanto en su forma directa (a partir de una lectura de iluminancia, obtener el DLI resultante) como en su forma inversa (a partir de un DLI objetivo, obtener la iluminancia de luxómetro necesaria):
 
 \begin{verbatim}
 Ti = 12;            % Fotoperiodo en horas
-Lux = 5000;         % Intensidad lumínica medida con el BH1750
-F_L = 8.87/100;     % Factor de luminaria
+Lux = 6500;         % Lectura de referencia del foco (BH1750, h = 27 cm)
+F_L = 8.87/100;     % Factor de luminaria del foco
 PPFD = Lux * F_L;   % Conversion de Lux a PPFD
 DLI = 0.0036 * PPFD * Ti;
 
@@ -34,7 +36,7 @@ PPFDc = DLI_D / (0.0036 * Ti);
 Luxs = PPFDc / F_L;
 \end{verbatim}
 
-Para los valores de ejemplo del script ($Lux = 5000$, $F_L = 0{,}0887$, $T_i = 12\text{ h}$), la conversión directa arroja $PPFD = 443{,}5\ \si{\micro\mole\per\square\meter\per\second}$ y $DLI \approx 19{,}16\ \si{\mole\per\square\meter\per\day}$. La conversión inversa, para un objetivo de $DLI_D = 17{,}3\ \si{\mole\per\square\meter\per\day}$, indica que se requeriría una lectura sostenida de $Luxs \approx 4515\ \si{lux}$ durante todo el fotoperíodo para alcanzar exactamente ese objetivo. Esta doble verificación --directa e inversa-- permitió confirmar la consistencia del factor de luminaria antes de trasladar la lógica al lazo de control principal.
+Para el valor de referencia obtenido en la calibración ($Lux = 6500$, $F_L = 0{,}0887$) y un fotoperíodo hipotético de $T_i = 12\text{ h}$, la conversión directa arroja $PPFD = 576{,}55\ \si{\micro\mole\per\square\meter\per\second}$ y $DLI \approx 24{,}91\ \si{\mole\per\square\meter\per\day}$ si el foco permaneciera encendido durante todo ese lapso --valor que ilustra la capacidad máxima de aporte del foco y no un tiempo de encendido real, dado que este se determina dinámicamente mediante el algoritmo de la Sección \ref{subsec:algoritmo_control_dli}--. La conversión inversa, para un objetivo de $DLI_D = 17{,}3\ \si{\mole\per\square\meter\per\day}$, indica que se requeriría una lectura sostenida de $Luxs \approx 4515\ \si{lux}$ durante todo el fotoperíodo para alcanzar exactamente ese objetivo. Esta verificación permitió confirmar la consistencia de ambos factores de luminaria antes de trasladar la lógica al lazo de control principal.
 
 \subsection{Algoritmo de control dinámico del fotoperíodo}
 \label{subsec:algoritmo_control_dli}
