@@ -1,0 +1,183 @@
+% CAPÍTULO 3 — HARDWARE DE CONTROL
+% ================================================================
+\chapter{Hardware de control}
+\label{cha:hardware_control}
+
+Este capítulo desarrolla la disposición física de luminarias y hardware, los actuadores del sistema (luces, bomba, válvulas, goteros), la etapa de potencia (relés), la alimentación complementaria, el circuito de riego, el sistema de ventilación y los esquemas de conexión --incluyendo, en cada sección correspondiente, los cálculos que justifican el dimensionamiento de cada sistema (riego, luz y ventilación).
+
+\section{Disposición de las luminarias}
+\label{sec:disposicion_luminarias}
+
+Para la instalación física del panel de espectro completo, se acondicionó la viga transversal de madera posicionada en el estrato superior de la estación de cultivo, integrando armellas de sujeción cerrada conocidas comercialmente como tornillos ojo. A través de estos componentes mecánicos se enhebran las eslingas de acero que suspenden el artefacto lumínico, estableciendo una matriz de fijación redundante. La distribución geométrica de estos anclajes se calculó con el propósito operativo de regular de forma manual el distanciamiento vertical entre el foco y el ápice del dosel vegetal; esta modularidad posicional permite manipular de manera directa la densidad de flujo fotónico y la carga térmica por radiación que incide sobre las especies bajo ensayo. En la etapa de germinación, posterior a la siembra, las luminarias se configuran en su cota altimétrica mínima, optimizando la transferencia de energía electromagnética necesaria para estimular los fotorreceptores iniciales de las plántulas.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/luminaria.jpeg}
+    \caption{Disposición de las luminarias.}
+    \Fuente{propia.}
+\end{figure}
+
+\PENDIENTE{Valentín: acá van los cálculos de DLI/fotoperíodo --- factor de luminaria $F_L$ calibrado, PPFD estimado a partir de las lecturas del BH1750, y el cálculo del tiempo de encendido diario necesario para alcanzar el DLI objetivo de cada cultivo (ver Marco Teórico Sección \ref{sec:ppfd_dli} para la fórmula)}
+
+\section{Disposición de hardware}
+\label{sec:disposicion_hardware}
+
+Con el propósito de alojar los módulos de control y procesamiento del sistema (tales como la unidad central Raspberry Pi 4, la placa de relés y los conversores analógico-digitales (ADC)), se definió una localización estratégica basada en criterios de accesibilidad, seguridad y optimización de las líneas de señal. Se optó por ubicar este núcleo de control en la zona superior de la estructura, logrando una posición equidistantemente centralizada que facilita el ruteado de los cables hacia los distintos sensores y actuadores del prototipo, minimizando a su vez el impacto visual y la interferencia estructural.
+
+Esta disposición en altura aísla la electrónica crítica frente a riesgos mecánicos por manipulación directa o eventuales filtraciones y salpicaduras provenientes del subsistema hidráulico. Para garantizar un aislamiento eléctrico adecuado y protección contra humedad y polvo, la totalidad de los componentes se confinó dentro de un gabinete con sellado hermético. La interconexión con los periféricos externos se ejecutó mediante pasacables con prensacables (pasamuros), permitiendo el paso ordenado y seguro de los conductores sin comprometer el nivel de protección de la envolvente.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/modulocentral1.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/modulocentral2.jpeg}
+    \end{minipage}
+    \caption{Caja eléctrica estanca con componentes vitales del sistema.}
+    \Fuente{propia.}
+    \label{fig:caja_electrica}
+\end{figure}
+
+\section{Actuadores}
+\label{sec:actuadores_metodologico}
+
+\subsection{Luces para el cultivo}
+
+Para el sistema de iluminación artificial y estimulación del desarrollo vegetal, se implementó un panel LED para cultivo indoor de 50 W (marca Practiled). La elección de esta luminaria se justifica por su diseño espectral optimizado para la fotosíntesis, el cual concentra sus picos de emisión en las longitudes de onda de 450 nm (espectro azul) y 650 nm (espectro rojo), interactuando de manera directa con las clorofilas A y B para potenciar las fases de crecimiento vegetativo y floración. A su vez, el módulo cuenta con protecciones contra sobretensión, sobrecorriente y un sensor de sobrecalentamiento crítico para el confinamiento del cultivo. Asimismo, cuenta con un grado de protección IP65 que garantiza su estanqueidad y resistencia frente a la alta humedad y salpicaduras derivadas del riego automatizado, operando con un regulador de voltaje interno que asegura una potencia constante y una alta eficiencia energética (clase A++). Debido a las características mencionadas y su bajo costo en comparación con otras opciones del mercado, se convirtió en la opción ideal para este proyecto.
+
+\subsection{Bomba para riego}
+
+Para el accionamiento del sistema de riego, se seleccionó una bomba periférica presurizadora de corriente continua (modelo Kushiro BPYK12). El parámetro determinante para esta elección fue su altura máxima de elevación de 2 metros, magnitud hidrodinámica que supera con holgura el nivel físico de la maceta, garantizando un suministro hídrico eficiente y sin caídas de presión hasta el estrato superior del cultivo. Desde la perspectiva de la integración electrónica y la seguridad, su operación a una tensión nominal de $12\text{ V}$ resulta fundamental para minimizar los riesgos de electrocución en un entorno caracterizado por alta humedad, facilitando además su control lógico mediante etapas de potencia estándar (relé) comandadas por el microcontrolador. Asimismo, su capacidad para entregar un caudal máximo de $3{,}8\text{ l/min}$ a una presión de trabajo de $2{,}5\text{ bar}$ es idónea para presurizar las líneas de riego sin generar caudales excesivos que inunden la zona radicular. Por último, su arquitectura mecánica, que incorpora un impulsor de bronce y un cuerpo de aluminio, proporciona una alta resistencia a la oxidación, asegurando la vida útil del actuador al operar con agua limpia.
+
+\subsection{Válvulas solenoides}
+
+Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar cumplimiento al criterio de gestión sustentable del recurso hídrico, se implementaron electroválvulas solenoides por maceta, permitiendo direccionar el flujo de riego de forma independiente hacia cada unidad de cultivo bajo el mando de la unidad central.
+
+\subsection{Goteros}
+
+Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar cumplimiento al criterio metodológico de gestión sustentable del recurso hídrico, se implementaron emisores de riego localizado con una capacidad nominal máxima de 80 litros por hora. La integración física de estos componentes en la red de distribución se realiza de forma directa sobre la línea de conducción principal, efectuando un punzonado calibrado en la pared de la manguera de polietileno. Los goteros se introducen a presión dentro de esta perforación mediante un acoplamiento por interferencia mecánica, aprovechando las propiedades elásticas del material polimérico para asegurar la estanqueidad total del nodo y prevenir caídas de presión en el circuito. Estos dispositivos operan como actuadores pasivos finales y cuentan con un mecanismo de regulación helicoidal que permite modificar la sección transversal del conducto interno mediante obturación mecánica, optimizando la respuesta del lazo de irrigación automatizado. Esta capacidad de ajuste resulta crítica para la calibración del sistema, debido a que permite ecualizar la pérdida de carga en la red de distribución, garantizando que el coeficiente de descarga sea uniforme en todas las estaciones de cultivo.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/regador1.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/regador2.jpeg}
+    \end{minipage}
+    \caption{Goteros.}
+    \Fuente{propia.}
+\end{figure}
+
+\section{Etapa de potencia: relés electromecánicos y de estado sólido}
+\label{sec:etapa_potencia}
+
+Para la gestión energética de los actuadores del sistema (luces, bomba hidráulica y válvulas solenoides), fue necesaria la implementación de módulos de relés, seleccionando tecnologías específicas según la naturaleza de la carga y el tipo de corriente a conmutar.
+
+Por un lado, para el control de los paneles lumínicos, se optó por un módulo de relés de estado sólido (SSR) de dos canales con componentes OMRON. La elección de esta tecnología se justifica debido a que su etapa de salida está diseñada estrictamente para operar en corriente alterna (soportando hasta 240 VCA y 2 A). Al carecer de partes móviles, el SSR elimina la inercia mecánica, lo que permite realizar conmutaciones de encendido y apagado a gran velocidad sin sufrir fatiga ni desgaste físico a largo plazo. Adicionalmente, este módulo incorpora fusibles resistivos en su salida, añadiendo una capa de protección eléctrica fundamental para resguardar la integridad de las luminarias que son un elemento imprescindible del proyecto.
+
+Por otro lado, para gobernar la bomba hidráulica y las válvulas solenoides (las cuales operan con corriente continua a 12 V) se implementó un módulo de relés electromecánicos de ocho canales. Esta decisión se fundamenta en la alta capacidad de manejo de corriente de sus contactos, los cuales soportan hasta 10 A a 30 VCC, resultando idóneos para absorber los picos de corriente transitorios que demandan las cargas inductivas (motores y electroimanes) durante su arranque. Un factor crítico para la elección de esta placa fue la integración de optoacopladores en sus entradas, esto garantiza un aislamiento galvánico completo entre la etapa de potencia y la lógica de control (5 V), protegiendo al microcontrolador frente a ruidos eléctricos o corrientes inversas generadas por las bobinas de los actuadores hidráulicos al desenergizarse.
+
+\section{Circuito de riego}
+\label{sec:circuito_riego}
+
+El subsistema de irrigación opera mediante un esquema de distribución selectiva alimentado por la electrobomba descrita en la sección anterior. A través de un arreglo de válvulas solenoides, el firmware puede dirigir el flujo hídrico hacia un módulo o maceta en particular, según los requerimientos de humedad detectados por los sensores. La canalización principal se ejecutó utilizando tubos flexibles de \textonehalf{} pulgada, dimensión seleccionada para garantizar un caudal óptimo de operación sin generar sobrepresiones en los acoples. En el tramo interno de cada contenedor se instalaron goteros autocompensados que liberan un caudal volumétrico constante por unidad de tiempo, logrando una distribución homogénea del recurso hídrico en la zona radicular.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/sistemariego.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/bomba.jpeg}
+    \end{minipage}
+    \caption{Sistema de riego.}
+    \Fuente{propia.}
+    \label{fig:sistema_riego}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/valvsolenoide.jpeg}
+    \caption{Válvula solenoide.}
+    \Fuente{propia.}
+\end{figure}
+
+Una vez que el sustrato absorbe la humedad necesaria para la nutrición y desarrollo vegetal, el excedente no retenido inicia un proceso de percolación natural. Gracias al diseño en pendiente y al sistema de drenaje inferior de cada módulo, el agua no aprovechada cae por acción de la gravedad hacia un depósito de recolección ubicado en la base de la estructura. Este circuito cerrado permite recircular el efluente hídrico hacia el tanque principal mediante una red de colectores, maximizando la eficiencia en el uso del agua y reduciendo de forma significativa el consumo operativo del prototipo.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/batea.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/bateaymaceta.jpeg}
+    \end{minipage}
+    \caption{Sistema de recolección de agua.}
+    \Fuente{propia.}
+    \label{fig:recoleccion_agua}
+\end{figure}
+
+\PENDIENTE{Valentín: acá van los cálculos de riego --- caudal de goteros/bomba, volumen objetivo de agua por maceta y ciclo de cultivo, y el cálculo del tiempo de inyección hídrica (duración de apertura de la electroválvula) necesario para alcanzar ese volumen}
+
+\section{Sistema de ventilación}
+\label{sec:sistema_ventilacion}
+
+Con el objetivo de garantizar una renovación constante de la masa de aire y evitar la formación de microclimas saturados de humedad en el dosel vegetal, se integró un sistema de ventilación forzada distribuido por niveles en la estructura vertical. La presencia de humedad relativa elevada y aire estancado favorece la acumulación de condensación sobre el filoplano (superficie foliar), creando un entorno propicio para la proliferación de hongos. Para mitigar este riesgo y favorecer la disipación térmica, se instalaron ventiladores en cada uno de los niveles de cultivo. Estos dispositivos son gestionados dinámicamente por la unidad central mediante un algoritmo de control basado en un umbral crítico de humedad relativa: cuando los sensores del nivel detectan valores superiores al límite configurado, el sistema conmuta la activación de los ventiladores correspondientes. Esta acción rompe la capa límite de humedad sobre las hojas, acelera la tasa de transpiración vegetal de forma controlada y promueve un descenso paulatino de la temperatura ambiental en el módulo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/soporteventilador2.jpeg}
+    \caption{Disposición de los ventiladores.}
+    \Fuente{propia.}
+\end{figure}
+
+\PENDIENTE{Valentín: acá va la justificación numérica del umbral de humedad relativa elegido para disparar la ventilación (por qué ese \% y no otro, en base a los rangos de HR de rúcula/espinaca del Marco Teórico)}
+
+\section{Esquemas de conexión}
+\label{sec:esquemas_conexion}
+
+A continuación, se detalla el esquema de conexionado adoptado para el prototipo, describiendo la asignación de señales para cada puerto de propósito general de la unidad central. Por criterios de diseño orientados a la robustez electromecánica, se proyectó una interfaz intermedia mediante una placa de circuito impreso perforada de uso general, la cual actúa como un nodo centralizador de conexiones. Esta implementación previene la necesidad de efectuar uniones soldadas directas sobre la computadora de placa única, resguardando la integridad física de sus terminales y flexibilizando la modularidad del sistema ante tareas de mantenimiento o sustitución de periféricos. En el diagrama esquemático, la denominación de "Componentes I2C" identifica el nodo de acoplamiento para el bus de datos compartido, donde coexisten bajo el mismo direccionamiento el sensor de iluminancia y el módulo de conversión analógico-digital, el cual gestiona de forma dedicada los canales de los higrómetros capacitivos de suelo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/RaspberryPi4Schematic.png}
+    \caption{Esquema de conexiones.}
+    \Fuente{propia.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/placaperforada.jpeg}
+    \caption{Placa perforada de uso general.}
+    \Fuente{propia.}
+\end{figure}
+
+Diagrama de conexión de la placa mostrada en la imagen anterior:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/ProtoCables1.png}
+    \caption{Esquema de placa de pruebas simplificado con color de cables.}
+    \Fuente{propia.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/protocables2.jpeg}
+    \caption{Conexión que recibe cada color de cable en relación al esquema anterior.}
+    \Fuente{propia.}
+\end{figure}
