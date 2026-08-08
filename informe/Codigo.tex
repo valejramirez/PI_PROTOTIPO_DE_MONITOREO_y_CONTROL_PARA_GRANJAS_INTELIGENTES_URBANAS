@@ -1,3 +1,11 @@
+\chapter{Implementación y Despliegue del Software de Control}
+\label{cha:software_control}
+
+Este capítulo describe la arquitectura del software de control local, la lógica de las rutinas de control implementadas, su integración con la plataforma de telemetría en la nube ThingSpeak, y la interfaz de usuario del sistema.
+
+\section{Código}
+\label{sec:codigo}
+
 \subsection{Sistema operativo y lenguaje de desarrollo}
 \label{subsec:so_lenguaje}
 
@@ -20,6 +28,69 @@ Siguiendo el principio de separación de responsabilidades presentado en el Marc
 \end{itemize}
 
 Esta organización refleja de forma directa los seis bloques de separación de responsabilidades enumerados en el Marco Teórico: configuración (\texttt{config\_loader.py}), representación del estado (\texttt{models.py}), abstracción de hardware (\texttt{hardware.py}), lógica de control (\texttt{control.py}), orquestación (\texttt{main.py}) e interfaces de salida (\texttt{web.py}, junto con las rutinas de registro CSV y telemetría dentro de \texttt{main.py}).
+
+La Figura \ref{fig:arquitectura_control} muestra las dependencias de importación reales entre los cuatro módulos que conforman el proceso de control (\texttt{indoor\_main.service}, Sección \ref{subsec:systemd}), junto con las funciones y clases principales que expone cada uno.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    modulo/.style={rectangle, draw=black, rounded corners, align=left, font=\footnotesize, text width=4cm, inner sep=6pt},
+    flujo/.style={-latex, thick},
+]
+
+\node (models) [modulo, fill=blue!8] at (3.6,7.2) {\textbf{models.py}\\ \textit{Dataclasses:} SystemConfig, MacetaConfig, MacetaEstado, GlobalConfig};
+
+\node (configloader) [modulo, fill=blue!8] at (3.6,5.2) {\textbf{config\_loader.py}\\ cargar\_configuracion()\\ \_validar\_configuracion()};
+
+\node (hardware) [modulo, fill=orange!10, text width=3.9cm] at (0,2.9) {\textbf{hardware.py}\\ \textit{HardwareManager:}\\ leer\_humedad\_raw()\\ leer\_lux(), leer\_dht()\\ set\_luz\_maceta()\\ set\_valvula\_maceta()\\ set\_ventilador\_maceta()};
+
+\node (control) [modulo, fill=orange!10, text width=3.9cm] at (7.2,2.9) {\textbf{control.py}\\ procesar\_maceta()\\ calcular\_y\_controlar\_dli()\\ decidir\_riego()\\ decidir\_ventilacion()};
+
+\node (main) [modulo, fill=green!10] at (3.6,0.3) {\textbf{main.py}\\ main(): ciclo principal\\ ejecutar\_riego\_seguro()\\ guardar\_csv(), subir\_thingspeak()};
+
+\draw [flujo] (models) -- (configloader);
+\draw [flujo] (models.south) -| (hardware.north);
+\draw [flujo] (models.south) -| (control.north);
+\draw [flujo] (configloader) -- (main);
+\draw [flujo] (hardware) |- (main.west);
+\draw [flujo] (control) |- (main.east);
+
+\end{tikzpicture}
+\caption{Dependencias de importación entre los módulos del proceso de control (\texttt{indoor\_main.service}). Todas las flechas representan relaciones de código (\textit{import}): \texttt{main.py} depende de los tres módulos restantes, que a su vez comparten las estructuras de datos definidas en \texttt{models.py}.}
+\label{fig:arquitectura_control}
+\end{figure}
+
+Como contrapunto, la Figura \ref{fig:arquitectura_web} muestra que el proceso de configuración web (\texttt{indoor\_web.service}) --detallado en la Sección \ref{sec:interfaz_usuario}-- \textbf{no importa ni depende de ningún código} de los módulos anteriores: es un proceso de Python completamente independiente, que solo comparte con el proceso de control el archivo \texttt{config.toml} en disco. Esta ausencia deliberada de acoplamiento por código es consistente con la decisión de ejecutar ambos procesos como servicios de \texttt{systemd} separados y sin dependencias de arranque explícitas entre sí (Sección \ref{subsec:systemd}).
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    modulo/.style={rectangle, draw=black, rounded corners, align=left, font=\footnotesize, text width=4cm, inner sep=6pt},
+    archivo/.style={rectangle, draw=black, dashed, rounded corners, align=center, font=\footnotesize, fill=gray!10, text width=2.2cm, inner sep=6pt},
+    servicio/.style={rectangle, draw=black, dotted, rounded corners, align=center, font=\scriptsize, fill=yellow!10, text width=2.8cm, inner sep=5pt},
+    flujoarch/.style={-latex, dashed, thick, gray!50!black},
+    flujo/.style={-latex, thick},
+]
+
+\node (mainproc) [servicio, fill=green!10] at (-0.6,2.6) {Proceso de control\\ (\texttt{indoor\_main.service})};
+
+\node (toml) [archivo] at (4.0,2.6) {config.toml};
+
+\node (web) [modulo, fill=purple!8] at (8.6,2.6) {\textbf{web.py}\\ Flask app\\ index() [GET/POST]};
+
+\node (ngrok) [servicio] at (8.6,5.2) {\texttt{ngrok.service}\\ (túnel inverso)};
+
+\node (template) [modulo, fill=purple!8] at (8.6,0.0) {\textbf{templates/index.html}\\ Formulario (Jinja2) +\\ gráficos ThingSpeak embebidos};
+
+\draw [flujoarch] (mainproc.east) -- node[above,font=\tiny,align=center]{escribe\\ DLI/estado} (toml.west);
+\draw [flujoarch] (toml.east) -- node[above,font=\tiny,align=center]{lee y\\ escribe} (web.west);
+\draw [flujoarch] (ngrok.south) -- node[right,font=\tiny]{expone puerto 5000} (web.north);
+\draw [flujo] (web.south) -- node[right,font=\tiny]{renderiza} (template.north);
+
+\end{tikzpicture}
+\caption{Relación entre el proceso de control y el proceso de configuración web (\texttt{indoor\_web.service}). A diferencia de la Figura \ref{fig:arquitectura_control}, aquí no existe ninguna dependencia de código Python entre ambos procesos: la única relación es el archivo \texttt{config.toml} compartido en disco (flechas punteadas), que cada proceso lee y/o escribe de forma independiente. El servicio \texttt{ngrok.service} tampoco depende del código de \texttt{web.py}; únicamente reenvía tráfico de red hacia el puerto que este último expone.}
+\label{fig:arquitectura_web}
+\end{figure}
 
 \subsection{Configuración externalizada}
 \label{subsec:config_externalizada_real}
@@ -83,7 +154,6 @@ Se definieron tres unidades de servicio independientes: \texttt{indoor\_main.ser
 \end{itemize}
 
 Los tres servicios se ejecutan como procesos independientes, sin una relación de dependencia u orden de arranque explícito entre ellos --ninguno declara al otro como requisito previo--. Esta independencia es intencional: el servidor de configuración web y el túnel de acceso remoto no requieren que el ciclo de control esté corriendo para cumplir su función (permitir la consulta y edición de la configuración, y exponer el puerto del servidor web hacia internet, respectivamente), por lo que acoplar su arranque al del proceso de control introduciría una dependencia innecesaria. Como contrapartida, no existe una garantía explícita de que \texttt{ngrok.service} inicie después de que \texttt{indoor\_web.service} ya esté escuchando en su puerto; en la práctica esto no representa un problema operativo relevante, dado que la política \texttt{Restart=always} y el propio comportamiento de reconexión de ngrok absorben cualquier intento de conexión fallido en los primeros segundos posteriores al arranque.
-
 \subsubsection{Adquisición de Datos y Registro Histórico del Sistema}
 \label{subsubsec:adquisicion_registro}
 
@@ -105,3 +175,20 @@ El envío de la información hacia los servidores en la nube se ejecuta de maner
     \item \textbf{Tolerancia a fallos y operación local:} El aspecto más crítico de la rutina de transmisión es su diseño orientado a la robustez. La comunicación con los servidores externos incorpora mecanismos de seguridad como la limitación del tiempo máximo de espera (\textit{timeout}) y el manejo seguro de excepciones ante caídas de conexión.
     \item \textbf{Prioridad de control:} Estas medidas garantizan que, ante una eventual pérdida de acceso a Internet o latencia en los servidores remotos, el software no colapse ni detenga su ejecución. De este modo, la unidad central prioriza el control local, pudiendo continuar ininterrumpidamente con tareas críticas como la desactivación de la bomba de riego o el encendido de la iluminación, asegurando la integridad del cultivo sin importar el estado de las telecomunicaciones.
 \end{itemize}
+
+\PENDIENTE{agregar fotos de la plataforma ThingSpeak (canal, gráficos)}
+
+\section{Interfaz de usuario}
+\label{sec:interfaz_usuario}
+
+La interfaz de usuario se implementó como una aplicación web mínima construida con Flask, aplicando directamente el patrón cliente-servidor descripto en el Marco Teórico (Sección \ref{sec:cliente_servidor}): el servidor --ejecutado localmente en la Raspberry Pi y expuesto remotamente mediante el túnel inverso presentado en la Sección \ref{sec:tunel_inverso}-- concentra el acceso de lectura y escritura al archivo de configuración, mientras que cualquier navegador web actúa como cliente, sin necesidad de tener instalada ninguna dependencia del proyecto.
+
+La aplicación expone una única ruta que responde a dos métodos HTTP distintos. Ante una solicitud \texttt{GET}, el servidor lee el archivo de configuración vigente y renderiza una página que muestra los valores actuales de los parámetros editables de cada maceta. Ante una solicitud \texttt{POST} --generada al enviar el formulario de la página--, el servidor toma los nuevos valores ingresados, actualiza la estructura de configuración en memoria y la vuelve a escribir por completo sobre el archivo de configuración, sobrescribiendo la versión anterior. Los parámetros expuestos para edición remota por maceta son el umbral de humedad de sustrato, el umbral de humedad ambiente, el tiempo de riego y el DLI objetivo --es decir, precisamente los parámetros de umbral y calibración discutidos en el Capítulo \ref{cha:hardware_control}--, mientras que el resto de la configuración (asignación de pines, direcciones I2C, credenciales de ThingSpeak) permanece fija y solo es editable directamente sobre el archivo.
+
+Es importante remarcar que el código Python de \texttt{web.py} (Sección \ref{subsec:organizacion_modular_real}) resuelve únicamente la lectura y escritura del archivo de configuración y el enrutamiento HTTP; la estructura visual de la página --el formulario, sus etiquetas y estilos-- está definida por completo en un archivo de plantilla HTML separado (\texttt{templates/index.html}), siguiendo el patrón de plantillas de Flask basado en el motor Jinja2. Cada campo del formulario se vincula, mediante su atributo \texttt{name}, directamente con una clave del archivo de configuración: por ejemplo, el campo correspondiente al umbral de riego de la maceta 1 se declara en el HTML con \texttt{name="m1\_suelo"}, y es precisamente esa cadena la que \texttt{web.py} utiliza para leer el valor enviado y asignarlo a \texttt{config['macetas']['maceta1']['umbral\_humedad\_suelo\_raw']} antes de reescribir el archivo TOML. De manera análoga, cada campo se inicializa con el valor vigente en la configuración mediante una expresión de plantilla Jinja2 (por ejemplo, \texttt{\{\{ config.macetas.maceta1.umbral\_humedad\_suelo\_raw \}\}}), de modo que la página siempre refleja el estado real del archivo al momento de cargarse, y no un valor por defecto codificado en el HTML.
+
+Más allá del formulario de configuración, la misma página incorpora una sección de monitoreo histórico que embebe directamente, mediante elementos \texttt{iframe}, los gráficos públicos generados por la plataforma ThingSpeak (Sección \ref{subsec:thingspeak}) para cada campo de cada canal. De esta forma, la interfaz cumple una doble función en una única página: permite tanto la edición remota de los parámetros de control como la visualización de la evolución histórica de las variables de cada maceta, sin necesidad de que el usuario abandone la página ni de que el propio servidor Flask genere ningún gráfico por su cuenta --esa tarea queda completamente delegada a ThingSpeak--. Cabe destacar que toda la interfaz se resuelve mediante renderizado del lado del servidor: no se emplea código JavaScript propio ni actualización asincrónica de datos, por lo que cada cambio de valores requiere un envío de formulario y una recarga completa de la página, una decisión de diseño consistente con el criterio general de simplicidad y bajo costo de mantenimiento adoptado en el resto del proyecto.
+
+Tras procesar una solicitud de guardado exitosa, el servidor redirige al usuario nuevamente a la página principal en lugar de responder directamente sobre la misma solicitud POST, evitando así que una recarga accidental de la página por parte del usuario reenvíe el mismo formulario y sobrescriba la configuración por segunda vez. Esta misma respuesta de redirección incluye una señal que la página utiliza para mostrar una confirmación visual de que los cambios se guardaron correctamente.
+
+\PENDIENTE{agregar fotos/capturas de pantalla de la interfaz web}
