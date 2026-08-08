@@ -1,17 +1,59 @@
+% ============================================================
+% Reemplazar la descripción de "Goteros" (Cap. 3, Actuadores) por esta versión
+% (corrige el rango a 10-80 L/h y menciona las 4 unidades por maceta)
+% ============================================================
+\subsection{Goteros}
+\label{subsec:goteros}
+
+Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar cumplimiento al criterio metodológico de gestión sustentable del recurso hídrico, se implementaron cuatro emisores de riego localizado por maceta, con una capacidad nominal ajustable en un rango de 10 a 80 litros por hora cada uno. Los cuatro goteros se insertan sobre una única línea de distribución dispuesta a lo largo del eje central de la maceta, distribuidos de forma uniforme para cubrir la superficie de cultivo. La integración física de estos componentes en la red de distribución se realiza de forma directa sobre la línea de conducción principal, efectuando un punzonado calibrado en la pared de la manguera de polietileno. Los goteros se introducen a presión dentro de esta perforación mediante un acoplamiento por interferencia mecánica, aprovechando las propiedades elásticas del material polimérico para asegurar la estanqueidad total del nodo y prevenir caídas de presión en el circuito. Estos dispositivos operan como actuadores pasivos finales y cuentan con un mecanismo de regulación helicoidal que permite modificar la sección transversal del conducto interno mediante obturación mecánica, optimizando la respuesta del lazo de irrigación automatizado. Esta capacidad de ajuste resulta crítica para la calibración del sistema, debido a que permite ecualizar la pérdida de carga en la red de distribución, garantizando que el coeficiente de descarga sea uniforme en todas las estaciones de cultivo.
+
+% ============================================================
+% Reemplazar el primer párrafo de "Sistema de riego" (Cap. 3) por este
+% (agrega la topología real: circuito cerrado con retorno de drenaje,
+% línea única con dos válvulas excluyentes)
+% ============================================================
+El subsistema de irrigación opera en circuito cerrado: la manguera de succión de la electrobomba (Sección \ref{subsec:bomba_riego}) toma agua desde el depósito de reserva, el mismo punto donde desemboca el agua percolada y recolectada por el sistema de drenaje (Sección \ref{subsubsec:impermeabilizacion_drenaje}), recirculando así el recurso hídrico no absorbido por el sustrato. A la salida de la bomba, una única línea alimenta dos válvulas solenoides --una por maceta-- que operan de forma excluyente, habilitando el paso de agua hacia una sola maceta a la vez. Cada válvula da paso a una manguera dispuesta sobre el eje central de su maceta correspondiente, sobre la cual se insertan los cuatro goteros autocompensados descriptos en la Sección \ref{subsec:goteros}, logrando una distribución homogénea del recurso hídrico en la zona radicular.
+
+% ============================================================
+% Sección completa de dimensionamiento hidráulico (reemplaza la versión anterior)
+% ============================================================
 \subsection{Dimensionamiento hidráulico del sistema de riego}
 \label{subsec:dimensionamiento_riego}
 
-La bomba seleccionada (Sección \ref{subsec:bomba_riego}) opera a una presión de trabajo de \SI{2.5}{bar} y un caudal máximo de \SI{3.8}{\liter\per\minute} (\SI{228}{\liter\per\hour}), magnitud que excede ampliamente el caudal individual de un gotero autocompensado, ajustable en un rango de 5 a \SI{80}{\liter\per\hour} (Sección \ref{subsec:goteros}). Esta holgura de caudal --entre uno y dos órdenes de magnitud por encima del requerimiento de un único punto de emisión-- es la que permite presurizar la línea de riego sin comprometer la uniformidad de caudal entre los distintos goteros de la instalación, incluso ante la eventual apertura simultánea de más de una línea.
-
-El volumen de agua efectivamente entregado en cada evento de riego depende del caudal calibrado en el gotero y de la duración de apertura de la electroválvula. Para el rango completo de ajuste del gotero, y considerando la duración de riego adoptada (60 segundos, Sección \ref{subsec:algoritmo_control_riego}), el volumen entregado por punto de emisión se ubica entre:
+A diferencia de un esquema de un único punto de emisión, cada maceta cuenta con cuatro goteros (Sección \ref{subsec:goteros}) alimentados simultáneamente por la misma línea, por lo que el caudal efectivo que debe considerarse para el dimensionamiento es la suma de los cuatro emisores en paralelo. Para el rango de ajuste individual de cada gotero (10 a \SI{80}{\liter\per\hour}), el caudal combinado de la maceta se ubica entre:
 
 \begin{align*}
-    V_{min} &= 5\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}} \approx 0{,}083\ \text{L} \\
-    V_{max} &= 80\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}} \approx 1{,}33\ \text{L}
+    Q_{total,\ min} &= 4 \times 10\ \frac{\text{L}}{\text{h}} = 40\ \frac{\text{L}}{\text{h}} \\
+    Q_{total,\ max} &= 4 \times 80\ \frac{\text{L}}{\text{h}} = 320\ \frac{\text{L}}{\text{h}}
 \end{align*}
 
-Este rango de casi 16 a 1 entre el mínimo y el máximo ajustable evidencia que, en este diseño, la variable de control primaria sobre el volumen de agua entregado es la regulación mecánica del caudal en el propio gotero, mientras que el firmware se limita a decidir cuándo abrir la electroválvula y por cuánto tiempo. El caudal específico calibrado en los goteros del prototipo, dentro de este rango, se ajustó de forma empírica hasta observar la recuperación de humedad deseada tras cada riego (Sección \ref{subsec:algoritmo_control_riego}).
+Este caudal combinado debe contrastarse con la capacidad de la bomba (Sección \ref{subsec:bomba_riego}), cuyo caudal máximo de \SI{3.8}{\liter\per\minute} equivale a \SI{228}{\liter\per\hour}. Se observa que $Q_{total,\ max} = \SI{320}{\liter\per\hour}$ \textbf{supera} la capacidad máxima de la bomba (\SI{228}{\liter\per\hour}): si los cuatro goteros se calibraran simultáneamente cerca de su tope de ajuste, la demanda combinada excedería lo que la bomba puede suministrar, y sería esta última --y no el ajuste nominal de los goteros-- la que terminaría limitando el caudal real entregado. En consecuencia, el caudal máximo real del sistema no es $Q_{total,\ max}$, sino el caudal máximo de la bomba:
 
+\begin{equation}
+    Q_{real,\ max} = \min(Q_{total,\ max},\ Q_{bomba}) = \SI{228}{\liter\per\hour}
+    \label{eq:caudal_real_max}
+\end{equation}
+
+Para la duración de riego adoptada empíricamente (60 segundos, Sección \ref{subsec:algoritmo_control_riego}), el volumen de agua entregado a la maceta se ubica entonces entre:
+
+\begin{align*}
+    V_{min} &= 40\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}} \approx 0{,}667\ \text{L} \\
+    V_{max} &= 228\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}} = 3{,}8\ \text{L}
+\end{align*}
+
+\noindent donde $V_{max}$ resulta de aplicar el caudal límite de la bomba (Ecuación~\ref{eq:caudal_real_max}) en lugar del máximo nominal de los goteros. Expresado como lámina de agua equivalente sobre la superficie de la maceta ($\SI{50}{\centi\meter} \times \SI{100}{\centi\meter} = \SI{0.5}{\meter\squared}$), y empleando la equivalencia $\SI{1}{\liter\per\meter\squared} = \SI{1}{\milli\meter}$ de lámina:
+
+\begin{align*}
+    L_{min} &= \frac{0{,}667\ \text{L}}{0{,}5\ \text{m}^2} \approx \SI{1.33}{\milli\meter} \\
+    L_{max} &= \frac{3{,}8\ \text{L}}{0{,}5\ \text{m}^2} = \SI{7.6}{\milli\meter}
+\end{align*}
+
+Este rango de lámina aplicada (entre 1,3 mm y 7,6 mm por evento de riego, según la calibración elegida para los goteros) es consistente con una irrigación superficial ligera --adecuada para el objetivo de mantener húmeda la superficie del sustrato sin saturar el perfil completo (Sección \ref{subsec:calibracion_higrometro})-- y resulta coherente con la recuperación de humedad observada empíricamente (80\% a 90\%) tras cada evento de 60 segundos. La disposición de los cuatro goteros a lo largo del eje central de la maceta, subdividiendo la superficie total en cuatro zonas de aproximadamente $\SI{0.125}{\meter\squared}$ cada una, es la que garantiza que la lámina calculada se distribuya de forma razonablemente homogénea en todo el ancho y largo del contenedor, y no se concentre en un único punto de la superficie.
+
+% ============================================================
+% Calibración del higrómetro y algoritmo de control (sin cambios respecto
+% al mensaje anterior, incluidos acá solo para tener el bloque completo)
+% ============================================================
 \subsection{Calibración del sensor de humedad de sustrato}
 \label{subsec:calibracion_higrometro}
 
