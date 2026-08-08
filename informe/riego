@@ -1,0 +1,45 @@
+\subsection{Dimensionamiento hidráulico del sistema de riego}
+\label{subsec:dimensionamiento_riego}
+
+La bomba seleccionada (Sección \ref{subsec:bomba_riego}) opera a una presión de trabajo de \SI{2.5}{bar} y un caudal máximo de \SI{3.8}{\liter\per\minute} (\SI{228}{\liter\per\hour}), magnitud que excede ampliamente el caudal individual de un gotero autocompensado, ajustable en un rango de 5 a \SI{80}{\liter\per\hour} (Sección \ref{subsec:goteros}). Esta holgura de caudal --entre uno y dos órdenes de magnitud por encima del requerimiento de un único punto de emisión-- es la que permite presurizar la línea de riego sin comprometer la uniformidad de caudal entre los distintos goteros de la instalación, incluso ante la eventual apertura simultánea de más de una línea.
+
+El volumen de agua efectivamente entregado en cada evento de riego depende del caudal calibrado en el gotero y de la duración de apertura de la electroválvula. Para el rango completo de ajuste del gotero, y considerando la duración de riego adoptada (60 segundos, Sección \ref{subsec:algoritmo_control_riego}), el volumen entregado por punto de emisión se ubica entre:
+
+\begin{align*}
+    V_{min} &= 5\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}} \approx 0{,}083\ \text{L} \\
+    V_{max} &= 80\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}} \approx 1{,}33\ \text{L}
+\end{align*}
+
+Este rango de casi 16 a 1 entre el mínimo y el máximo ajustable evidencia que, en este diseño, la variable de control primaria sobre el volumen de agua entregado es la regulación mecánica del caudal en el propio gotero, mientras que el firmware se limita a decidir cuándo abrir la electroválvula y por cuánto tiempo. El caudal específico calibrado en los goteros del prototipo, dentro de este rango, se ajustó de forma empírica hasta observar la recuperación de humedad deseada tras cada riego (Sección \ref{subsec:algoritmo_control_riego}).
+
+\subsection{Calibración del sensor de humedad de sustrato}
+\label{subsec:calibracion_higrometro}
+
+A diferencia del contenido volumétrico de agua ($\theta$) definido en el Marco Teórico (Ecuación \ref{eq:vwc}), que requiere conocer el volumen de agua respecto del volumen total del sustrato, el sistema no mide $\theta$ de forma absoluta, sino que utiliza una escala relativa obtenida por calibración directa del sensor capacitivo entre dos extremos físicos de referencia: sustrato en su condición más seca observada ($raw_{seco} = 250$) y sustrato en su condición de saturación extrema o encharcamiento (barro, $raw_{mojado} = 60$). La conversión de la lectura cruda del ADC a un porcentaje de humedad relativa se realiza por interpolación lineal entre ambos extremos:
+
+\begin{equation}
+    H_{\%} = \frac{raw - raw_{seco}}{raw_{mojado} - raw_{seco}} \times 100
+    \label{eq:calibracion_higrometro}
+\end{equation}
+
+acotado al rango $[0, 100]$. Dado que $raw_{mojado} < raw_{seco}$, la Ecuación~\ref{eq:calibracion_higrometro} refleja que una lectura cruda menor corresponde a un sustrato más húmedo.
+
+El umbral de disparo del riego se fijó en $raw_{umbral} = 150$, equivalente, según la Ecuación~\ref{eq:calibracion_higrometro}, a $H_{\%} \approx 52{,}6\%$. Este valor se determinó empíricamente, observando que por debajo de esa humedad relativa la superficie del sustrato --la zona más crítica a mantener húmeda, dado que la profundidad radicular efectiva no supera los 20 cm sobre los 30 cm de altura total de la maceta-- comenzaba a manifestar signos visibles de sequedad. Tras cada evento de riego, las lecturas del sensor se recuperaban típicamente a valores de entre el 80\% y el 90\% de humedad relativa, definiendo así el rango de operación normal del sistema entre un piso de disparo ($\approx 52{,}6\%$) y un techo de recuperación ($80\text{-}90\%$).
+
+\subsection{Algoritmo de control de riego}
+\label{subsec:algoritmo_control_riego}
+
+A diferencia de la luz (Sección \ref{subsec:algoritmo_control_dli}) y la ventilación, que incorporan explícitamente una banda de histéresis o un temporizador de permanencia mínima en su lógica de decisión, el riego se gobierna mediante un único umbral de comparación sobre la lectura suavizada de humedad de sustrato:
+
+\begin{equation}
+    riego_{pendiente} =
+    \begin{cases}
+        \text{verdadero} & \text{si } raw_{promedio} \geq raw_{umbral} \\
+        \text{falso} & \text{en caso contrario}
+    \end{cases}
+    \label{eq:decision_riego}
+\end{equation}
+
+Previamente a esta comparación, la lectura se acondiciona en dos etapas de filtrado sucesivas, aplicando el principio de redundancia y sobremuestreo presentado en el Marco Teórico (Secciones \ref{subsec:redundancia} y \ref{sec:control_histeresis}): en primer lugar, cada uno de los dos sensores de humedad de la maceta se promedia sobre una ventana móvil de las últimas 3 lecturas válidas; en segundo lugar, ambos valores suavizados se promedian entre sí --o se conserva el único sensor disponible en caso de falla del otro--, obteniendo así el valor $raw_{promedio}$ utilizado en la Ecuación~\ref{eq:decision_riego}. Adicionalmente, toda lectura cruda igual a 128 --valor que corresponde a una condición de fallo de lectura del conversor A/D-- se descarta antes de ingresar a la ventana de suavizado, evitando que un dato espurio contamine el promedio.
+
+La ausencia de una banda de histéresis explícita en esta lógica no genera, en la práctica, conmutaciones erráticas del actuador: el propio proceso físico de infiltración del agua en el sustrato introduce un retardo natural de varios minutos entre la apertura de la electroválvula y la estabilización de la nueva lectura de humedad, funcionando como una histéresis implícita del sistema. Una vez detectado el disparo, la señal $riego_{pendiente}$ es interpretada por la capa de orquestación del programa --fuera del módulo de lógica de control-- para ejecutar la apertura de la electroválvula durante una ventana de tiempo fija de 60 segundos, valor determinado empíricamente como suficiente para recuperar la humedad del sustrato hasta el rango del 80\% al 90\% sin generar encharcamiento superficial.
