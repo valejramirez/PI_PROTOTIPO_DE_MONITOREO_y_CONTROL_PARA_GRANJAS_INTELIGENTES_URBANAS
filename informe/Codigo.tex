@@ -1,0 +1,107 @@
+\subsection{Sistema operativo y lenguaje de desarrollo}
+\label{subsec:so_lenguaje}
+
+El software de control se ejecuta sobre Raspberry Pi OS (anteriormente denominado Raspbian), la distribución oficial de Linux basada en Debian mantenida por la Raspberry Pi Foundation para las computadoras de placa única de esta familia. La elección de este sistema operativo no fue una decisión de diseño independiente, sino una consecuencia directa de la selección de la Raspberry Pi 4 Model B como unidad de procesamiento central (Sección \ref{sec:raspberry_pi}): al tratarse de la distribución de referencia del fabricante, garantiza la compatibilidad completa con los periféricos de hardware embebido (GPIO, bus I2C) a través de sus bibliotecas oficiales, sin requerir capas de compatibilidad adicionales.
+
+Todo el software desarrollado --la lógica de adquisición y control, el registro de datos, la integración con la nube y la interfaz web de configuración-- se implementó íntegramente en Python. Esta elección aprovecha directamente las ventajas de concurrencia y gestión de librerías discutidas en la Sección \ref{sec:raspberry_pi}: Python cuenta con soporte oficial de primer nivel en Raspberry Pi OS, y dispone de bibliotecas maduras tanto para el acceso a hardware embebido (a través del proyecto Adafruit Blinka, que expone una capa de compatibilidad CircuitPython sobre los pines GPIO y el bus I2C de la Raspberry Pi) como para el desarrollo de servicios web (mediante el microframework Flask, utilizado para la interfaz de usuario de la Sección \ref{sec:interfaz_usuario}).
+
+\subsection{Organización modular del software}
+\label{subsec:organizacion_modular_real}
+
+Siguiendo el principio de separación de responsabilidades presentado en el Marco Teórico (Sección \ref{sec:modularidad}), el software del prototipo se organiza en seis módulos de Python, cada uno responsable de un único bloque funcional:
+
+\begin{itemize}
+    \item \texttt{models.py}: define, mediante clases de datos (\textit{dataclasses}), la estructura de la configuración del sistema (\texttt{SystemConfig}, \texttt{MacetaConfig}, y las configuraciones anidadas de cada sensor y actuador) y la estructura del estado en tiempo de ejecución (\texttt{MacetaEstado}), sin contener ninguna lógica propia. Es la representación del estado descripta de forma genérica en el Marco Teórico.
+    \item \texttt{config\_loader.py}: implementa la configuración externalizada (Sección \ref{subsec:config_externalizada_real}), leyendo el archivo de configuración y construyendo las estructuras de \texttt{models.py} a partir de él, además de validar su consistencia antes de iniciar el sistema.
+    \item \texttt{hardware.py}: implementa la capa de abstracción de hardware (Sección \ref{subsec:capa_hardware_real}), traduciendo operaciones de alto nivel (``leer humedad de suelo'', ``encender luz'') a las operaciones concretas de bus I2C y de pines GPIO.
+    \item \texttt{control.py}: contiene la lógica de control propiamente dicha --las funciones de decisión de riego, ventilación y DLI presentadas en el Capítulo \ref{cha:hardware_control}--, sin conocer ningún detalle de cómo se leen los sensores ni de cómo se accionan los actuadores.
+    \item \texttt{main.py}: implementa la orquestación del sistema (Sección \ref{subsec:ciclo_orquestacion}): el ciclo principal que en cada iteración coordina la lectura de sensores, la invocación de la lógica de control, la actuación sobre el hardware, el registro persistente en CSV y el envío de telemetría a ThingSpeak.
+    \item \texttt{web.py}: implementa la interfaz de salida de configuración remota (Sección \ref{sec:interfaz_usuario}), exponiendo un servidor web que permite consultar y modificar los parámetros del sistema sin necesidad de acceso directo a la Raspberry Pi.
+\end{itemize}
+
+Esta organización refleja de forma directa los seis bloques de separación de responsabilidades enumerados en el Marco Teórico: configuración (\texttt{config\_loader.py}), representación del estado (\texttt{models.py}), abstracción de hardware (\texttt{hardware.py}), lógica de control (\texttt{control.py}), orquestación (\texttt{main.py}) e interfaces de salida (\texttt{web.py}, junto con las rutinas de registro CSV y telemetría dentro de \texttt{main.py}).
+
+\subsection{Configuración externalizada}
+\label{subsec:config_externalizada_real}
+
+Todos los parámetros ajustables del sistema --umbrales de control, factores de luminaria, direcciones I2C, asignación de pines GPIO, credenciales de ThingSpeak, entre otros-- se externalizan en un único archivo de configuración en formato TOML (\texttt{config.toml}), aplicando directamente el patrón de configuración externalizada descripto en el Marco Teórico (Sección \ref{sec:config_persistencia}). A modo ilustrativo, la configuración de una maceta incluye:
+
+\begin{verbatim}
+[macetas.maceta1]
+umbral_humedad_suelo_raw = 150
+umbral_humedad_ambiente_pct = 80.0
+umbral_temperatura_c = 30
+tiempo_riego_seg = 60.0
+hora_inicio_dia = 10
+hora_fin_dia = 22
+dli_objetivo = 15.0
+lux_foco = 6500
+factor_luminaria = 0.0887
+factor_luminaria_ambiente = 0.0185
+\end{verbatim}
+
+El módulo \texttt{config\_loader.py} no se limita a parsear este archivo: antes de que el sistema comience a operar, ejecuta un conjunto de validaciones de consistencia sobre la configuración cargada, entre ellas: que los umbrales porcentuales se encuentren dentro del rango físicamente válido (0 a 100), que no existan direcciones I2C repetidas entre distintos conversores A/D, y que no haya dos actuadores o sensores distintos asignados al mismo pin GPIO. Esta validación temprana evita que un error de tipeo en el archivo de configuración --por ejemplo, dos actuadores compartiendo accidentalmente el mismo GPIO-- se manifieste recién en tiempo de ejecución como una falla de hardware difícil de diagnosticar.
+
+\subsection{Capa de abstracción de hardware}
+\label{subsec:capa_hardware_real}
+
+La clase \texttt{HardwareManager} centraliza todo el acceso físico a sensores y actuadores, exponiendo hacia el resto del sistema métodos de alto nivel (\texttt{leer\_humedad\_raw}, \texttt{leer\_lux}, \texttt{leer\_dht}, \texttt{set\_luz\_maceta}, \texttt{set\_valvula\_maceta}, \texttt{set\_ventilador\_maceta}, entre otros) que ocultan por completo los detalles de bus I2C y de numeración de pines GPIO al módulo de control. Dos aspectos de su implementación aplican directamente principios ya presentados en el Marco Teórico:
+
+En primer lugar, la lectura de humedad de sustrato (\texttt{leer\_humedad\_raw}) toma una primera lectura de descarte antes de comenzar el muestreo real, y luego promedia 5 lecturas sucesivas del conversor A/D. La lectura de descarte responde directamente al comportamiento del PCF8591 descripto en el Marco Teórico (Sección \ref{subsec:conversion_ad}): tras una condición de reinicio, o al cambiar de canal, el primer byte transmitido corresponde a una conversión anterior y no al canal actualmente seleccionado, por lo que se descarta explícitamente antes de tomar las muestras válidas. El promedio de las 5 lecturas posteriores implementa, a nivel de hardware, el sobremuestreo (\textit{oversampling}) también presentado en esa misma sección.
+
+En segundo lugar, la configuración de cada pin de salida (\texttt{\_configurar\_salida}) fija el nivel lógico seguro del actuador \textit{antes} de conmutar el pin al modo salida, evitando así un pulso espurio de activación en el instante en que el microcontrolador toma control del pin --una precaución directamente relacionada con la lógica de activación por nivel bajo descripta en el Marco Teórico (Sección \ref{subsec:activo_bajo}), dado que un pin flotante o mal inicializado podría interpretarse transitoriamente como un nivel bajo y disparar el relé de forma no intencional durante el arranque del sistema.
+
+\subsection{Ciclo principal de orquestación}
+\label{subsec:ciclo_orquestacion}
+
+El módulo \texttt{main.py} ejecuta un ciclo continuo que, en cada iteración, repite la siguiente secuencia para cada maceta habilitada: lectura de sensores a través de \texttt{hardware.py}, procesamiento de esas lecturas mediante \texttt{control.py} (Capítulo \ref{cha:hardware_control}), y aplicación del nuevo estado resultante sobre los actuadores de luz y ventilación. A diferencia de un ciclo de control de período fijo, el intervalo real transcurrido entre iteraciones ($\Delta t$) se mide explícitamente en cada vuelta del ciclo, y es ese valor medido --no un valor nominal supuesto-- el que se utiliza para la integración del DLI (Ecuación \ref{eq:dli_ppfd} del Marco Teórico), evitando que una eventual demora en el ciclo de lectura introduzca un error sistemático en la acumulación diaria de luz. El acumulador de DLI, además, se reinicia automáticamente a cero al detectar un cambio de día calendario.
+
+El riego se gestiona de forma diferenciada del resto de los actuadores, mediante una rutina de ejecución segura (\texttt{ejecutar\_riego\_seguro}) que introduce una secuencia de enclavamiento explícita para evitar condiciones de riego simultáneo entre macetas --consistente con la disposición física de una única bomba y línea compartida descripta en la Sección \ref{sec:circuito_riego}--:
+
+\begin{enumerate}
+    \item Un indicador global de exclusión mutua impide que se inicie un nuevo riego mientras otro ya está en curso; si el sistema está ocupado, el pedido de riego de esa maceta queda pendiente para el siguiente ciclo.
+    \item Como medida preventiva, se cierran explícitamente las válvulas de todas las macetas antes de abrir la correspondiente a la maceta objetivo, evitando que un estado inconsistente previo deje dos válvulas abiertas a la vez.
+    \item Se abre la válvula de la maceta objetivo y se introduce una breve espera antes de encender la bomba, asegurando que el camino hidráulico ya esté disponible en el momento en que comienza a circular agua a presión.
+    \item Transcurrido el tiempo de riego configurado, la bomba se apaga \textit{antes} que la válvula, y se introduce una segunda espera (el tiempo de despresurización configurado) antes de cerrar la válvula, evitando que la manguera quede presurizada tras el cierre.
+\end{enumerate}
+
+Esta secuencia se ejecuta dentro de un bloque de manejo de excepciones que garantiza el apagado de la bomba y el cierre de la válvula --y la liberación del indicador de exclusión mutua-- incluso si ocurriera un error durante el riego, evitando que una falla de software derive en una válvula o una bomba que permanezcan indefinidamente activas.
+
+Al finalizar el procesamiento de todas las macetas en cada ciclo, el sistema registra el estado completo en el archivo CSV local (Sección \ref{subsubsec:adquisicion_registro}) y transmite las variables relevantes a ThingSpeak (Sección \ref{subsec:thingspeak}), antes de aguardar el intervalo de lectura configurado e iniciar el siguiente ciclo. Ante una interrupción del programa --ya sea manual o por una excepción no controlada--, un bloque de finalización garantizado apaga todos los actuadores y libera los recursos de GPIO utilizados, evitando dejar relés activados tras la detención del sistema.
+
+\subsection{Despliegue y arranque automático: gestión mediante servicios de systemd}
+\label{subsec:systemd}
+
+Para garantizar que el sistema comience a operar de forma autónoma inmediatamente después de energizar la Raspberry Pi --sin requerir que un operador inicie manualmente ningún proceso--, los tres componentes de software que deben ejecutarse de forma continua (el ciclo de control principal, el servidor web de configuración, y el túnel inverso de acceso remoto) se gestionan como servicios del sistema mediante \texttt{systemd}, el gestor de servicios estándar de Raspberry Pi OS.
+
+Se definieron tres unidades de servicio independientes: \texttt{indoor\_main.service} (ejecuta el ciclo de orquestación de \texttt{main.py}, Sección \ref{subsec:ciclo_orquestacion}), \texttt{indoor\_web.service} (ejecuta el servidor Flask de \texttt{web.py}, Sección \ref{sec:interfaz_usuario}) y \texttt{ngrok.service} (ejecuta el túnel inverso presentado en el Marco Teórico, Sección \ref{sec:tunel_inverso}). Las tres unidades comparten la misma estructura de configuración:
+
+\begin{itemize}
+    \item \texttt{After=network.target}: cada servicio espera a que la interfaz de red del sistema esté disponible antes de iniciar su ejecución. Esto es particularmente relevante para \texttt{indoor\_main.service} (que depende de la red para la telemetría hacia ThingSpeak) y para \texttt{ngrok.service} (cuyo propósito es, precisamente, establecer una conexión de red saliente), evitando que intenten operar sobre una interfaz de red todavía no inicializada durante el arranque del sistema.
+    \item \texttt{Restart=always}: ante la finalización inesperada de cualquiera de los tres procesos --por ejemplo, por una excepción no controlada--, \texttt{systemd} lo reinicia automáticamente sin intervención humana. Esta política de reinicio automático es la que materializa, a nivel de infraestructura de despliegue, el requisito de operación autónoma de la capa de procesamiento local planteado en el Marco Teórico (Sección \ref{sec:arquitectura_capas}).
+    \item \texttt{WantedBy=multi-user.target}: habilita el arranque automático de los tres servicios durante el proceso de inicio del sistema operativo, sin requerir que un usuario inicie sesión ni ejecute manualmente ningún comando.
+\end{itemize}
+
+Los tres servicios se ejecutan como procesos independientes, sin una relación de dependencia u orden de arranque explícito entre ellos --ninguno declara al otro como requisito previo--. Esta independencia es intencional: el servidor de configuración web y el túnel de acceso remoto no requieren que el ciclo de control esté corriendo para cumplir su función (permitir la consulta y edición de la configuración, y exponer el puerto del servidor web hacia internet, respectivamente), por lo que acoplar su arranque al del proceso de control introduciría una dependencia innecesaria. Como contrapartida, no existe una garantía explícita de que \texttt{ngrok.service} inicie después de que \texttt{indoor\_web.service} ya esté escuchando en su puerto; en la práctica esto no representa un problema operativo relevante, dado que la política \texttt{Restart=always} y el propio comportamiento de reconexión de ngrok absorben cualquier intento de conexión fallido en los primeros segundos posteriores al arranque.
+
+\subsubsection{Adquisición de Datos y Registro Histórico del Sistema}
+\label{subsubsec:adquisicion_registro}
+
+Para la persistencia, estructuración y posterior análisis de las variables físicas recopiladas durante las campañas de ensayo, el sistema implementa la generación automática de archivos con formato de valores separados por comas. Este estándar abierto de texto plano almacena la información tabulada en filas y columnas mediante delimitadores, consolidando en cada registro una estampa temporal (timestamp) de alta resolución que integra de forma simultánea tanto las lecturas de los sensores como el estado operativo de los actuadores. Por un lado, se registran las variables de entrada procesadas por la red de captación (incluyendo parámetros microclimáticos como la temperatura ambiente, la humedad relativa, la iluminancia en luxes, el DLI acumulado y la humedad volumétrica del sustrato en ambas macetas). Por otro lado, se almacenan las variables lógicas binarias que representan la activación o desactivación de los elementos de control, tales como los módulos de iluminación artificial y las bombas de riego. La elección del formato .csv se fundamenta en su baja carga computacional, su eficiencia en el consumo de memoria en el microcontrolador y su elevada interoperabilidad, lo que permite importar e integrar el dataset histórico de manera directa en entornos de procesamiento como Python para la posterior reconstrucción y análisis estadístico del comportamiento del prototipo.
+
+\subsection{Telemetría y visualización en la nube: integración con ThingSpeak}
+\label{subsec:thingspeak}
+
+Para dotar al sistema de capacidades de monitoreo remoto propias del Internet de las Cosas (IoT), se implementó la plataforma en la nube ThingSpeak. Desarrollada por MathWorks, esta herramienta permite la agregación, visualización y análisis de flujos de datos en tiempo real.
+
+La elección de esta plataforma para el prototipo se fundamenta en múltiples ventajas operativas. En primer lugar, ofrece un nivel de uso gratuito y de libre acceso para proyectos académicos y de investigación, lo que elimina los costos de licenciamiento o alquiler de servidores privados. En segundo lugar, descentraliza la visualización de los datos; al enviar las lecturas críticas del entorno radicular y ambiental a la nube, el usuario adquiere la capacidad de auditar el estado del cultivo (humedad de suelo, iluminancia, temperatura y humedad relativa) desde cualquier dispositivo con acceso a Internet, independizándose de la red de área local donde opera el sistema. Esta arquitectura sienta las bases prácticas para la interconexión de múltiples granjas inteligentes en un futuro.
+
+\subsubsection{Arquitectura de transmisión de datos}
+
+El envío de la información hacia los servidores en la nube se ejecuta de manera cíclica en cada iteración del lazo de control principal del sistema. Para garantizar una comunicación eficiente y segura, el algoritmo de telemetría se estructuró en las siguientes etapas conceptuales:
+
+\begin{itemize}
+    \item \textbf{Autenticación y acondicionamiento:} El proceso inicia con la validación de credenciales mediante una clave de interfaz (API Key) única, la cual autoriza a la placa central a publicar información en su respectivo canal. Previo a la conformación del paquete de datos, las lecturas de los sensores sufren un proceso de acondicionamiento digital; los valores decimales son truncados para eliminar fluctuaciones minúsculas no representativas, optimizando así el ancho de banda y el peso de la trama de red enviada.
+    \item \textbf{Tolerancia a fallos y operación local:} El aspecto más crítico de la rutina de transmisión es su diseño orientado a la robustez. La comunicación con los servidores externos incorpora mecanismos de seguridad como la limitación del tiempo máximo de espera (\textit{timeout}) y el manejo seguro de excepciones ante caídas de conexión.
+    \item \textbf{Prioridad de control:} Estas medidas garantizan que, ante una eventual pérdida de acceso a Internet o latencia en los servidores remotos, el software no colapse ni detenga su ejecución. De este modo, la unidad central prioriza el control local, pudiendo continuar ininterrumpidamente con tareas críticas como la desactivación de la bomba de riego o el encendido de la iluminación, asegurando la integridad del cultivo sin importar el estado de las telecomunicaciones.
+\end{itemize}
