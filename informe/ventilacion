@@ -1,0 +1,43 @@
+\subsection{Dimensionamiento del caudal de ventilación}
+\label{subsec:dimensionamiento_ventilacion}
+
+El volumen de aire a renovar corresponde al espacio comprendido entre la superficie del sustrato y el techo de cada nivel de cultivo, de dimensiones aproximadas $\SI{65}{\centi\meter}$ (alto) $\times\ \SI{50}{\centi\meter}$ (ancho) $\times\ \SI{100}{\centi\meter}$ (largo):
+
+\begin{equation}
+    V_{aire} = 0{,}65 \times 0{,}5 \times 1{,}0 = \SI{0.325}{\meter\cubed}
+    \label{eq:volumen_aire}
+\end{equation}
+
+Los ventiladores empleados son unidades axiales genéricas de 12 V (estándar de PC, $\SI{120}{\milli\meter} \times \SI{120}{\milli\meter} \times \SI{38}{\milli\meter}$, $0{,}6$ A, $2400$ RPM), sin hoja de datos propia del fabricante. Para estimar su caudal de aire se tomó como referencia un ventilador comercial de especificaciones físicas y eléctricas equivalentes (mismo tamaño y tensión, velocidad de giro de $2300$ RPM), cuyo catálogo especifica un caudal de $105$ CFM ($\approx \SI{178.4}{\meter\cubed\per\hour}$) \cite{mechatronics_f1238m12b}. Se aclara que este valor corresponde a un componente comparable y no a una medición directa del ventilador utilizado en el prototipo, dado que este último carece de ficha técnica propia.
+
+A partir de este caudal de referencia, el tiempo necesario para una renovación completa del volumen de aire del nivel de cultivo es:
+
+\begin{equation}
+    t_{renovacion} = \frac{V_{aire}}{Q_{ventilador}} = \frac{0{,}325\ \text{m}^3}{178{,}4\ \text{m}^3/\text{h}} \approx \SI{6.6}{\second}
+    \label{eq:tiempo_renovacion}
+\end{equation}
+
+Este resultado indica que, durante el bloque mínimo de activación de 120 segundos definido en el algoritmo de control (Sección \ref{subsec:algoritmo_control_ventilacion}), el ventilador alcanza a renovar por completo el volumen de aire del nivel aproximadamente 18 veces ($120\ \text{s} / 6{,}6\ \text{s} \approx 18$), lo que evidencia un amplio margen de sobredimensionamiento respecto del mínimo necesario para romper la capa límite de humedad estancada sobre el follaje.
+
+\subsection{Justificación de los umbrales de disparo}
+\label{subsec:umbral_ventilacion}
+
+Los umbrales configurados en el sistema son $\SI{30}{\celsius}$ para la temperatura ambiente y $\SI{80}{\percent}$ para la humedad relativa ambiente. Ambos valores se fijaron con un margen deliberado por encima de las condiciones óptimas de los cultivos (Sección \ref{sec:seleccion_cultivos}) y no como un límite estrictamente igual al punto ideal, con el fin de evitar activaciones innecesarias del ventilador ante fluctuaciones menores del microclima.
+
+En el caso de la temperatura, la rúcula y la espinaca tienen temperaturas objetivo de $\SI{24}{\celsius}$ y $\SI{25}{\celsius}$ respectivamente, por encima de las cuales comienza a manifestarse estrés térmico (espigado en la rúcula, pérdida de calidad de hoja en la espinaca). El umbral de $\SI{30}{\celsius}$ representa un margen de aproximadamente $5$ a $\SI{6}{\celsius}$ por encima de ese óptimo, suficiente para no disparar la ventilación ante variaciones normales del ambiente, pero sin permitir que la temperatura se aleje demasiado del rango deseado antes de intervenir.
+
+En el caso de la humedad relativa, el umbral de $\SI{80}{\percent}$ se relaciona directamente con el riesgo fitosanitario identificado para la espinaca (Sección \ref{sec:seleccion_cultivos}): la combinación de sustrato húmedo y aire estancado con alta humedad relativa favorece la proliferación de hongos en la base del tallo. Un umbral en ese entorno del $80\%$ es consistente con los niveles de humedad relativa a partir de los cuales la literatura fitopatológica general asocia un aumento del riesgo de enfermedades fúngicas foliares, por lo que se adoptó como punto de disparo preventivo antes de que se consoliden condiciones de saturación del aire.
+
+\subsection{Algoritmo de control de ventilación}
+\label{subsec:algoritmo_control_ventilacion}
+
+A diferencia del riego (Sección \ref{subsec:algoritmo_control_riego}), que emplea un único umbral, el control de ventilación combina dos condiciones de disparo independientes con un temporizador de permanencia mínima, aplicando directamente los conceptos de banda de histéresis temporal e histéresis por promediado presentados en el Marco Teórico (Sección \ref{sec:control_histeresis}):
+
+\begin{enumerate}
+    \item \textbf{Gestión del temporizador:} si el ventilador ya se encuentra activo por una activación previa, el ciclo de control simplemente descuenta el tiempo transcurrido de un temporizador de permanencia mínima (120 segundos) y mantiene el actuador encendido mientras dicho tiempo no se haya agotado, sin evaluar ninguna otra condición. Este mecanismo es equivalente al tiempo mínimo de permanencia descripto en la Sección \ref{subsec:histeresis}, y evita apagados prematuros ante una lectura puntual que vuelva a caer por debajo de los umbrales antes de completar una renovación de aire eficaz.
+    \item \textbf{Condición A -- exceso de temperatura (reacción inmediata):} si la lectura instantánea de temperatura supera los $\SI{30}{\celsius}$, el ventilador se activa de inmediato, sin requerir confirmación adicional, dado que un exceso térmico puntual ya representa una condición de riesgo para el cultivo.
+    \item \textbf{Condición B -- exceso de humedad ambiente (promediado de 5 muestras):} a diferencia de la temperatura, la humedad ambiente se evalúa sobre el promedio de las últimas 5 lecturas válidas antes de disparar el ventilador. Este filtrado adicional evita que una lectura aislada y momentáneamente alta --por ejemplo, inmediatamente después de un riego-- dispare una activación innecesaria, exigiendo en cambio evidencia sostenida de humedad elevada a lo largo de varias muestras consecutivas.
+    \item \textbf{Reinicio de memoria:} cada vez que se dispara una activación --por cualquiera de las dos condiciones-- el historial de muestras de humedad ambiente se vacía por completo, de modo que, al apagarse el ventilador, el sistema vuelve a acumular evidencia desde cero antes de poder disparar nuevamente por la condición de humedad promediada.
+\end{enumerate}
+
+La combinación de una condición de reacción inmediata (temperatura) con otra de reacción filtrada (humedad promediada), sumada al temporizador de permanencia mínima, resulta en un comportamiento asimétrico deliberado: el sistema reacciona sin demora ante un riesgo térmico agudo, pero exige mayor evidencia antes de intervenir por humedad, evitando así ciclos de encendido y apagado innecesariamente frecuentes ante un parámetro que, a diferencia de la temperatura, tiende a variar de forma más gradual en el microclima del cultivo.
