@@ -8,16 +8,16 @@ El volumen de aire a renovar corresponde al espacio comprendido entre la superfi
     \label{eq:volumen_aire}
 \end{equation}
 
-Los ventiladores empleados son unidades axiales genéricas de 12 V (estándar de PC, $\SI{120}{\milli\meter} \times \SI{120}{\milli\meter} \times \SI{38}{\milli\meter}$, $0{,}6$ A, $2400$ RPM), sin hoja de datos propia del fabricante. Para estimar su caudal de aire se tomó como referencia un ventilador comercial de especificaciones físicas y eléctricas equivalentes (mismo tamaño y tensión, velocidad de giro de $2300$ RPM), cuyo catálogo especifica un caudal de $105$ CFM ($\approx \SI{178.4}{\meter\cubed\per\hour}$) \cite{mechatronics_f1238m12b}. Se aclara que este valor corresponde a un componente comparable y no a una medición directa del ventilador utilizado en el prototipo, dado que este último carece de ficha técnica propia.
+Los ventiladores empleados son unidades axiales de 12 V (estándar de PC, $\SI{120}{\milli\meter} \times \SI{120}{\milli\meter} \times \SI{38}{\milli\meter}$, $0{,}6$ A, $2400$ RPM), con un caudal nominal de $80$ CFM ($\approx \SI{135.9}{\meter\cubed\per\hour}$) según la especificación del proveedor \cite{ventilador_datasheet}.
 
-A partir de este caudal de referencia, el tiempo necesario para una renovación completa del volumen de aire del nivel de cultivo es:
+A partir de este caudal, el tiempo necesario para una renovación completa del volumen de aire del nivel de cultivo es:
 
 \begin{equation}
-    t_{renovacion} = \frac{V_{aire}}{Q_{ventilador}} = \frac{0{,}325\ \text{m}^3}{178{,}4\ \text{m}^3/\text{h}} \approx \SI{6.6}{\second}
+    t_{renovacion} = \frac{V_{aire}}{Q_{ventilador}} = \frac{0{,}325\ \text{m}^3}{135{,}9\ \text{m}^3/\text{h}} \approx \SI{8.6}{\second}
     \label{eq:tiempo_renovacion}
 \end{equation}
 
-Este resultado indica que, durante el bloque mínimo de activación de 120 segundos definido en el algoritmo de control (Sección \ref{subsec:algoritmo_control_ventilacion}), el ventilador alcanza a renovar por completo el volumen de aire del nivel aproximadamente 18 veces ($120\ \text{s} / 6{,}6\ \text{s} \approx 18$), lo que evidencia un amplio margen de sobredimensionamiento respecto del mínimo necesario para romper la capa límite de humedad estancada sobre el follaje.
+Este resultado indica que, durante el bloque mínimo de activación de 120 segundos definido en el algoritmo de control (Sección \ref{subsec:algoritmo_control_ventilacion}), el ventilador alcanza a renovar por completo el volumen de aire del nivel aproximadamente 14 veces ($120\ \text{s} / 8{,}6\ \text{s} \approx 14$), lo que evidencia un amplio margen de sobredimensionamiento respecto del mínimo necesario para romper la capa límite de humedad estancada sobre el follaje.
 
 \subsection{Justificación de los umbrales de disparo}
 \label{subsec:umbral_ventilacion}
