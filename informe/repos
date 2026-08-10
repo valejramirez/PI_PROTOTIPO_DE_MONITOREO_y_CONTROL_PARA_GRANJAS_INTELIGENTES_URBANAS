@@ -1,0 +1,4 @@
+En este contexto, se propone el diseño, construcción e implementación de un prototipo\footnote{El código fuente completo del sistema de control desarrollado se encuentra disponible en \cite{repo}.} de granja urbana vertical inteligente, aplicando principios de la Industria 4.0 para el monitoreo y control automatizado de variables críticas de cultivo.
+
+
+La totalidad del código fuente descripto en este capítulo, junto con los archivos de configuración y los scripts auxiliares de análisis numérico empleados durante el desarrollo del prototipo, se encuentra disponible públicamente en el repositorio del proyecto \cite{repo}.
