@@ -1,0 +1,111 @@
+\chapter{Introducción}
+\label{cap:introduccion}
+
+El presente proyecto integrador se desarrolla en el marco de las investigaciones del Laboratorio de Investigación Aplicada y Desarrollo Electrónico (LIADE), orientadas al desarrollo de soluciones tecnológicas aplicadas a la agricultura urbana y periurbana (AUP), un campo de creciente importancia frente al aumento de la urbanización, la reducción de tierras cultivables y la limitación de recursos hídricos y energéticos. En este contexto, se propone el diseño, construcción e implementación de un prototipo de granja urbana vertical inteligente, aplicando principios de la Industria 4.0 para el monitoreo y control automatizado de variables críticas de cultivo.
+
+Este trabajo forma parte del proyecto de investigación del LIADE titulado \textit{Granjas inteligentes para ciudades inteligentes y sostenibles. Desarrollos de la Industria 4.0 para la gestión de la agricultura urbana y periurbana (AUP) sostenible de ciudades inteligentes} \cite{vanella2023}, con el propósito de contribuir al cumplimiento de la meta correspondiente al período 2025--2026, orientada a la implementación, puesta a punto y validación experimental de un prototipo funcional.
+
+\section{Antecedentes}
+\label{sec:antecedentes}
+
+A nivel mundial, la agricultura en entornos cerrados y controlados (CEA, por sus siglas en inglés \textit{Controlled Environment Agriculture}) y los sistemas de granjas verticales han emergido como alternativas viables para optimizar el uso del suelo y maximizar la producción por metro cuadrado. En la Argentina, el desarrollo de la agricultura vertical se encuentra en una etapa incipiente en comparación con otras regiones del mundo. Si bien existen antecedentes de aplicación de tecnologías afines en sectores agrícolas específicos, las soluciones disponibles en el mercado suelen ser de alto costo, rígidas en cuanto a sustrato y orientación tecnológica, y dirigidas a productores industriales.
+
+En el contexto académico local, en la Facultad de Ciencias Exactas, Físicas y Naturales de la Universidad Nacional de Córdoba, existen diversos antecedentes relacionados con la agricultura vertical y los sistemas de monitoreo y control para cultivos. Asimismo, el presente Proyecto Integrador se desarrolla en el marco del proyecto de investigación del Laboratorio de Investigación Aplicada y Desarrollo Electrónico (LIADE) \cite{vanella2023}. Entre los antecedentes más relevantes para este trabajo se encuentran:
+\begin{itemize}
+    \item \textbf{Migliore, Emiliano (2024) \cite{migliore2024}:} \textit{“Diseño e implementación de un sistema de control para un módulo de agricultura vertical”}, trabajo que sentó bases en la estructuración de lazos de control y monitoreo de microclimas para estructuras verticales dentro del laboratorio.
+    \item \textbf{Irazuzta, Nicolás (2023) \cite{irazuzta2023}:} \textit{“Monitoreo de invernadero hidropónico mediante IoT”}, enfocado en la adquisición remota de datos e integración de protocolos de comunicación para sistemas de cultivo.
+    \item \textbf{Pieckenstainer, Mateo (2024) \cite{pieckenstainer2024}:} Trabajo desarrollado en el marco de la Práctica Profesional Supervisada (PPS) en el LIADE, centrado en la investigación de tecnologías aplicadas a granjas urbanas inteligentes.
+\end{itemize}
+
+El presente proyecto retoma y expande estas experiencias integrando un prototipo vertical modular de bajo costo, versátil en el uso de sustratos y con una arquitectura de hardware y software orientada a la accesibilidad del usuario urbano sin conocimientos técnicos avanzados.
+
+\section{Relevancia del trabajo}
+\label{sec:relevancia}
+
+La relevancia de este trabajo radica en articular tecnologías propias de la Industria 4.0 (sensores integrados, control automatizado, transmisión y registro continuo de datos) en un prototipo accesible de pequeña escala. Frente al modelo tradicional de producción agrícola, la implementación de sistemas verticales modulados permite:
+\begin{itemize}
+    \item \textbf{Eficiencia espacial e hídrica:} Maximizar el rendimiento por unidad de superficie mediante una estructura modular de varios niveles y utilizar sistemas de riego con recolección y recirculación de agua.
+    \item \textbf{Sostenibilidad energética y microclimática:} Automatizar la iluminación LED de espectro adecuado y la ventilación forzada para evitar la acumulación excesiva de humedad y calor en estructuras verticales.
+    \item \textbf{Democratización tecnológica:} Desarrollar una solución de bajo costo y fácil interacción que acerque la agricultura de precisión al usuario urbano común o a entornos educativos/domésticos.
+\end{itemize}
+
+\section{Alineación con la agenda 2030 y objetivos de desarrollo sostenible (ODS)}
+\label{sec:ods_onu}
+
+El desarrollo de soluciones tecnológicas aplicadas a la agricultura urbana inteligente no solo responde a un desafío técnico de la ingeniería electrónica, sino que se alinea de manera directa con las metas globales establecidas por la Organización de las Naciones Unidas (ONU) en su Agenda 2030 para el Desarrollo Sostenible \cite{onu2015agenda}. 
+
+La integración de automatización, agricultura de precisión y estructuras verticales de cultivo aporta de manera concreta al cumplimiento de los siguientes Objetivos de Desarrollo Sostenible (ODS):
+
+\begin{itemize}
+    \item \textbf{ODS 2: hambre cero (metas 2.3 y 2.4):} Al promover modelos de agricultura urbana modular de bajo costo, se facilita la producción local de alimentos nutritivos y de autoconsumo en entornos hiperurbanizados. La implementación de lazos de control automáticos garantiza sistemas de producción de alimentos resilientes y eficientes en el uso de recursos, reduciendo la dependencia de extensas cadenas de distribución.
+    
+    \item \textbf{ODS 6: agua limpia y saneamiento (meta 6.4):} La escasez de agua dulce es uno de los mayores retos ambientales del siglo XXI. Este proyecto aborda de forma directa la eficiencia hídrica mediante el monitoreo de la humedad de sustrato y la implementación de un subsistema de riego automatizado con recolección y recirculación, reduciendo sustancialmente el desperdicio de agua en comparación con los métodos de cultivo tradicionales.
+    
+    \item \textbf{ODS 11: ciudades y comunidades sostenibles (meta 11.a):} La expansión del tejido urbano requiere transformar las ciudades en espacios más productivos y sostenibles. El aprovechamiento del espacio vertical mediante varios niveles por módulo permite reincorporar la producción agrícola dentro de la infraestructura urbana existente (departamentos, balcones o terrazas), disminuyendo la huella de carbono asociada al transporte de alimentos desde las zonas rurales.
+    
+    \item \textbf{ODS 12: producción y consumo responsables (meta 12.2):} La automatización de la iluminación LED según fotoperiodos optimizados y la ventilación forzada garantiza un uso racional de la energía eléctrica. Asimismo, el enfoque de bajo costo y software optimizado alienta la adopción de tecnologías eficientes de consumo energético responsable.
+\end{itemize}
+
+Esta vinculación institucional y socioambiental refuerza la pertenencia del prototipo dentro de las líneas de investigación del LIADE, consolidando un desarrollo tecnológico local con impacto y proyección en el marco de la sostenibilidad global.
+
+\section{Motivaciones}
+\label{sec:motivaciones}
+
+Las motivaciones que impulsan este Proyecto Integrador se dividen en tres ejes principales:
+\begin{enumerate}
+    \item \textbf{Motivación técnica e ingenieril:} El desafío de diseñar integralmente un sistema electrónico que combine sensado de datos, diseño de potencia, desarrollo de software de control optimizado y lógica de control.
+    \item \textbf{Motivación socio-ambiental:} Aportar soluciones concretas a la seguridad alimentaria urbana y a la reducción de la huella hídrica mediante tecnologías de producción sostenible en ciudades inteligentes.
+    \item \textbf{Motivación institucional:} Dar continuidad a los objetivos científicos del LIADE para el periodo 2025/2026 dentro del proyecto de Agricultura Urbana y Periurbana (AUP).
+\end{enumerate}
+
+\section{Formulación del problema}
+\label{sec:formulacion_problema}
+
+A pesar de los beneficios teóricos de la agricultura urbana vertical, la adopción masiva tropieza con barreras tecnológicas y económicas: los sistemas comerciales son costosos, complejos de mantener y poco adaptables a diferentes variedades de hortalizas o sustratos. Ante este escenario, surge la siguiente pregunta de investigación e ingeniería:
+
+\textit{¿Es posible diseñar e implementar un prototipo de granja urbana vertical modular de varios niveles que sea de bajo costo, accesible para usuarios no especializados y capaz de mantener de manera autónoma y estable el microclima (riego, luz, ventilación) garantizando la eficiencia energética?}
+
+\section{Objetivos}
+\label{sec:objetivos}
+
+\subsection{Objetivo general}
+Desarrollar e implementar un prototipo de granja urbana vertical inteligente, aplicando principios de la Industria 4.0 para el monitoreo y control de variables críticas de cultivo en entornos urbanos, con el fin de optimizar el uso de agua, energía y espacio, contribuyendo a la seguridad alimentaria y a la sostenibilidad ambiental.
+
+\subsection{Objetivos específicos}
+\begin{itemize}
+    \item Analizar y justificar la selección de cultivos representativos a utilizar en el prototipo según criterios agronómicos de adaptación y requerimientos hídricos/lumínicos.
+    \item Seleccionar la unidad de procesamiento adecuada para el procesamiento y gestión de datos.
+    \item Diseñar la estructura física modular de varios niveles con dimensiones compatibles con un entorno de laboratorio y escalabilidad futura.
+    \item Seleccionar e instalar sensores ambientales y de sustrato (temperatura del aire, humedad relativa, humedad del suelo e intensidad lumínica).
+    \item Implementar los subsistemas de iluminación LED, riego, ventilación forzada y protección frente a factores ambientales.
+    \item Desarrollar la lógica de control en la unidad central de procesamiento para la gestión integral y autónoma del sistema.
+    \item Construir e integrar el prototipo completo integrando los subsistemas físicos, electrónicos y de potencia.
+    \item Realizar pruebas de funcionamiento con los cultivos elegidos en condiciones controladas de laboratorio.
+    \item Adquirir y registrar los datos de operación del sistema de manera continua.
+    \item Evaluar la eficiencia energética y la estabilidad microclimática alcanzada, generando conclusiones sobre la viabilidad técnica y económica del sistema.
+\end{itemize}
+
+\section{Metodología utilizada}
+\label{sec:metodologia}
+
+Para la consecución de los objetivos planteados, se adoptó una metodología estructurada en fases secuenciales e iterativas:
+\begin{enumerate}
+    \item \textbf{Fase de selección y análisis agronómico/tecnológico:} Definición de cultivos modelo, caracterización de rangos ideales de cultivo y selección de sensores, actuadores y unidad de procesamiento central priorizando la relación costo-beneficio.
+    \item \textbf{Fase de diseño y construcción estructural:} Diseño de la estructura vertical de varios niveles y dimensionamiento mecánico para soporte seguro.
+    \item \textbf{Fase de implementación de subsistemas:} Montaje de las líneas de riego con tanque y bomba, selección de focos de iluminación LED regulada por fotoperiodos y ventiladores para recirculación de aire.
+    \item \textbf{Fase de desarrollo de software e integración:} Programación de la lógica de control en la unidad de procesamiento central, calibración de sensores de humedad de sustrato y temperatura, e integración con circuitos de acondicionamiento y potencia.
+    \item \textbf{Fase de ensayos experimentales y evaluación:} Puesta en marcha con cultivos reales, almacenamiento de series temporales de datos y evaluación de los mismos.
+\end{enumerate}
+
+\section{Organización del informe}
+\label{sec:organizacion}
+
+El presente documento final de Proyecto Integrador se estructura de manera lógica para guiar al lector desde los fundamentos teóricos hasta la validación experimental del prototipo:
+
+\begin{itemize}
+    \item En primer lugar, se establece el \textbf{Marco Teórico}, donde se abordan los fundamentos fisiológicos y ambientales del cultivo (Capítulo \ref{cha:cultivo}), los principios de instrumentación, actuación y lógica de control on/off (Capítulo \ref{cha:control_onoff}), y la arquitectura de software para sistemas IoT en capas que enmarca el desarrollo del prototipo (Capítulo \ref{cha:arquitectura_iot}).
+    
+    \item A continuación, se detalla el \textbf{Marco Metodológico}, exponiendo la justificación técnica detrás de la elección de los cultivos modelo, la unidad de procesamiento central, los sensores y actuadores, y la arquitectura mecánica del prototipo (Capítulo \ref{cha:diseno_estructural}); la implementación del hardware de control, incluyendo el dimensionamiento de los subsistemas de riego, iluminación y ventilación (Capítulo \ref{cha:hardware_control}); y el desarrollo e implementación del software de control (Capítulo \ref{cha:software_control}).
+    
+    \item Finalmente, se presentan los \textbf{Resultados}, analizando las mediciones recolectadas en condiciones reales de cultivo a lo largo de las distintas etapas de ensayo del prototipo, el consumo de potencia del sistema, y las \textbf{Conclusiones y trabajos futuros}, evaluando la eficiencia y estabilidad alcanzadas y proponiendo líneas de continuidad para el proyecto.
+\end{itemize}
