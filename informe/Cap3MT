@@ -1,0 +1,45 @@
+\subsection{Ciclo de trabajo y dimensionamiento energético de actuadores on/off}
+\label{subsec:duty_cycle}
+
+Un actuador gobernado por control on/off (Sección \ref{subsec:onoff_vs_pwm}) no permanece activo de forma continua, sino que alterna entre un estado energizado y uno de reposo a lo largo del tiempo. Esta alternancia se caracteriza mediante el \textbf{ciclo de trabajo} (\textit{duty cycle}, $D$), definido como la fracción de un intervalo de tiempo de referencia $T$ durante la cual el actuador permanece activo:
+
+\begin{equation}
+    D = \frac{t_{on}}{T}
+    \label{eq:duty_cycle}
+\end{equation}
+
+\noindent donde $t_{on}$ es el tiempo total de activación dentro del intervalo $T$ considerado (por ejemplo, un día completo). El ciclo de trabajo se expresa habitualmente como porcentaje, multiplicando la Ecuación~\ref{eq:duty_cycle} por 100 \FALTACITA{definición general de duty cycle en electrónica de potencia}.
+
+Esta magnitud es la que vincula la potencia nominal de un actuador --el valor que figura en su placa o datasheet, correspondiente a su consumo mientras está efectivamente energizado-- con su consumo energético real a lo largo de un período de operación. Para un actuador de potencia nominal $P_{nom}$ que opera con un ciclo de trabajo $D$, la potencia media consumida a lo largo del intervalo $T$ es:
+
+\begin{equation}
+    P_{med} = P_{nom} \cdot D
+    \label{eq:potencia_media}
+\end{equation}
+
+\noindent Esta relación es la que explica por qué, en un sistema con múltiples actuadores de accionamiento intermitente, la potencia instantánea máxima (la que se obtendría si todos los actuadores estuvieran energizados simultáneamente) sobreestima ampliamente el consumo energético real del sistema a lo largo del día, salvo que todos los ciclos de trabajo coincidan temporalmente entre sí y sean cercanos al 100\,\%.
+
+\subsubsection{Dimensionamiento eléctrico frente al consumo energético}
+
+Estas dos magnitudes --potencia instantánea máxima y potencia media-- no son intercambiables, porque cada una responde a un criterio de diseño distinto:
+
+\begin{itemize}
+    \item \textbf{Dimensionamiento de conductores y protecciones:} debe realizarse siempre en función de la \textbf{corriente máxima posible}, es decir, el escenario de peor caso en el que todos los actuadores del sistema se encuentran energizados de forma simultánea, independientemente de qué tan infrecuente sea esa condición en la operación normal. Un conductor, un fusible o un disyuntor dimensionado únicamente en función del consumo promedio del sistema quedaría subdimensionado frente a un pico de demanda real, con el consiguiente riesgo de sobrecalentamiento del cableado o disparo intempestivo de las protecciones \FALTACITA{criterio de dimensionamiento de conductores por corriente máxima, normativa eléctrica}.
+    \item \textbf{Estimación del consumo energético:} en cambio, para estimar el gasto energético de un sistema a lo largo de un período extendido (por ejemplo, para expresarlo en kWh y compararlo con el consumo de otros equipos domésticos), corresponde emplear la potencia media resultante de aplicar la Ecuación~\ref{eq:potencia_media} a cada actuador, y no la potencia instantánea máxima, ya que esta última nunca se sostiene en el tiempo.
+\end{itemize}
+
+En un sistema compuesto por $n$ actuadores, cada uno con su propia potencia nominal $P_i$ y ciclo de trabajo $D_i$, la potencia media total consumida por el conjunto es la suma de los aportes individuales:
+
+\begin{equation}
+    P_{med,\,total} = \sum_{i=1}^{n} P_{nom,i} \cdot D_i
+    \label{eq:potencia_media_total}
+\end{equation}
+
+\noindent mientras que la potencia instantánea máxima --relevante para el dimensionamiento de conductores y protecciones, y no para la estimación de consumo-- se obtiene simplemente sumando las potencias nominales de todos los actuadores, sin ponderar por su ciclo de trabajo:
+
+\begin{equation}
+    P_{pico} = \sum_{i=1}^{n} P_{nom,i}
+    \label{eq:potencia_pico}
+\end{equation}
+
+La diferencia entre ambas magnitudes (Ecuaciones~\ref{eq:potencia_media_total} y \ref{eq:potencia_pico}) crece cuanto menor es el ciclo de trabajo promedio de los actuadores del sistema, y es particularmente significativa en sistemas de control ambiental de bajo costo, donde los actuadores de mayor potencia (bombas, iluminación) suelen operar con ciclos de trabajo bajos --activos solo durante fracciones acotadas del día-- mientras que la instrumentación lógica de bajo consumo permanece energizada de forma continua.
