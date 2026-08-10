@@ -1,28 +1,599 @@
-% CAPÍTULO 3 — HARDWARE DE CONTROL
+% ============================================================
+% PARTE II - MARCO METODOLÓGICO (3 capítulos)
+% ============================================================
+% NOTA: usar \PENDIENTE{...} para marcar en rojo, en el PDF compilado,
+% todo lo que falta completar (texto, cálculos, fotos).
+\newcommand{\PENDIENTE}[1]{\textcolor{red}{\textbf{[PENDIENTE: #1]}}}
+
+% ================================================================
+% CAPÍTULO 1 — DISEÑO ESTRUCTURAL Y ANÁLISIS DE SISTEMAS INTEGRADOS
+% ================================================================
+\chapter{Diseño estructural y análisis de sistemas integrados}
+\label{cha:diseno_estructural}
+
+\textit{Este capítulo presenta el plan de trabajo y los instrumentos empleados durante el desarrollo del proyecto, la selección de los cultivos, la unidad de procesamiento central y los componentes del sistema, y la arquitectura mecánica del prototipo (prototipos inicial y final, impermeabilización y drenaje, modularidad, y piezas diseñadas mediante manufactura aditiva).}
+
+Este capítulo desarrolla el plan de trabajo seguido para la ejecución del proyecto, la selección de los cultivos, la unidad de procesamiento central y los componentes del sistema, y la arquitectura mecánica del prototipo (prototipos inicial y final, impermeabilización y drenaje, modularidad, y piezas diseñadas mediante manufactura aditiva).
+
+\section{Plan de trabajo e instrumentación}
+\label{sec:plan_trabajo_instrumentacion}
+
+Para el diseño, construcción y validación del prototipo de cultivo automatizado, se siguió un plan de ejecución estructurado, junto con el cronograma de actividades y los instrumentos y herramientas empleados durante su desarrollo.
+
+\subsection{Cronograma de ejecución}
+\label{sec:cronograma}
+
+Para garantizar el seguimiento ordenado y auditar la evolución del proyecto, se implementó el cronograma de actividades estructurado originalmente en la solicitud de aprobación de tema. Esta herramienta de planificación temporal, representada mediante el diagrama de Gantt que se expone a continuación, detalla la distribución cronológica y la simultaneidad de las fases operativas, permitiendo contrastar los plazos previstos en la formulación inicial con el progreso real de las tareas de diseño, manufactura y validación del prototipo.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\linewidth]{Imagenes/Gantt2.jpeg}
+    \caption{Diagrama de Gantt.}
+    \Fuente{propia.}
+    \label{fig:gantt}
+\end{figure}
+
+\subsection{Instrumentos y herramientas}
+\label{sec:instrumentos_herramientas}
+
+Para las fases de diagnóstico electrónico, calibración de sensores, manufactura estructural y ensamblaje general del prototipo, se requirió de un conjunto diversificado de instrumentos de medición y herramientas técnicas de soporte, clasificadas de acuerdo a su ámbito de aplicación:
+
+\textbf{Instrumentos de medición y diagnóstico:}
+\begin{itemize}
+    \item Multímetro digital para la verificación de señales eléctricas y continuidad.
+    \item Luxómetro para la validación y calibración de los niveles de radiación lumínica.
+    \item Cintas métricas para el dimensionamiento geométrico de la estructura.
+\end{itemize}
+
+\textbf{Equipos para soldadura e integración electrónica:}
+\begin{itemize}
+    \item Soldador de estaño para la fijación de conexiones y cableado de control.
+    \item Pistola de calor para el sellado de aislamientos térmicos y protectores.
+    \item Placa perforada multipropósito.
+\end{itemize}
+
+\textbf{Herramientas de manufactura y carpintería:}
+\begin{itemize}
+    \item Caladora electrónica para el corte de los paneles de madera.
+    \item Impresora 3D.
+    \item Taladros eléctricos para las perforaciones de fijación y vías de drenaje.
+    \item Engrapadora industrial para el tensado y fijación de la lona plástica impermeable.
+\end{itemize}
+
+\textbf{Herramientas de montaje general:}
+\begin{itemize}
+    \item Dispositivos manuales varios, incluyendo destornilladores de diferentes geometrías, pinzas de fuerza y herramientas de corte.
+\end{itemize}
+
+\section{Selección de cultivos}
+\label{sec:seleccion_cultivos}
+Para la validación experimental del prototipo de monitoreo y control, se seleccionaron especies vegetales cuyas características morfológicas, fisiológicas y temporales permitan evaluar con precisión la respuesta del sistema ante variaciones microclimáticas. Siguiendo el enfoque de sistemas de cultivo en ambientes controlados, los criterios de selección se basaron en el uso de especies de porte bajo, ciclo corto, adaptables a macetas de poca profundidad y con posibilidad de cosecha continua.
+
+En función de estos requerimientos, se seleccionaron la \textit{rúcula} y la \textit{espinaca}. A continuación se detalla la justificación técnica y agronómica de cada una:
+
+\subsection{Rúcula (\textit{Eruca sativa mill})}
+Si bien es considerada un cultivo de clima fresco, la rúcula presenta una excelente adaptabilidad para ser cultivada en interiores bajo el clima de Córdoba. Se caracteriza por un rápido crecimiento, con un tiempo de germinación muy corto (entre 7 y 10 días) y la posibilidad de iniciar una cosecha continua de sus hojas en apenas 3 a 4 semanas. Su sistema radicular la hace ideal para macetas de poca profundidad \cite{guia_rucula_indoors}.
+
+Desde el punto de vista del control microclimático, requiere que el sustrato se mantenga húmedo pero sin llegar al encharcamiento, activándose el riego cuando la superficie comienza a secarse. La temperatura objetivo ideal se sitúa en los 24~\textdegree C; superar este umbral térmico provoca estrés en la planta, acelerando la floración prematura (fenómeno conocido como espigado o \textit{bolting}) y aumentando el amargor de las hojas. En cuanto al régimen lumínico, requiere un fotoperíodo máximo de 14 horas, recomendándose reducirlo a 12 horas si la temperatura ambiente es elevada, con una densidad de flujo de fotones fotosintéticos ($PPFD$) en torno a los $230 \;\mu\text{mol}\cdot\text{m}^{-2}\cdot\text{s}^{-1}$ \cite{rucula_mdpi}.
+
+\subsection{Espinaca (\textit{Spinacia oleracea} - Var. Monstruosa de Viroflay)}
+La variedad Monstruosa de Viroflay fue seleccionada por su adaptabilidad a interiores, su resistencia a plagas domésticas y su capacidad de producción continua mediante la cosecha escalonada de sus hojas exteriores. Su periodo de germinación oscila entre 7 y 14 días. Fisiológicamente, es una planta de día largo que se ve favorecida por el frío y resiste bajas temperaturas; por el contrario, las temperaturas elevadas disminuyen drásticamente la calidad de su hoja \cite{mapa_espinaca}.
+
+Para su viabilidad en el sistema diseñado, exige condiciones físicas muy particulares en el sustrato: necesita excelente drenaje (alta proporción de arena gruesa o perlita), ya que el calor y la humedad característicos de Córdoba, sumados a un sustrato común encharcado, promueven la aparición rápida de hongos en la base del tallo. Esto justifica la necesidad ineludible de una buena ventilación natural o forzada en el diseño del prototipo.
+
+Luminicamente, se recomienda posicionar la luminaria LED a una distancia de 20 a 30 cm de la planta. Aunque estudios en sistemas hidropónicos sugieren una Integral Diaria de Luz ($DLI$) de máxima eficiencia de $17.3 \;\text{mol}\cdot\text{m}^{-2}\cdot\text{día}^{-1}$, al tratarse de un cultivo en sustrato con dinámicas de retención de humedad distintas, se adopta un perfil lumínico más conservador, limitando el fotoperíodo a un rango de 12 a 14 horas diarias para evitar estrés térmico \cite{espinaca_dli_ouci, espinaca_mdpi}.
+
+\begin{table}[h!]
+\centering
+\small
+\begin{tabular}{lcc}
+\hline
+\textbf{Variable / Parámetro} & \textbf{Rúcula} & \textbf{Espinaca} \\ \hline
+Temperatura objetivo ($T$) & $\le 24$ $^\circ$C & $\le 25$ $^\circ$C \\
+Humedad del Sustrato & Húmedo (sin encharcar) & Húmedo (muy drenado) \\
+Fotoperíodo ($t_{\text{luz}}$) & $12 - 14$ h/día & $12 - 14$ h/día \\
+DLI objetivo & $15$ $\text{mol}\cdot\text{m}^{-2}\cdot\text{día}^{-1}$ & $14$ $\text{mol}\cdot\text{m}^{-2}\cdot\text{día}^{-1}$ \\
+Cosecha & $\approx 28$ días (cosecha continua) & $\approx 45$ días (cosecha continua) \\ \hline
+\end{tabular}
+
+\caption{Parámetros agronómicos y microclimáticos de diseño para los cultivos seleccionados.}
+\label{tab:parametros_cultivos}
+
+\vspace{2mm}
+{\small Fuente: Elaboración propia en base a \cite{rucula_mdpi, espinaca_dli_ouci, mapa_espinaca, espinaca_mdpi}.}
+
+\end{table}
+
+\section{Unidad de Procesamiento Central: Raspberry Pi 4 Model B}
+\label{sec:raspberry_pi}
+
+La selección de la unidad de procesamiento central constituyó una decisión estratégica orientada a garantizar la modularidad y la proyección a largo plazo del sistema. En lugar de optar por microcontroladores tradicionales de arquitectura básica (como las familias ATmega o los módulos ESP), se seleccionó la computadora de placa única (\textit{Single Board Computer} o SBC) Raspberry Pi 4 Model B. Esta determinación se fundamentó en la previsión de un crecimiento modular del sistema, el cual contempla la adición de múltiples módulos de cultivo y macetas automatizadas sin un límite predefinido, asegurando que la capacidad de cómputo y el procesamiento de datos concurrentes no representen un cuello de botella tecnológico.
+
+Frente a los microcontroladores estándar del mercado, la Raspberry Pi 4 Model B presenta ventajas técnico-operativas disruptivas. En primer lugar, su procesador ARM Cortex-A72 de cuatro núcleos a $1{,}5\text{ GHz}$ ofrece una potencia de cálculo aritmético-lógico exponencialmente superior. En segundo lugar, al operar bajo un sistema operativo multitarea completo basado en Linux, el dispositivo permite la ejecución de hilos en paralelo (\textit{multithreading}), la gestión nativa de bases de datos relacionales o no relacionales en el almacenamiento local, y el despliegue de servidores web concurrentes para interfaces de usuario avanzadas; tareas que saturarían la memoria de un microcontrolador. Asimismo, la presencia de conectividad de red avanzada por hardware, como el puerto Gigabit Ethernet y los módulos integrados de Wi-Fi de doble banda y Bluetooth 5.0, optimizan la interoperabilidad y la transmisión de datos a sistemas remotos.
+
+Se reconoce que, en la etapa actual de desarrollo del prototipo, no se está explotando al máximo la capacidad nominal de procesamiento de este dispositivo. No obstante, este sobredimensionamiento controlado constituye un criterio de diseño defensivo y escalable. La integración futura de algoritmos de optimización hídrica o rutinas de visión computacional para el análisis foliar no requerirá una reestructuración del hardware de control.
+
+Más allá de los límites físicos del presente proyecto, esta elección de hardware traza el inicio del camino hacia el paradigma de las ciudades inteligentes (\textit{Smart Cities}). La arquitectura de software desplegada sobre la Raspberry Pi 4 Model B permite concebir este prototipo no como un elemento aislado, sino como un nodo genérico de una red distribuida. Esta visión de diseño facilita la interconexión e interoperabilidad con otras granjas inteligentes y proyectos de investigación complementarios, permitiendo que futuras tesis puedan tejer una red de monitoreo y producción automatizada a escala urbana, coordinada mediante protocolos robustos de comunicación industrial e Internet de las Cosas (IoT).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/raspberrypi4sf.png}
+    \caption{Raspberry Pi 4 Model B.}
+    \Fuente{\cite{foto_raspberry_emakers}}
+\end{figure}
+
+\section{Selección de componentes}
+\label{sec:seleccion_componentes}
+
+\subsection{Sustrato}
+\label{subsec:sustrato_metodologico}
+
+La selección del sustrato constituyó una fase crítica en el diseño del sistema, ya que el suelo no solo actúa como el soporte físico de las especies vegetales, sino que funciona como la interfaz principal para la absorción de nutrientes y el intercambio gaseoso radicular. Asimismo, las propiedades físicas del sustrato están intrínsecamente ligadas al desempeño del sistema de drenaje diseñado: una elección incorrecta podría derivar en la compactación del medio, afectando la conductividad hidráulica y provocando anoxia radicular (asfixia de las raíces por acumulación de agua).
+
+Tras un análisis comparativo de las opciones disponibles en el mercado, se evaluaron variables de costo, densidad, carga nutricional y, fundamentalmente, la capacidad de infiltración. Finalmente, se optó por una mezcla de tierra fértil compuesta por los siguientes elementos, cada uno cumpliendo una función técnica específica dentro del ecosistema del prototipo:
+
+\textbf{Tierra negra y Compost orgánico:} Constituyen la base nutricional del sustrato. El compost aporta materia orgánica descompuesta y microorganismos beneficiosos que facilitan la disponibilidad de nitrógeno, fósforo y potasio, esenciales para el crecimiento vegetativo.
+
+\textbf{Perlita (Silicato de aluminio):} Este componente mineral es vital para la ingeniería del suelo en cultivos confinados. Debido a su estructura porosa y baja densidad, evita la compactación del sustrato, asegurando una aireación óptima de las raíces y facilitando un drenaje rápido que previene la saturación hídrica.
+
+\textbf{Resaca de río:} Aporta una textura ligera y fibrosa que mejora la estructura del suelo. Su función principal es equilibrar la retención de humedad sin sacrificar la porosidad, permitiendo que el agua se distribuya de manera uniforme antes de ser evacuada por el sistema de drenaje.
+
+\textbf{Pinocha (Acículas de pino):} Su incorporación cumple un rol doble; por un lado, ayuda a mantener un pH ligeramente ácido (ideal para la mayoría de los cultivos de huerta vertical) y, por otro, mejora la estructura mecánica del suelo, evitando que se apelmace con el paso del tiempo y las sucesivas sesiones de riego.
+
+Esta combinación sinérgica garantizó un entorno de crecimiento estable, permitiendo que el hardware de monitoreo (sensores de humedad) registre valores consistentes y que el sistema de drenaje opere según las especificaciones de diseño, asegurando una evolución saludable de los cultivos a lo largo de las pruebas.
+
+\subsection{Sensores y conversor}
+\label{subsec:sensores_conversor}
+
+\subsubsection{Sensor de humedad ambiente y temperatura}
+
+Para controlar estas variables, se utilizó un sensor digital DHT22 \cite{aosong_dht22}. Esta elección se justifica por su rango completo de medición de humedad relativa (0 a 100\%), el cual supera las limitaciones del DHT11 (20 a 90\%). Asimismo, ofrece una resolución y estabilidad decimal críticas para lograr un control preciso de los parámetros del sistema. Desde la perspectiva del hardware, destaca por su simplicidad al comunicarse mediante un protocolo de un único hilo conectado directamente a los pines GPIO del microcontrolador, sin requerir un conversor analógico-digital externo. Finalmente, el componente fue seleccionado por su bajo costo y su amplia disponibilidad en el mercado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/dht22.jpeg}
+    \caption{Sensor DHT22.}
+    \Fuente{\cite{foto_sensor_dht22}}
+\end{figure}
+
+\subsubsection{Sensor de iluminancia}
+
+Para la cuantificación de la intensidad lumínica ambiental se seleccionó el sensor digital BH1750 \cite{sensor_iluminancia} en lugar de transductores analógicos resistivos (LDR). Esta decisión se fundamenta en su capacidad para entregar lecturas directas en unidades de lux (lx) con una respuesta espectral calibrada de fábrica que permite distinguir longitudes de onda desde los 400 nm hasta 700 nm, convirtiéndolo en un candidato ideal para realizar las mediciones para los cultivos. Al integrar un conversor analógico-digital de 16 bits y acondicionamiento de señal interno, el dispositivo ofrece un amplio rango dinámico (de $1\ lx$ a $65535\ lx$) con resolución decimal, garantizando la linealidad de los datos sin saturación ni necesidad de algoritmos de calibración complejos. Asimismo, su interfaz de comunicación basada en el protocolo I2C optimiza el uso de los recursos de hardware del microcontrolador al requerir únicamente dos líneas de datos compartidas. Debido a las características anteriores, que cumplen con las especificaciones solicitadas, sumado a su bajo costo, se seleccionó este módulo.
+
+\begin{figure}[H]
+    \centering
+
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/bh1750 Background Removed.png}
+        \caption{Sensor BH1750.}
+        \Fuente{\cite{foto_sensor_bh1750}}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/Respuesta_Espectral.png}
+        \caption{Respuesta espectral del sensor BH1750.}
+        \Fuente{\cite{foto_sensor_bh1750}}
+    \end{minipage}
+
+\end{figure}
+
+\subsubsection{Higrómetro de suelo}
+
+El sensor de humedad de suelo HD-38 \cite{suelo_capacitivo_resistivo} se preseleccionó por su compatibilidad de señal (analógica/digital) y su geometría, cuya longitud de terminales favorecía la medición en la zona radicular profunda. Aunque el fabricante especificaba un tratamiento anticorrosivo para entornos críticos, el desempeño del dispositivo en condiciones operativas reales fue deficiente, exhibiendo una severa pérdida de linealidad y sensibilidad que redujo su funcionamiento a una detección binaria (seco/mojado). Con el objetivo de optimizar su comportamiento, se evaluaron múltiples configuraciones experimentales: control por software del ciclo de trabajo del sensor para mitigar la electrólisis, inserción de un espaciador dieléctrico entre electrodos, variación de la profundidad de enterramiento, recalibración de las etapas del ADC y modificación de las resistencias de acoplamiento. Al no registrarse mejoras significativas en la estabilidad y repetibilidad de las lecturas, se determinó la inviabilidad técnica del componente, procediendo a su descarte definitivo.
+
+Durante la segunda fase de evaluación de higrómetros se implementó un sensor capacitivo \cite{dfrobot_sen0193}, donde el esquema de conexión era idéntico al sensor anterior, pero ahora con el propósito de mitigar la degradación por electrólisis identificada en el dispositivo previo. Debido a su encapsulado y aislamiento galvánico, los electrodos permanecen inmunes a la corrosión, asegurando la estabilidad temporal de las lecturas. El principio de operación se basa en la variación de la capacitancia del entorno, empleando el sustrato como dieléctrico; de este modo, se prescinde del contacto óhmico directo con las sales y el agua, atenuando la deriva en las mediciones y minimizando los requerimientos de recalibración. Tras la puesta en marcha del sistema, se verificó un incremento significativo en la linealidad y repetibilidad de los datos en todo el espectro físico (desde la condición de sequedad extrema hasta la saturación hídrica), proporcionando la precisión requerida para el ajuste y optimización del riego.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/soilcapacitivesensor.jpg}
+    \caption{Sensor de humedad de suelo capacitivo.}
+    \Fuente{\cite{foto_sensor_suelo}}
+\end{figure}
+
+\subsubsection{Módulo de conversión analógica a digital}
+
+Para la adquisición de señales analógicas y la optimización de los recursos de hardware, se seleccionó el circuito integrado PCF8591. Esta elección se justifica por su capacidad para expandir el sistema mediante cuatro entradas analógicas (ADC) de 8 bits que resultan suficientes para las tareas requeridas, utilizando únicamente dos líneas de comunicación gracias al protocolo I2C (\texttt{SDA} y \texttt{SCL}). Esta arquitectura periférica evita la saturación de los pines del microcontrolador principal, reservándolos para tareas críticas de actuación. Adicionalmente, el dispositivo ofrece la flexibilidad de configurar sus canales en modo diferencial para mitigar el ruido electromagnético en trayectos largos de cableado, y sus pines de direccionamiento por hardware (\texttt{A0}, \texttt{A1} y \texttt{A2}) garantizan la escalabilidad del sistema, permitiendo acoplar múltiples módulos en el mismo bus de datos sin requerir líneas de control adicionales. Gracias a estas características, y por su bajo costo y disponibilidad en el mercado, se seleccionó este conversor.
+
+\subsection{Alimentación complementaria}
+\label{subsec:alimentacion_complementaria}
+
+Con el propósito de energizar de manera dedicada los actuadores mecánicos, hídricos y las etapas de conmutación de potencia del sistema, se integró una fuente de alimentación conmutada de arquitectura avanzada extendida manufacturada por la marca Eurocase. La incorporación de este componente se fundamentó en un criterio metodológico de optimización de recursos preexistentes y minimización de costos operativos, aprovechando la disponibilidad inmediata del equipo en el laboratorio de desarrollo. Si bien los parámetros nominales de potencia de una fuente de este tipo exceden los requerimientos de consumo neto del prototipo, representando un sobredimensionamiento de la capacidad de corriente, su adopción evitó la adquisición de nuevos suministros comerciales sin comprometer la eficiencia. Asimismo, el dispositivo proporciona la ventaja tecnológica de entregar múltiples rieles de tensión estabilizados de forma simultánea, una característica que dota al sistema de versatilidad para futuras expansiones.
+
+\section{Arquitectura modular y prototipos}
+\label{sec:arquitectura_modular_prototipos}
+
+\subsection{Prototipo inicial}
+\label{subsec:prototipo_inicial}
+
+Para la construcción del primer prototipo, destinado a las pruebas preliminares, se optó por utilizar madera reciclada de bajo costo. El ensamblaje se diseñó con el propósito de soportar la luminaria de espectro completo en la parte superior, dejando espacio suficiente en la base para alojar la maceta, tal como se ilustra a continuación:
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.5\linewidth]{Imagenes/imagen14.png}
+    \caption{Construcción del prototipo inicial.}
+    \Fuente{propia.}
+    \label{fig:prototipo_inicial}
+\end{figure}
+
+Como se puede observar, la estructura presenta un diseño simple que agilizó su armado para la puesta en marcha del sistema; también se dispuso un cartón que rodeara la maceta con el fin de evitar la dispersión de luz fuera del espacio de la maceta. Esta disposición abierta resultó ventajosa para la integración del hardware, ya que facilitó la instalación del cableado, la conexión de los sensores y la regulación de la altura del foco. Asimismo, el diseño favoreció la aireación de la planta, contribuyendo a la reducción de la humedad y a una mejor disipación del calor térmico generado.
+
+Durante la fase experimental, se realizaron pruebas preliminares y validaciones técnicas que permitieron identificar oportunidades de optimización en el diseño original. A partir de los datos recolectados en estas iteraciones, se aplicaron ajustes correctivos para maximizar la eficiencia operativa del sistema. Una vez validados los criterios de funcionamiento bajo los estándares previstos, se procedió al diseño e implementación del prototipo final, integrando arquitecturas de hardware y software.
+
+\subsection{Prototipo final}
+\label{subsec:prototipo_final}
+
+Tras validar la eficacia del sistema inicial, se procedió al diseño del prototipo definitivo. Este fue proyectado para alojar los cultivos y cumplir con las dimensiones requeridas según las especificaciones del proyecto. Se determinó que las macetas debían poseer una superficie de 0,5 m\textsuperscript{2} cada una; para satisfacer este requerimiento, y considerando las dimensiones de los insumos comerciales disponibles (machimbre, tablones y listones de madera), se optó por una medida estándar de 100 cm x 50 cm. Se seleccionó madera de pino (\textit{Pinus}) para la construcción de la estructura debido a su factibilidad económica y a que sus propiedades mecánicas resultan adecuadas para los esfuerzos estructurales previstos en el sistema de cultivo.
+
+Debido a que uno de los objetivos centrales de este trabajo es la optimización de recursos y el aprovechamiento del espacio físico, se implementó una disposición vertical (tipo estantería o rack). Este diseño fue configurado para asegurar la correcta integración de los componentes electrónicos, sensores y actuadores, garantizando la accesibilidad para el mantenimiento y la eficiencia en la distribución del cableado. El diseño final se presenta en la siguiente figura:
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/prototipo 2026-04-20 at 11.49.18 AM.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/prototipo 2026-04-20 at 11.49.25 AM.png}
+    \end{minipage}
+    \caption{Diseño del prototipo.}
+    \Fuente{propia.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{Imagenes/prototipo 2026-04-20 at 11.49.04 AM.png}
+    \caption{Vista inferior del prototipo.}
+    \Fuente{propia.}
+\end{figure}
+
+Una vez establecido el diseño final, se procedió a su construcción física. Durante esta etapa, se presentaron restricciones prácticas que exigieron replantear el montaje original. En primer lugar, la altura total proyectada para el sistema superaba la altura disponible en el laboratorio, lo que hizo obligatorio realizar modificaciones dimensionales. En segundo lugar, se determinó que el peso final de la estructura en conjunto dificultaría considerablemente su traslado y reubicación una vez concluido el proyecto.
+
+Para resolver estos inconvenientes, se rediseñó la estructura adoptando un enfoque modular. El prototipo definitivo quedó conformado por dos módulos de cultivo apilables y desmontables entre sí, acompañados de un tercer módulo totalmente independiente. Esta solución no solo facilitó la logística y el transporte del hardware, sino que también dotó al proyecto de una arquitectura escalable, demostrando empíricamente que el sistema no presenta limitaciones frente a la cantidad de niveles que se deseen integrar.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/maceta1.jpeg}
+    \caption{Implementacion fisica del prototipo}
+    \Fuente{propia.}
+    \label{fig:placeholder1}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/prototipofinal.jpeg}
+    \caption{Prototipo en su etapa final.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsubsection{Impermeabilización y drenaje}
+\label{subsubsec:impermeabilizacion_drenaje}
+
+Para prevenir la absorción de humedad por parte de la estructura de madera (condición que podría derivar en hinchamiento, deformación mecánica o degradación biológica), resultó indispensable implementar una barrera física entre el sustrato de cultivo y el contenedor. Los criterios para la selección del material aislante exigían impermeabilidad total, resistencia mecánica para soportar la carga estática de la tierra húmeda, y una alta durabilidad temporal frente a la degradación.
+
+El material seleccionado para satisfacer estos requerimientos fue la lona plástica de uso agrícola (comercialmente conocida como Poliagro), un material sintético de alta resistencia fabricado a base de polietileno o poliéster con recubrimiento de PVC. Este polímero garantiza una impermeabilidad absoluta, cuenta con tratamiento de protección UV y presenta una elevada resistencia al desgarro. Estas características lo convierten en un estándar para aplicaciones agrícolas e industriales de alta exigencia (tales como el revestimiento de reservorios de agua --tanques australianos-- y la protección de maquinaria a la intemperie), asegurando así una prolongada vida útil dentro de las condiciones de humedad propias del sistema de cultivo.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen3.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen4.jpeg}
+    \end{minipage}
+    \caption{Proceso de impermeabilización.}
+    \Fuente{propia.}
+\end{figure}
+
+Una vez definida la impermeabilización del contenedor, se procedió al diseño del sistema de drenaje. Este componente representó un desafío técnico significativo debido a las propiedades físico-químicas del poliagro, el cual posee una tensión superficial baja (aproximadamente entre 30 y 31 dinas/cm). Esta baja energía superficial dificulta la humectación y la adhesión de selladores convencionales, complicando la estanqueidad del sistema. El objetivo del diseño era garantizar la evacuación del excedente hídrico para prevenir la anoxia radicular (podredumbre de las raíces), conduciendo el fluido hacia un depósito central de desagüe.
+
+Para la primera iteración, se realizaron seis perforaciones en la base de la maceta, donde se instalaron piezas filtrantes fabricadas en impresión 3D. Estas piezas tenían la función de actuar como filtros de sedimentos para evitar la pérdida de sustrato. Sin embargo, este primer diseño presentó filtraciones considerables; a pesar de haber reforzado las uniones con cinta adhesiva de alta resistencia y selladores elastoméricos, los resultados fueron insatisfactorios, lo que llevó a descartar esta configuración de inmediato.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen6.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen7.jpeg}
+    \end{minipage}
+    \caption{Configuración del desagüe.}
+    \Fuente{propia.}
+\end{figure}
+
+En una segunda fase, se diseñaron nuevos dispositivos de drenaje mediante manufactura aditiva, incorporando un sistema de acoplamiento roscado. El propósito de la rosca era ejercer una presión mecánica uniforme contra la estructura de madera para minimizar los espacios intersticiales. No obstante, persistieron fugas en la interfaz entre el poliagro y la madera. Tras una serie de ensayos experimentales, se determinó que la solución más efectiva consistía en la integración de dos juntas de estanqueidad (arandelas de goma sellantes) dispuestas en ambos puntos de contacto. Esta configuración final permitió alcanzar una estanqueidad total, eliminando el goteo y asegurando la integridad del sistema de drenaje.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen16.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen17.jpeg}
+    \end{minipage}
+    \caption{Conducto de desagüe impreso en 3D.}
+    \Fuente{propia.}
+\end{figure}
+
+Una vez establecido el sistema de drenaje en la base de los contenedores, se procedió a diseñar la red de conducción para dirigir el agua hacia el depósito colector. Dado que cada módulo cuenta con seis puntos de desagüe, fue necesario planificar el tendido de las líneas de transporte desde las piezas filtrantes impresas en 3D hasta el destino final.
+
+En esta etapa, el diseño exigió una rigurosa optimización de la disposición espacial. Por un lado, las líneas de conducción requerían un gradiente de inclinación (pendiente mínima) constante para asegurar el flujo del agua por gravedad, evitando así el estancamiento dentro del circuito. Por otro lado, la naturaleza compacta de la estructura vertical obligaba a aprovechar al máximo el reducido volumen disponible debajo de los cultivos.
+
+Con el objetivo de minimizar la cantidad de insumos requeridos (metros de manguera) y lograr un enrutamiento ordenado, se diseñaron y fabricaron mediante manufactura aditiva racores de derivación tipo "Y". Estos acoples a medida permitieron consolidar múltiples líneas de drenaje en conductos principales de forma eficiente, resolviendo las restricciones de espacio. La configuración final del sistema de conducción se ilustra a continuación:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/desague1.jpeg}
+    \caption{Instalación de desagüe.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsubsection{Arquitectura mecánica modular y acoplamiento estructural}
+\label{subsubsec:arquitectura_mecanica_modular}
+
+Con el propósito de optimizar la portabilidad y simplificar las tareas de mantenimiento, se proyectó un sistema de desacoplamiento estructural en los contenedores de cultivo. Cada módulo posee la capacidad de separarse de la sección inmediatamente inferior mediante uniones por encastre geométrico, una solución de diseño que confiere una elevada estabilidad estática ante las cargas nominales del sustrato y, simultáneamente, agiliza los procedimientos de desarmado. Asimismo, el módulo posicionado en el estrato superior incorpora ruedas que facilitan el desplazamiento independiente de la estructura dentro del espacio de laboratorio.
+
+\section{Diseños de piezas en 3D}
+\label{sec:piezas_3d}
+
+Durante el desarrollo del proyecto, se diseñaron múltiples elementos mediante modelado 3D para facilitar la integración física de los sensores, los periféricos y demás componentes del sistema. Para esta tarea se empleó principalmente el software CAD Tinkercad, seleccionado por su entorno de diseño intuitivo y la versatilidad de sus herramientas.
+
+Para la fabricación de las piezas se hizo uso del laminador Cura Slicer, y los parámetros utilizados fueron orientados a maximizar la estanqueidad y la resistencia mecánica. En particular, se utilizó un espesor de pared de 3 mm, correspondiente a 5 líneas de pared, lo que permite generar una estructura externa robusta y continua, reduciendo la posibilidad de filtraciones a través de las capas.
+
+Se adoptó una densidad de relleno del 100\%, con el objetivo de eliminar cavidades internas que puedan favorecer el paso de agua, garantizando así una mayor impermeabilidad de la pieza. Asimismo, se configuraron 8 capas superiores e inferiores, reforzando las superficies horizontales y contribuyendo a un cierre más efectivo del volumen impreso.
+
+La altura de capa se fijó en 0,20 mm, valor que representa un compromiso adecuado entre tiempo de impresión y calidad superficial, permitiendo una correcta adhesión entre capas. Por su parte, el flujo de material se ajustó al 103\%, lo que incrementa ligeramente la cantidad de material extruido, favoreciendo el relleno de posibles microespacios entre trayectorias y mejorando el sellado general.
+
+En cuanto a las condiciones térmicas, se empleó una temperatura de extrusión de 207 °C, adecuada para el material PLA utilizado, asegurando una correcta fusión entre capas. Finalmente, la velocidad de impresión se estableció en 40 mm/s, valor moderado que contribuye a una deposición más controlada del material, mejorando la adherencia y reduciendo la probabilidad de defectos que puedan comprometer la estanqueidad.
+
+\subsection{Soporte para sensores}
+
+El diseño de esta pieza tuvo como objetivo principal proporcionar un alojamiento seguro y estable para realizar las primeras pruebas de los módulos de sensado. Esta fijación garantiza que las mediciones de las variables ambientales se realicen de manera correcta y repetible, evitando cualquier disposición aleatoria dentro del sistema. La estructura cuenta con aberturas dimensionadas para el encastre preciso de cada sensor e incorpora canalizaciones internas específicas para el guiado y protección del cableado.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen16.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen17.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen18.png}
+    \end{minipage}
+    \caption{Primer diseño de soporte para sensores.}
+    \Fuente{propia.}
+    \label{fig:soporte_sensores_diseno}
+\end{figure}
+
+Luego, la implementación física:
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen3.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen9.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen10.png}
+    \end{minipage}
+    \caption{Implementación física.}
+    \Fuente{propia.}
+    \label{fig:soporte_sensores_fisico}
+\end{figure}
+
+\subsection{Soporte para manguera}
+
+Se diseñó una pieza vertical para su inserción en el suelo, con un sistema superior de sujeción que fija la manguera, permitiendo un trazado del circuito ordenado y definido.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen1.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen8.png}
+    \end{minipage}
+    \caption{Soporte para mangueras.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsection{Acople Y}
+
+Para la unión de las mangueras, se diseñó un acople que permite vincularlas optimizando el espacio disponible y mejorando su organización.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen15.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen1.jpeg}
+    \end{minipage}
+    \caption{Conector Y.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsection{Filtro de desagüe v1}
+
+Inicialmente, se diseñó un filtro con acople para manguera de \textonehalf{} pulgada, con el objetivo de retener la tierra y conducir el agua a través del orificio realizado en la madera hasta el contenedor.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen2.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen7.png}
+    \end{minipage}
+    \caption{Desagüe v1.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsection{Filtro de desagüe v2}
+
+Debido a que la primera implementación no funcionó según lo esperado, se realizaron modificaciones. Se desarrolló un sistema roscado que permite ejercer presión sobre la madera, logrando un mejor sellado y evitando filtraciones sin perder capacidad de filtrado. Además, se mantuvo la conexión para manguera de \textonehalf{} pulgada y se incorporó una forma curvada en la pieza que permite disponer la manguera de manera más compacta, favoreciendo el flujo de agua sin restricciones.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen11.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen13.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.31\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/imagen17.jpeg}
+    \end{minipage}
+    \caption{Desagüe v2.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsection{Soporte para ventilador}
+
+Se diseñaron soportes específicos para la sujeción de los ventiladores, orientados a maximizar la versatilidad del sistema de control ambiental. Estos componentes fueron proyectados para permitir una instalación dinámica, pudiendo desplazarse y fijarse en cualquier punto a lo largo del perímetro de la estructura de cultivo, según los requerimientos específicos de las especies vegetales o las fases del desarrollo fenológico.
+
+Esta configuración ajustable no solo optimiza la circulación del flujo de aire y la disipación térmica, sino que también mejora la portabilidad del prototipo. Al permitir el desmontaje o reubicación rápida de los ventiladores, se facilita el traslado de los módulos y se minimiza el riesgo de daños mecánicos en los actuadores durante las maniobras de transporte o mantenimiento.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/soporteventilador1.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/soporteventilador2.jpeg}
+    \end{minipage}
+    \caption{Soporte para ventilador.}
+    \Fuente{propia.}
+\end{figure}
+
+\subsection{Soporte para sensor de humedad y temperatura}
+
+Se diseñó un soporte específico para la integración del sensor DHT22. El diseño contempla un encapsulado con estructura reticular (tipo malla) que actúa como barrera física para resguardar el dispositivo frente a posibles salpicaduras de riego, acumulación de polvo e impactos mecánicos accidentales.
+
+Esta configuración de "carcasa ventilada" es fundamental para asegurar la integridad del componente sin comprometer su funcionamiento; la porosidad del diseño permite la libre circulación del aire, garantizando que el sensor mantenga un tiempo de respuesta óptimo y continúe proporcionando lecturas de las variables ambientales con la precisión requerida por el sistema de control.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.48\textwidth]{Imagenes/soportedht1.jpeg}
+    \caption{Soporte DHT22.}
+    \Fuente{propia.}
+    \label{fig:soporte_dht22}
+\end{figure}
+
+\subsection{Soporte para sensor de iluminancia}
+
+Para la correcta fijación del sensor de luz, se diseñaron soportes modulares basados en el principio de acoplamiento de los ventiladores del sistema. Estas estructuras permiten una reconfiguración posicional flexible dentro del entorno de cultivo, otorgando la versatilidad de retirar y reubicar los sensores en diferentes puntos estratégicos según los requerimientos lumínicos de la etapa fenológica de las plantas y la geometría del ambiente.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/soportebh17501.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/soportebh17502.jpeg}
+    \end{minipage}
+    \caption{Soporte para BH1750.}
+    \Fuente{propia.}
+    \label{fig:soporte_bh1750}
+\end{figure}
+
+\subsection{Cobertor de protección para higrómetros}
+
+Para la impermeabilización de los sensores de humedad de suelo, se diseñaron carcasas de protección a medida con el propósito de aislar herméticamente sus componentes electrónicos sensibles. Asimismo, los puntos de acoplamiento mecánico y las vías de salida del cableado fueron sellados mediante la aplicación de silicona de alta resistencia, garantizando la estanqueidad del conjunto y previniendo filtraciones que pudieran degradar los circuitos durante la operación en sustratos húmedos.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/soportehigrometro1.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/soportehigrometro2.jpeg}
+    \end{minipage}
+    \caption{Cobertor para higrómetro.}
+    \Fuente{propia.}
+    \label{fig:cobertor_higrometro}
+\end{figure}
+
+Posteriormente a la vinculación y calibración del sensor, se inició la etapa de adecuación física orientada a la protección del circuito electrónico interno contra agentes ambientales. Con este propósito, se aplicó un polímero de silicona de alta rigidez dieléctrica sobre todas las uniones de la carcasa e interfaces de los conductores, estableciendo una barrera hermética contra la humedad. Esta acción de sellado resulta crítica en el diseño, dado que previene la infiltración de agua hacia las pistas de cobre y componentes activos, resguardando el sistema ante posibles derivaciones de corriente que degraden la linealidad de las lecturas analógicas o causen fallas catastróficas por cortocircuito en las etapas de alimentación.
+
+\begin{figure}[H]
+    \centering
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/Imperm_Sensor1.jpeg}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Imagenes/Imperm_Sensor2.jpeg}
+    \end{minipage}
+    \caption{Proceso de impermeabilización del sensor.}
+    \Fuente{propia.}
+    \label{fig:impermeabilizacion_sensor}
+\end{figure}
+
+% ================================================================
+% CAPÍTULO 2 — HARDWARE DE CONTROL
 % ================================================================
 \chapter{Hardware de control}
 \label{cha:hardware_control}
 
-Este capítulo desarrolla la disposición física de luminarias y hardware, los actuadores del sistema (luces, bomba, válvulas, goteros), la etapa de potencia (relés), la alimentación complementaria, el circuito de riego, el sistema de ventilación y los esquemas de conexión --incluyendo, en cada sección correspondiente, los cálculos que justifican el dimensionamiento de cada sistema (riego, luz y ventilación).
+\textit{Este capítulo desarrolla la disposición física del hardware de procesamiento, los actuadores del sistema (luces, bomba, válvulas y goteros), la suspensión de las luminarias, la etapa de potencia (relés), el circuito de riego, el sistema de ventilación y los esquemas de conexión.}
 
-\section{Disposición de las luminarias}
-\label{sec:disposicion_luminarias}
-
-Para la instalación física del panel de espectro completo, se acondicionó la viga transversal de madera posicionada en el estrato superior de la estación de cultivo, integrando armellas de sujeción cerrada conocidas comercialmente como tornillos ojo. A través de estos componentes mecánicos se enhebran las eslingas de acero que suspenden el artefacto lumínico, estableciendo una matriz de fijación redundante. La distribución geométrica de estos anclajes se calculó con el propósito operativo de regular de forma manual el distanciamiento vertical entre el foco y el ápice del dosel vegetal; esta modularidad posicional permite manipular de manera directa la densidad de flujo fotónico y la carga térmica por radiación que incide sobre las especies bajo ensayo. En la etapa de germinación, posterior a la siembra, las luminarias se configuran en su cota altimétrica mínima, optimizando la transferencia de energía electromagnética necesaria para estimular los fotorreceptores iniciales de las plántulas.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/luminaria.jpeg}
-    \caption{Disposición de las luminarias.}
-    \Fuente{propia.}
-\end{figure}
-
-\PENDIENTE{Valentín: acá van los cálculos de DLI/fotoperíodo --- factor de luminaria $F_L$ calibrado, PPFD estimado a partir de las lecturas del BH1750, y el cálculo del tiempo de encendido diario necesario para alcanzar el DLI objetivo de cada cultivo (ver Marco Teórico Sección \ref{sec:ppfd_dli} para la fórmula)}
+Este capítulo desarrolla la disposición física del hardware de procesamiento, los actuadores del sistema (luces, bomba, válvulas y goteros), la suspensión de las luminarias, la etapa de potencia (relés), el circuito de riego, el sistema de ventilación y los esquemas de conexión --incluyendo, en cada sección correspondiente, los cálculos que justifican el dimensionamiento de cada sistema (riego, luz y ventilación).
 
 \section{Disposición de hardware}
 \label{sec:disposicion_hardware}
 
-Con el propósito de alojar los módulos de control y procesamiento del sistema (tales como la unidad central Raspberry Pi 4, la placa de relés y los conversores analógico-digitales (ADC)), se definió una localización estratégica basada en criterios de accesibilidad, seguridad y optimización de las líneas de señal. Se optó por ubicar este núcleo de control en la zona superior de la estructura, logrando una posición equidistantemente centralizada que facilita el ruteado de los cables hacia los distintos sensores y actuadores del prototipo, minimizando a su vez el impacto visual y la interferencia estructural.
+Con el propósito de alojar los módulos de control y procesamiento del sistema (tales como la unidad central Raspberry Pi 4, la placa de relés y los conversores analógico-digitales (ADC)), se definió una localización estratégica basada en criterios de accesibilidad, seguridad y optimización de las líneas de señal. Se optó por ubicar este núcleo de control en la zona superior de la estructura, logrando una posición centralizada que facilita el ruteado de los cables hacia los distintos sensores y actuadores del prototipo, minimizando a su vez el impacto visual y la interferencia estructural.
 
 Esta disposición en altura aísla la electrónica crítica frente a riesgos mecánicos por manipulación directa o eventuales filtraciones y salpicaduras provenientes del subsistema hidráulico. Para garantizar un aislamiento eléctrico adecuado y protección contra humedad y polvo, la totalidad de los componentes se confinó dentro de un gabinete con sellado hermético. La interconexión con los periféricos externos se ejecutó mediante pasacables con prensacables (pasamuros), permitiendo el paso ordenado y seguro de los conductores sin comprometer el nivel de protección de la envolvente.
 
@@ -30,12 +601,12 @@ Esta disposición en altura aísla la electrónica crítica frente a riesgos mec
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Imagenes/modulocentral1.jpeg}
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/modulocentral1.jpeg}
     \end{minipage}
     \hfill
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Imagenes/modulocentral2.jpeg}
+        \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/modulocentral2.jpeg}
     \end{minipage}
     \caption{Caja eléctrica estanca con componentes vitales del sistema.}
     \Fuente{propia.}
@@ -46,20 +617,43 @@ Esta disposición en altura aísla la electrónica crítica frente a riesgos mec
 \label{sec:actuadores_metodologico}
 
 \subsection{Luces para el cultivo}
+\label{subsec:luces_cultivo}
 
 Para el sistema de iluminación artificial y estimulación del desarrollo vegetal, se implementó un panel LED para cultivo indoor de 50 W (marca Practiled). La elección de esta luminaria se justifica por su diseño espectral optimizado para la fotosíntesis, el cual concentra sus picos de emisión en las longitudes de onda de 450 nm (espectro azul) y 650 nm (espectro rojo), interactuando de manera directa con las clorofilas A y B para potenciar las fases de crecimiento vegetativo y floración. A su vez, el módulo cuenta con protecciones contra sobretensión, sobrecorriente y un sensor de sobrecalentamiento crítico para el confinamiento del cultivo. Asimismo, cuenta con un grado de protección IP65 que garantiza su estanqueidad y resistencia frente a la alta humedad y salpicaduras derivadas del riego automatizado, operando con un regulador de voltaje interno que asegura una potencia constante y una alta eficiencia energética (clase A++). Debido a las características mencionadas y su bajo costo en comparación con otras opciones del mercado, se convirtió en la opción ideal para este proyecto.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/luz.jpeg}
+    \caption{Luces para el cultivo.}
+    \Fuente{https://www.mercadolibre.com.ar/lampara-panel-de-cultivo-practiled-indoor-50w-full-spectrum/up/MLAU3359194731}
+    \label{fig:prueba2_06abr}
+\end{figure}
 
 \subsection{Bomba para riego}
-
+\label{subsec:bomba_riego}  
 Para el accionamiento del sistema de riego, se seleccionó una bomba periférica presurizadora de corriente continua (modelo Kushiro BPYK12). El parámetro determinante para esta elección fue su altura máxima de elevación de 2 metros, magnitud hidrodinámica que supera con holgura el nivel físico de la maceta, garantizando un suministro hídrico eficiente y sin caídas de presión hasta el estrato superior del cultivo. Desde la perspectiva de la integración electrónica y la seguridad, su operación a una tensión nominal de $12\text{ V}$ resulta fundamental para minimizar los riesgos de electrocución en un entorno caracterizado por alta humedad, facilitando además su control lógico mediante etapas de potencia estándar (relé) comandadas por el microcontrolador. Asimismo, su capacidad para entregar un caudal máximo de $3{,}8\text{ l/min}$ a una presión de trabajo de $2{,}5\text{ bar}$ es idónea para presurizar las líneas de riego sin generar caudales excesivos que inunden la zona radicular. Por último, su arquitectura mecánica, que incorpora un impulsor de bronce y un cuerpo de aluminio, proporciona una alta resistencia a la oxidación, asegurando la vida útil del actuador al operar con agua limpia.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/bomba.jpeg}
+    \caption{Bomba de riego.}
+    \Fuente{Propia.}
+    \label{fig:prueba2_06abr}
+\end{figure}
 
 \subsection{Válvulas solenoides}
 
 Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar cumplimiento al criterio de gestión sustentable del recurso hídrico, se implementaron electroválvulas solenoides por maceta, permitiendo direccionar el flujo de riego de forma independiente hacia cada unidad de cultivo bajo el mando de la unidad central.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/valvulasolenoide.jpg}
+    \caption{Valvula solenoide.}
+    \Fuente{https://tienda.starware.com.ar/producto/valvula-solenoide-diy-12p-12v-agua-aire-macho/?srsltid=AfmBOor9EFrAHjSQ-RJnY6DOvpbChbeFn6chrIUFvLc5Q0gxa9Rx4HHG}
+    \label{fig:prueba2_06abr}
+\end{figure}
 
 \subsection{Goteros}
+\label{subsec:goteros}
 
-Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar cumplimiento al criterio metodológico de gestión sustentable del recurso hídrico, se implementaron emisores de riego localizado con una capacidad nominal máxima de 80 litros por hora. La integración física de estos componentes en la red de distribución se realiza de forma directa sobre la línea de conducción principal, efectuando un punzonado calibrado en la pared de la manguera de polietileno. Los goteros se introducen a presión dentro de esta perforación mediante un acoplamiento por interferencia mecánica, aprovechando las propiedades elásticas del material polimérico para asegurar la estanqueidad total del nodo y prevenir caídas de presión en el circuito. Estos dispositivos operan como actuadores pasivos finales y cuentan con un mecanismo de regulación helicoidal que permite modificar la sección transversal del conducto interno mediante obturación mecánica, optimizando la respuesta del lazo de irrigación automatizado. Esta capacidad de ajuste resulta crítica para la calibración del sistema, debido a que permite ecualizar la pérdida de carga en la red de distribución, garantizando que el coeficiente de descarga sea uniforme en todas las estaciones de cultivo.
+Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar cumplimiento al criterio metodológico de gestión sustentable del recurso hídrico, se implementaron cuatro emisores de riego localizado por maceta, con una capacidad nominal ajustable en un rango de 10 a 80 litros por hora cada uno. Los cuatro goteros se insertan sobre una única línea de distribución dispuesta a lo largo del eje central de la maceta, distribuidos de forma uniforme para cubrir la superficie de cultivo. La integración física de estos componentes en la red de distribución se realiza de forma directa sobre la línea de conducción principal, efectuando un punzonado calibrado en la pared de la manguera de polietileno. Los goteros se introducen a presión dentro de esta perforación mediante un acoplamiento por interferencia mecánica, aprovechando las propiedades elásticas del material polimérico para asegurar la estanqueidad total del nodo y prevenir caídas de presión en el circuito. Estos dispositivos operan como actuadores pasivos finales y cuentan con un mecanismo de regulación helicoidal que permite modificar la sección transversal del conducto interno mediante obturación mecánica, optimizando la respuesta del lazo de irrigación automatizado. Esta capacidad de ajuste resulta crítica para la calibración del sistema, debido a que permite ecualizar la pérdida de carga en la red de distribución, garantizando que el coeficiente de descarga sea uniforme en todas las estaciones de cultivo.
 
 \begin{figure}[H]
     \centering
@@ -76,6 +670,16 @@ Con el propósito de ejecutar la dosificación hídrica de manera precisa y dar 
     \Fuente{propia.}
 \end{figure}
 
+\subsection{Ventiladores}
+Se implementaron ventiladores axiales de 12V (estándar de PC) para la regulación microclimática por estratos. La elección de estos componentes responde a un criterio de optimización de recursos, al ofrecer una solución económica, altamente fiable y de fácil integración electrónica. Su bajo consumo de corriente permite conmutarlos de forma directa mediante los módulos de relés electromecánicos del sistema, sin requerir etapas de acondicionamiento de potencia complejas ni alterar significativamente el balance energético global del prototipo.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/ventiladorMP.png}
+    \caption{Ventilador.}
+    \Fuente{\cite{ventilador_datasheet}}
+    \label{fig:ventilador}
+\end{figure}
+
 \section{Etapa de potencia: relés electromecánicos y de estado sólido}
 \label{sec:etapa_potencia}
 
@@ -85,21 +689,94 @@ Por un lado, para el control de los paneles lumínicos, se optó por un módulo 
 
 Por otro lado, para gobernar la bomba hidráulica y las válvulas solenoides (las cuales operan con corriente continua a 12 V) se implementó un módulo de relés electromecánicos de ocho canales. Esta decisión se fundamenta en la alta capacidad de manejo de corriente de sus contactos, los cuales soportan hasta 10 A a 30 VCC, resultando idóneos para absorber los picos de corriente transitorios que demandan las cargas inductivas (motores y electroimanes) durante su arranque. Un factor crítico para la elección de esta placa fue la integración de optoacopladores en sus entradas, esto garantiza un aislamiento galvánico completo entre la etapa de potencia y la lógica de control (5 V), protegiendo al microcontrolador frente a ruidos eléctricos o corrientes inversas generadas por las bobinas de los actuadores hidráulicos al desenergizarse.
 
-\section{Circuito de riego}
-\label{sec:circuito_riego}
 
-El subsistema de irrigación opera mediante un esquema de distribución selectiva alimentado por la electrobomba descrita en la sección anterior. A través de un arreglo de válvulas solenoides, el firmware puede dirigir el flujo hídrico hacia un módulo o maceta en particular, según los requerimientos de humedad detectados por los sensores. La canalización principal se ejecutó utilizando tubos flexibles de \textonehalf{} pulgada, dimensión seleccionada para garantizar un caudal óptimo de operación sin generar sobrepresiones en los acoples. En el tramo interno de cada contenedor se instalaron goteros autocompensados que liberan un caudal volumétrico constante por unidad de tiempo, logrando una distribución homogénea del recurso hídrico en la zona radicular.
+\section{Sistema de iluminación}
+
+\subsection{Diseño geométrico de la disposición lumínica}
+\label{subsec:diseno_geometrico_luz}
+
+El panel LED seleccionado (Sección \ref{subsec:luces_cultivo}) es una fuente de emisión rectangular, no puntual, con una placa estructural de $17\text{ cm} \times 11{,}3\text{ cm}$. Bajo el criterio de diseño de mantener el dosel vegetal a una distancia de la luminaria de entre 20 y 30 cm, y considerando que el ángulo de emisión de luz de los paneles LED es de 120°, la huella iluminada en el plano de la maceta (para una fuente rectangular) se obtiene sumando a cada lado del panel la expansión lateral del haz:
+
+\begin{equation}
+    L_{iluminado} = L_{panel} + 2 \cdot h \cdot \tan\left(\frac{120°}{2}\right)
+    \label{eq:huella_rectangular}
+\end{equation}
+
+\noindent donde $L_{panel}$ es la dimensión del panel en el eje considerado y $h$ la altura de instalación. Evaluando la Ecuación~\ref{eq:huella_rectangular} en el caso más desfavorable ($h = 20\text{ cm}$, la altura mínima permitida, que produce la menor huella):
+
+\begin{align*}
+    L_{iluminado,\ 17\text{cm}} &= 17 + 2 \cdot 20 \cdot \tan(60°) = 17 + 69{,}28 = 86{,}3\text{ cm} \\
+    L_{iluminado,\ 11{,}3\text{cm}} &= 11{,}3 + 2 \cdot 20 \cdot \tan(60°) = 11{,}3 + 69{,}28 = 80{,}6\text{ cm}
+\end{align*}
+
+Dado que cada maceta tiene una superficie de $100\text{ cm} \times 50\text{ cm}$ y se emplean dos paneles por maceta --cada uno cubriendo nominalmente una mitad de $50\text{ cm} \times 50\text{ cm}$--, la huella mínima obtenida ($86{,}3\text{ cm} \times 80{,}6\text{ cm}$) resulta ampliamente superior a la requerida, garantizando la cobertura completa de la superficie de cultivo en todo el rango de altura permitido, con una zona de superposición entre ambos focos en la región central de la maceta.
+
+\subsection{Conversión de iluminancia a DLI: validación numérica}
+\label{subsec:validacion_dli}
+
+Para la caracterización del sistema de iluminación, se realizó una medición directa con el sensor BH1750 ubicando el panel LED a una altura nominal de \SI{27}{\centi\meter} respecto del dosel vegetal --valor comprendido dentro del rango de instalación de \SI{20}{\centi\meter} a \SI{30}{\centi\meter} definido en la Sección \ref{subsec:diseno_geometrico_luz}--. La lectura registrada en esta condición, de \SI{6500}{\lux}, se adoptó como el valor de referencia de iluminancia del foco ($lux_{\text{foco}}$) para el algoritmo de control (Sección \ref{subsec:algoritmo_control_dli}).
+
+Por otro lado, dado que la conversión de iluminancia a densidad de flujo de fotones fotosintéticos (PPFD) depende de la distribución espectral de la fuente de luz, se emplearon dos factores de luminaria independientes: $F_L = 0{,}0887$ para el panel LED artificial y $F_{L,\text{ambiente}} = 0{,}0185$ para la radiación solar natural \cite{factor_luminaria}.
+
+Antes de su implementación en el software de control, la conversión de iluminancia a PPFD y su posterior integración a DLI (Ecuaciones \ref{eq:ppfd_lux} y \ref{eq:dli_ppfd}) se validó numéricamente evaluando tanto la conversión directa como la inversa para los valores de caracterización obtenidos.
+
+Para la condición de referencia ($Lux = \SI{6500}{\lux}$, $F_L = 0{,}0887$) y considerando un fotoperíodo hipotético de $T_i = \SI{12}{\hour}$, la evaluación directa arroja un nivel de $\text{PPFD} = \SI{576{,}55}{\micro\mole\per\square\meter\per\second}$, lo que equivale a un $\text{DLI} \approx \SI{24{,}91}{\mole\per\square\meter\per\day}$ si la luminaria permaneciera encendida de forma continua durante todo el intervalo. Este valor ilustra la capacidad máxima de aporte del foco y no un tiempo de encendido real, dado que este último se determina dinámicamente mediante el algoritmo de la Sección \ref{subsec:algoritmo_control_dli}.
+
+Por otro lado, la conversión inversa para un requerimiento de cultivo de $\text{DLI}_D = \SI{17{,}3}{\mole\per\square\meter\per\day}$ indica que se requeriría una lectura sostenida de $Lux_s \approx \SI{4515}{\lux}$ a lo largo de las \SI{12}{\hour} para alcanzar exactamente dicho objetivo. Esta verificación numérica permitió confirmar la consistencia de los factores de conversión antes de trasladar la lógica al lazo de control principal. Estos calculos se realizaron en un pequeño script de matlab que se encuentra en el repositorio del proyecto \cite{repo}.
+
+\subsection{Algoritmo de control dinámico del fotoperíodo}
+\label{subsec:algoritmo_control_dli}
+
+A diferencia del caso ilustrativo anterior, el sistema real no asume una iluminancia constante durante todo el fotoperíodo: integra continuamente dos fuentes de luz, la natural (ambiente) y la artificial (foco) y decide en cada ciclo de control si corresponde mantener encendido el panel LED, siguiendo el principio de control por presupuesto acumulado presentado en el Marco Teórico (Sección \ref{subsec:control_presupuesto}).
+
+El algoritmo distingue dos factores de luminaria diferentes, uno para el panel LED ($F_L$) y otro para la luz solar ($F_{L,\text{ambiente}}$), dado que ambas fuentes tienen composiciones espectrales distintas y requieren constantes de conversión propias. En cada ciclo de control, de duración $\Delta t$:
+
+\begin{enumerate}
+    \item Se calcula el PPFD aportado por el foco, a partir de un valor de iluminancia de referencia del panel ($lux_{foco}$) y su factor de luminaria: $PPFD_{foco} = lux_{foco} \cdot F_L$.
+    \item Se calcula el PPFD aportado por el ambiente a partir de la lectura en vivo del sensor BH1750, el cual se encuentra ubicado fuera de la zona de incidencia directa del panel LED para registrar exclusivamente la luz natural del entorno: 
+        \begin{equation}
+        PPFD_{\text{ambiente}} = lux_{\text{ambiente}} \cdot F_{L,\text{ambiente}}
+        \end{equation}
+    \item Se obtiene el PPFD total del ciclo, sumando el aporte ambiente con el del foco únicamente si este se encuentra encendido:
+        \begin{equation}
+        PPFD_{\text{total}} = PPFD_{\text{ambiente}} + PPFD_{\text{foco}} \cdot S_{\text{foco}}
+        \end{equation}
+        donde $S_{\text{foco}} \in \{0, 1\}$ representa el estado discreto del actuador LED ($1$ encendido, $0$ apagado).
+    \item Se integra el incremento de DLI del ciclo y se acumula al total del día: $\Delta DLI = 0{,}0036 \cdot PPFD_{total} \cdot \Delta t_{horas}$. Esta acumulación ocurre durante las 24 horas del día, independientemente de si el foco está habilitado a actuar, de modo que el aporte de luz solar siempre se contabiliza.
+    \item Se verifica si el instante actual se encuentra dentro de la ventana horaria configurada para el fotoperíodo artificial. Si no lo está, el foco permanece apagado, sin evaluar más condiciones.
+    \item Dentro de la ventana horaria, se calcula el DLI faltante para alcanzar el objetivo diario ($DLI_{faltante} = DLI_{objetivo} - DLI_{acumulado}$). Si ya fue alcanzado, el foco se apaga.
+    \item En caso contrario, se proyecta cuánto DLI aportaría el foco si permaneciera encendido de forma continua durante todo el tiempo restante de la ventana horaria ($DLI_{potencial} = 0{,}0036 \cdot PPFD_{foco} \cdot T_{i,\text{restante}}$).
+    \item El foco se enciende únicamente si ese aporte potencial no supera al DLI que todavía falta ($DLI_{potencial} \leq DLI_{faltante}$); es decir, solo mientras dejarlo encendido durante todo el tiempo que resta del día no exceda el objetivo.
+\end{enumerate}
+
+Esta última condición es la que le da al control su carácter anticipativo: en lugar de encender el foco recién cuando el DLI faltante llega a cero, el sistema calcula en cada ciclo si "todavía hay margen"  para dejarlo encendido sin pasarse del objetivo diario, apagándolo tan pronto ese margen se agota. En la práctica, esto produce que el foco permanezca encendido de forma prácticamente continua mientras el aporte solar es bajo, y que reduzca su tiempo de encendido de forma progresiva a medida que la contribución de luz natural acumulada a lo largo del día se acerca al objetivo.
+
+\subsection{Disposición física de las luminarias}
+\label{sec:disposicion_luminarias}
+Para la instalación del panel LED de espectro completo se utilizaron tornillos ojo (armellas) montados sobre la viga transversal superior de la estructura. El panel se suspendió mediante eslingas de acero, permitiendo regular manualmente la altura de las luces respecto al ápice de las plantas. Esta posibilidad de ajuste vertical facilita el control directo de la densidad de flujo fotónico ($PPFD$) y de la radiación térmica sobre el cultivo.
+\begin{figure}[H]
+    \centering
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/luminaria.jpeg}
+    \caption{Disposición de las luminarias.}
+    \Fuente{propia.}
+\end{figure}
+%-----------RIEGO----------------------------
+\section{Sistema de riego}
+\label{sec:circuito_riego}
+\subsection{Disposición física del sistema de riego}
+\label{sec:sistema_irrigacion}
+El sistema de irrigación opera en circuito cerrado: la manguera de succión de la electrobomba (Sección \ref{subsec:bomba_riego}) toma agua desde el depósito de reserva, el mismo punto donde desemboca el agua filtrada y recolectada por el sistema de drenaje (Sección \ref{subsubsec:impermeabilizacion_drenaje}), recirculando así el recurso hídrico no absorbido por el sustrato. A la salida de la bomba, una única línea alimenta dos válvulas solenoides --una por maceta-- que operan de forma excluyente, habilitando el paso de agua hacia una sola maceta a la vez. Cada válvula da paso a una manguera dispuesta sobre el eje central de su maceta correspondiente, sobre la cual se insertan los cuatro goteros autocompensados descriptos en la Sección \ref{subsec:goteros}, logrando una distribución homogénea del recurso hídrico en la zona radicular.
 
 \begin{figure}[H]
     \centering
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Imagenes/sistemariego.jpeg}
+        \includegraphics[height=6cm, width=\textwidth, keepaspectratio]{Imagenes/valvsolenoide.jpeg}
     \end{minipage}
     \hfill
     \begin{minipage}{0.48\textwidth}
         \centering
-        \includegraphics[width=\textwidth]{Imagenes/bomba.jpeg}
+        \includegraphics[height=6cm, width=\textwidth, keepaspectratio]{Imagenes/bomba.jpeg}
     \end{minipage}
     \caption{Sistema de riego.}
     \Fuente{propia.}
@@ -108,12 +785,12 @@ El subsistema de irrigación opera mediante un esquema de distribución selectiv
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/valvsolenoide.jpeg}
-    \caption{Válvula solenoide.}
+    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/sistemariego.jpeg}
+    \caption{Sistema de riego: manguera con goteros.}
     \Fuente{propia.}
 \end{figure}
 
-Una vez que el sustrato absorbe la humedad necesaria para la nutrición y desarrollo vegetal, el excedente no retenido inicia un proceso de percolación natural. Gracias al diseño en pendiente y al sistema de drenaje inferior de cada módulo, el agua no aprovechada cae por acción de la gravedad hacia un depósito de recolección ubicado en la base de la estructura. Este circuito cerrado permite recircular el efluente hídrico hacia el tanque principal mediante una red de colectores, maximizando la eficiencia en el uso del agua y reduciendo de forma significativa el consumo operativo del prototipo.
+Una vez que el sustrato absorbe la humedad necesaria para la nutrición y desarrollo vegetal, el excedente no retenido inicia un proceso de filtrado natural. Gracias al diseño en pendiente y al sistema de drenaje inferior de cada módulo, el agua no aprovechada cae por acción de la gravedad hacia un depósito de recolección ubicado en la base de la estructura. Este circuito cerrado permite recircular el efluente hídrico hacia el tanque principal mediante una red de colectores, maximizando la eficiencia en el uso del agua y reduciendo de forma significativa el consumo operativo del prototipo.
 
 \begin{figure}[H]
     \centering
@@ -131,12 +808,96 @@ Una vez que el sustrato absorbe la humedad necesaria para la nutrición y desarr
     \label{fig:recoleccion_agua}
 \end{figure}
 
-\PENDIENTE{Valentín: acá van los cálculos de riego --- caudal de goteros/bomba, volumen objetivo de agua por maceta y ciclo de cultivo, y el cálculo del tiempo de inyección hídrica (duración de apertura de la electroválvula) necesario para alcanzar ese volumen}
+\subsection{Dimensionamiento hidráulico del sistema de riego}
+\label{subsec:dimensionamiento_riego}
+
+En este sistema cada maceta cuenta con cuatro goteros (Sección \ref{subsec:goteros}) alimentados simultáneamente por la misma línea, por lo que el caudal efectivo que debe considerarse para el dimensionamiento es la suma de los cuatro emisores en paralelo. Para el rango de ajuste individual de cada gotero (10 a \SI{80}{\liter\per\hour}), el caudal combinado de la maceta se ubica entre:
+\begin{equation}
+\label{eq:caudal_total_min}
+Q_{\text{total, min}} = 4 \times 10\ \frac{\text{L}}{\text{h}} = 40\ \frac{\text{L}}{\text{h}}
+\end{equation}
+
+\begin{equation}
+\label{eq:caudal_total_max}
+Q_{\text{total, max}} = 4 \times 80\ \frac{\text{L}}{\text{h}} = 320\ \frac{\text{L}}{\text{h}}
+\end{equation}
+
+Este caudal combinado debe contrastarse con la capacidad de la bomba (Sección \ref{subsec:bomba_riego}), cuyo caudal máximo de \SI{3.8}{\liter\per\minute} equivale a \SI{228}{\liter\per\hour}. Se observa que $Q_{total,\ max} = \SI{320}{\liter\per\hour}$ \textbf{supera} la capacidad máxima de la bomba (\SI{228}{\liter\per\hour}): si los cuatro goteros se calibraran simultáneamente cerca de su tope de ajuste, la demanda combinada excedería lo que la bomba puede suministrar, y sería esta última (y no el ajuste nominal de los goteros) la que terminaría limitando el caudal real entregado. En consecuencia, el caudal máximo real del sistema no es $Q_{total,\ max}$, sino el caudal máximo de la bomba:
+
+\begin{equation}
+    Q_{real,\ max} = \min(Q_{total,\ max},\ Q_{bomba}) = \SI{228}{\liter\per\hour}
+    \label{eq:caudal_real_max}
+\end{equation}
+
+Para la duración de riego adoptada empíricamente (60 segundos, Sección \ref{subsec:algoritmo_control_riego}), el volumen de agua entregado a la maceta se ubica entonces entre:
+
+\begin{equation}
+\label{eq:volumen_riego_min}
+V_{\text{min}} = 40\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}}
+\approx 0{,}667\ \text{L}
+\end{equation}
+
+\begin{equation}
+\label{eq:volumen_riego_max}
+V_{\text{max}} = 228\ \frac{\text{L}}{\text{h}} \times \frac{60\ \text{s}}{3600\ \text{s/h}}
+= 3{,}8\ \text{L}
+\end{equation}
+
+\noindent donde $V_{max}$ resulta de aplicar el caudal límite de la bomba (Ecuación~\ref{eq:caudal_real_max}) en lugar del máximo nominal de los goteros. Expresado como lámina de agua equivalente sobre la superficie de la maceta ($\SI{50}{\centi\meter} \times \SI{100}{\centi\meter} = \SI{0.5}{\meter\squared}$), y empleando la equivalencia $\SI{1}{\liter\per\meter\squared} = \SI{1}{\milli\meter}$ de lámina:
+
+\begin{equation}
+\label{eq:Lamina_riego_min}
+L_{\text{min}} = \frac{0{,}667\ \text{L}}{0{,}5\ \text{m}^2}
+\approx \SI{1.33}{\milli\meter}
+\end{equation}
+
+\begin{equation}
+\label{eq:Lamina_riego_max}
+L_{\text{max}} = \frac{3{,}8\ \text{L}}{0{,}5\ \text{m}^2}
+= \SI{7.6}{\milli\meter}
+\end{equation}
+
+Este rango de lámina aplicada (entre 1,3 mm y 7,6 mm por evento de riego, según la calibración elegida para los goteros) es consistente con una irrigación superficial ligera --adecuada para el objetivo de mantener húmeda la superficie del sustrato sin saturar el perfil completo (Sección \ref{subsec:calibracion_higrometro})-- y resulta coherente con la recuperación de humedad observada empíricamente (80\% a 90\%) tras cada evento de 60 segundos. La disposición de los cuatro goteros a lo largo del eje central de la maceta, subdividiendo la superficie total en cuatro zonas de aproximadamente $\SI{0.125}{\meter\squared}$ cada una, es la que garantiza que la lámina calculada se distribuya de forma razonablemente homogénea en todo el ancho y largo del contenedor, y no se concentre en un único punto de la superficie.
+
+\subsection{Calibración del sensor de humedad de sustrato}
+\label{subsec:calibracion_higrometro}
+
+A diferencia del contenido volumétrico de agua ($\theta$) definido en el Marco Teórico (Ecuación \ref{eq:vwc}), que requiere conocer el volumen de agua respecto del volumen total del sustrato, el sistema no mide $\theta$ de forma absoluta, sino que utiliza una escala relativa obtenida por calibración directa del sensor capacitivo entre dos extremos físicos de referencia: sustrato en su condición más seca observada ($raw_{seco} = 250$) y sustrato en su condición de saturación extrema o encharcamiento (barro, $raw_{mojado} = 60$). La conversión de la lectura cruda del ADC a un porcentaje de humedad relativa se realiza por interpolación lineal entre ambos extremos:
+
+\begin{equation}
+    H_{\%} = \frac{raw - raw_{seco}}{raw_{mojado} - raw_{seco}} \times 100
+    \label{eq:calibracion_higrometro}
+\end{equation}
+
+acotado al rango $[0, 100]$. Dado que $raw_{mojado} < raw_{seco}$, la Ecuación~\ref{eq:calibracion_higrometro} refleja que una lectura cruda menor corresponde a un sustrato más húmedo.
+
+El umbral de disparo del riego se fijó en $raw_{umbral} = 150$, equivalente, según la Ecuación~\ref{eq:calibracion_higrometro}, a $H_{\%} \approx 52{,}6\%$. Este valor se determinó empíricamente, observando que por debajo de esa humedad relativa la superficie del sustrato, que es la zona más crítica a mantener húmeda, dado que la profundidad radicular efectiva no supera los 20 cm sobre los 30 cm de altura total de la maceta, comenzaba a manifestar signos visibles de sequedad. Tras cada evento de riego, las lecturas del sensor se recuperaban típicamente a valores de entre el 80\% y el 90\% de humedad relativa, definiendo así el rango de operación normal del sistema entre un piso de disparo ($\approx 52{,}6\%$) y un techo de recuperación ($80\text{-}90\%$).
+
+\subsection{Algoritmo de control de riego}
+\label{subsec:algoritmo_control_riego}
+
+A diferencia de la luz (Sección \ref{subsec:algoritmo_control_dli}) y la ventilación, que incorporan explícitamente una banda de histéresis o un temporizador de permanencia mínima en su lógica de decisión, el riego se gobierna mediante un único umbral de comparación sobre la lectura suavizada de humedad de sustrato:
+
+\begin{equation}
+    riego_{pendiente} =
+    \begin{cases}
+        \text{verdadero} & \text{si } raw_{promedio} \geq raw_{umbral} \\
+        \text{falso} & \text{en caso contrario}
+    \end{cases}
+    \label{eq:decision_riego}
+\end{equation}
+
+Previamente a esta comparación, la lectura se acondiciona en dos etapas de filtrado sucesivas, aplicando el principio de redundancia y sobremuestreo presentado en el Marco Teórico (Secciones \ref{subsec:redundancia} y \ref{sec:control_histeresis}): en primer lugar, cada uno de los dos sensores de humedad de la maceta se promedia sobre una ventana móvil de las últimas 3 lecturas válidas; en segundo lugar, ambos valores suavizados se promedian entre sí --o se conserva el único sensor disponible en caso de falla del otro--, obteniendo así el valor $raw_{promedio}$ utilizado en la Ecuación~\ref{eq:decision_riego}. Adicionalmente, toda lectura cruda igual a 128 (valor que corresponde a una condición de fallo de lectura del conversor A/D) se descarta antes de ingresar a la ventana de suavizado, evitando que un dato erróneo contamine el promedio.
+
+La ausencia de una banda de histéresis explícita en esta lógica no genera en la práctica conmutaciones erráticas del actuador: el propio proceso físico de infiltración y absorción del agua por parte del sustrato constituye un fenómeno de dinámica lenta, que introduce un retardo natural de varios minutos entre la apertura de la electroválvula y la estabilización de la nueva lectura de humedad, funcionando como una histéresis implícita del sistema. Esta dinámica lenta también justifica la adopción de un intervalo de muestreo relativamente largo, establecido en \SI{30}{\minute}, ya que un período de medición significativamente menor no aportaría información relevante sobre la evolución de la humedad y podría generar decisiones de control sobre estados transitorios del sustrato.
+
+Una vez detectado el disparo, la señal $riego_{pendiente}$ es interpretada por la capa de orquestación del programa ---fuera del módulo de lógica de control--- para ejecutar la apertura de la electroválvula durante una ventana de tiempo fija de \SI{60}{\second}, valor determinado empíricamente como suficiente para recuperar la humedad del sustrato hasta el rango del \SI{80}{\percent} al \SI{90}{\percent} sin generar encharcamiento superficial.
+
 
 \section{Sistema de ventilación}
 \label{sec:sistema_ventilacion}
 
-Con el objetivo de garantizar una renovación constante de la masa de aire y evitar la formación de microclimas saturados de humedad en el dosel vegetal, se integró un sistema de ventilación forzada distribuido por niveles en la estructura vertical. La presencia de humedad relativa elevada y aire estancado favorece la acumulación de condensación sobre el filoplano (superficie foliar), creando un entorno propicio para la proliferación de hongos. Para mitigar este riesgo y favorecer la disipación térmica, se instalaron ventiladores en cada uno de los niveles de cultivo. Estos dispositivos son gestionados dinámicamente por la unidad central mediante un algoritmo de control basado en un umbral crítico de humedad relativa: cuando los sensores del nivel detectan valores superiores al límite configurado, el sistema conmuta la activación de los ventiladores correspondientes. Esta acción rompe la capa límite de humedad sobre las hojas, acelera la tasa de transpiración vegetal de forma controlada y promueve un descenso paulatino de la temperatura ambiental en el módulo.
+Con el objetivo de garantizar una renovación constante de la masa de aire y evitar la formación de microclimas saturados de humedad en el dosel vegetal, se integró un sistema de ventilación forzada distribuido por niveles en la estructura vertical. La presencia de humedad relativa elevada y aire estancado favorece la acumulación de condensación sobre las plantas, creando un entorno propicio para la proliferación de hongos. Para mitigar este riesgo y favorecer la disipación térmica, se instalaron ventiladores en cada uno de los niveles de cultivo. Estos dispositivos son gestionados dinámicamente por la unidad central mediante un algoritmo de control basado en un umbral crítico de humedad relativa: cuando los sensores del nivel detectan valores superiores al límite configurado, el sistema conmuta la activación de los ventiladores correspondientes. Esta acción rompe la capa límite de humedad sobre las hojas, acelera la tasa de transpiración vegetal de forma controlada y promueve un descenso paulatino de la temperatura ambiental en el módulo.
 
 \begin{figure}[H]
     \centering
@@ -145,12 +906,64 @@ Con el objetivo de garantizar una renovación constante de la masa de aire y evi
     \Fuente{propia.}
 \end{figure}
 
-\PENDIENTE{Valentín: acá va la justificación numérica del umbral de humedad relativa elegido para disparar la ventilación (por qué ese \% y no otro, en base a los rangos de HR de rúcula/espinaca del Marco Teórico)}
+\subsection{Dimensionamiento del caudal de ventilación}
+\label{subsec:dimensionamiento_ventilacion}
+
+El volumen de aire a renovar corresponde al espacio comprendido entre la superficie del sustrato y el techo de cada nivel de cultivo, de dimensiones aproximadas $\SI{65}{\centi\meter}$ (alto) $\times\ \SI{50}{\centi\meter}$ (ancho) $\times\ \SI{100}{\centi\meter}$ (largo):
+
+\begin{equation}
+V_{\text{aire}} = 0{,}65 \times 0{,}5 \times 1{,}0 = \SI{0.325}{\meter\cubed}
+\label{eq:volumen_aire}
+\end{equation}
+
+Los ventiladores empleados son unidades axiales de 12 V, estándar de PC, de dimensiones $\SI{120}{\milli\meter} \times \SI{120}{\milli\meter} \times \SI{38}{\milli\meter}$, con un consumo de $0{,}6$ A y una velocidad de giro de $2400$ RPM. Según la especificación del proveedor, presentan un caudal nominal de $80$ CFM, equivalente aproximadamente a $\SI{135.9}{\meter\cubed\per\hour}$ \cite{ventilador_datasheet}.
+
+A partir de este caudal nominal, el tiempo teórico necesario para producir una renovación del volumen de aire considerado es:
+
+\begin{equation}
+t_{\text{renovacion}} = \frac{V_{\text{aire}}}{Q_{\text{ventilador}}}
+= \frac{0{,}325\ \text{m}^3}{135{,}9\ \text{m}^3/\text{h}}
+\approx \SI{8.6}{\second}
+\label{eq:tiempo_renovacion}
+\end{equation}
+
+Este resultado indica que, durante el bloque mínimo de activación de \SI{120}{\second} definido en el algoritmo de control (Sección \ref{subsec:algoritmo_control_ventilacion}), el caudal nominal del ventilador equivale aproximadamente a 14 renovaciones del volumen de aire considerado ($120\ \text{s}/8{,}6\ \text{s} \approx 14$). Este cálculo representa una estimación teórica basada en el caudal nominal del ventilador y no contempla pérdidas de carga, recirculaciones ni otras condiciones propias de la instalación real. No obstante, proporciona un margen considerable respecto del tiempo necesario para romper la capa limite de humedad estancada sobre el follaje.
+
+\subsection{Umbrales de disparo}
+\label{subsec:umbral_ventilacion}
+
+Los umbrales configurados en el sistema son $\SI{30}{\celsius}$ para la temperatura ambiente y $\SI{80}{\percent}$ para la humedad relativa ambiente. Ambos valores se fijaron con un margen deliberado por encima de las condiciones óptimas de los cultivos (Sección \ref{sec:seleccion_cultivos}), y no como límites estrictamente coincidentes con las condiciones ideales, con el fin de evitar activaciones innecesarias del ventilador ante fluctuaciones menores del microclima.
+
+En el caso de la temperatura, la rúcula y la espinaca presentan temperaturas objetivo de aproximadamente $\SI{24}{\celsius}$ y $\SI{25}{\celsius}$, respectivamente. Temperaturas significativamente superiores pueden afectar el desarrollo y la calidad de ambos cultivos, favoreciendo fenómenos como el espigado en la rúcula y la pérdida de calidad de hoja en la espinaca. En este contexto, el umbral de $\SI{30}{\celsius}$ representa un margen de aproximadamente $5$ a $\SI{6}{\celsius}$ respecto de las temperaturas objetivo, suficiente para evitar el disparo de la ventilación ante variaciones normales del ambiente, pero sin permitir que la temperatura se aleje excesivamente del rango deseado antes de intervenir.
+
+En el caso de la humedad relativa, el umbral de $\SI{80}{\percent}$ se relaciona directamente con el riesgo fitosanitario identificado para la espinaca (Sección \ref{sec:seleccion_cultivos}). La combinación de un sustrato húmedo y un ambiente con elevada humedad relativa y escasa circulación de aire puede favorecer la proliferación de hongos y el desarrollo de enfermedades foliares. Por este motivo, se adoptó un umbral en torno al $80\%$ como punto de disparo preventivo, buscando intervenir antes de que se consoliden condiciones de humedad excesivamente elevada en el microclima del cultivo.
+
+\subsection{Algoritmo de control de ventilación}
+\label{subsec:algoritmo_control_ventilacion}
+
+A diferencia del riego (Sección \ref{subsec:algoritmo_control_riego}), que emplea un único umbral, el control de ventilación combina dos condiciones de disparo independientes con un temporizador de permanencia mínima, aplicando directamente los conceptos de banda de histéresis temporal e histéresis por promediado presentados en el Marco Teórico (Sección \ref{sec:control_histeresis}):
+
+\begin{enumerate}
+\item \textbf{Gestión del temporizador:} si el ventilador ya se encuentra activo por una activación previa, el ciclo de control simplemente descuenta el tiempo transcurrido de un temporizador de permanencia mínima de \SI{120}{\second} y mantiene el actuador encendido mientras dicho tiempo no se haya agotado, sin evaluar ninguna otra condición. Este mecanismo es equivalente al tiempo mínimo de permanencia descripto en la Sección \ref{subsec:histeresis}, y evita apagados prematuros ante una lectura puntual que vuelva a caer por debajo de los umbrales antes de completar una renovación de aire eficaz.
+
+\item \textbf{Condición A -- exceso de temperatura (reacción inmediata):} si la lectura instantánea de temperatura supera los $\SI{30}{\celsius}$, el ventilador se activa de inmediato, sin requerir confirmación adicional, dado que un exceso térmico representa una condición potencialmente desfavorable para el cultivo.
+
+\item \textbf{Condición B -- exceso de humedad ambiente (promediado de 5 muestras):} a diferencia de la temperatura, la humedad ambiente se evalúa sobre el promedio de las últimas 5 lecturas válidas antes de disparar el ventilador. Este filtrado adicional evita que una lectura aislada y momentáneamente elevada dispare una activación innecesaria, exigiendo en cambio evidencia sostenida de humedad elevada a lo largo de varias muestras consecutivas.
+
+\item \textbf{Reinicio de memoria:} cada vez que se dispara una activación --por cualquiera de las dos condiciones-- el historial de muestras de humedad ambiente se vacía por completo, de modo que, al apagarse el ventilador, el sistema vuelve a acumular evidencia desde cero antes de poder disparar nuevamente por la condición de humedad promediada.
+
+\end{enumerate}
+
+La combinación de una condición de reacción inmediata (temperatura) con otra de reacción filtrada (humedad promediada), sumada al temporizador de permanencia mínima, resulta en un comportamiento asimétrico deliberado: el sistema reacciona sin demora ante un riesgo térmico, pero exige mayor evidencia antes de intervenir por humedad, evitando así ciclos de encendido y apagado innecesariamente frecuentes ante un parámetro que, a diferencia de la temperatura, tiende a variar de forma más gradual en el microclima del cultivo.
+
+En conjunto, el dimensionamiento del sistema de ventilación y la estrategia de control se diseñaron de manera complementaria: mientras que el caudal disponible permite una renovación rápida del volumen de aire considerado, la lógica de control limita la frecuencia y duración de las activaciones mediante umbrales diferenciados, promediado de humedad y un tiempo mínimo de permanencia. De este modo, se busca alcanzar una respuesta suficiente frente a condiciones térmicas o higrométricas desfavorables sin introducir un funcionamiento excesivamente frecuente del actuador.
 
 \section{Esquemas de conexión}
 \label{sec:esquemas_conexion}
 
-A continuación, se detalla el esquema de conexionado adoptado para el prototipo, describiendo la asignación de señales para cada puerto de propósito general de la unidad central. Por criterios de diseño orientados a la robustez electromecánica, se proyectó una interfaz intermedia mediante una placa de circuito impreso perforada de uso general, la cual actúa como un nodo centralizador de conexiones. Esta implementación previene la necesidad de efectuar uniones soldadas directas sobre la computadora de placa única, resguardando la integridad física de sus terminales y flexibilizando la modularidad del sistema ante tareas de mantenimiento o sustitución de periféricos. En el diagrama esquemático, la denominación de "Componentes I2C" identifica el nodo de acoplamiento para el bus de datos compartido, donde coexisten bajo el mismo direccionamiento el sensor de iluminancia y el módulo de conversión analógico-digital, el cual gestiona de forma dedicada los canales de los higrómetros capacitivos de suelo.
+A continuación, se presenta el esquema de conexionado adoptado para el prototipo, en el cual se detalla la asignación de señales a los distintos puertos de propósito general (GPIO) de la Raspberry Pi. Con el objetivo de mejorar la organizacion y facilitar el mantenimiento del sistema, se implementó una interfaz intermedia mediante una placa de circuito impreso perforada de uso general, utilizada como punto centralizador de las conexiones entre la unidad de procesamiento y los distintos periféricos. Esta disposición evita realizar conexiones y uniones soldadas directamente sobre la Raspberry Pi, reduciendo el riesgo de daños en sus terminales y facilitando la incorporación, sustitución o desconexión de los distintos componentes.
+
+En el diagrama, la denominación ``Componentes I2C'' corresponde al bus de comunicación utilizado para interconectar los dispositivos que emplean este protocolo. Sobre este bus se encuentran conectados el sensor de iluminancia y el módulo de conversión analógico-digital (ADC), encargado de realizar la adquisición de las señales provenientes de los higrómetros capacitivos de humedad del suelo mediante sus distintos canales de entrada.
 
 \begin{figure}[H]
     \centering
@@ -161,23 +974,267 @@ A continuación, se detalla el esquema de conexionado adoptado para el prototipo
 
 \begin{figure}[H]
     \centering
-    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/placaperforada.jpeg}
-    \caption{Placa perforada de uso general.}
+
+    % Placa perforada
+    \includegraphics[height=8.5cm, width=\textwidth, keepaspectratio]{Imagenes/placaperforada.jpeg}
+
+    \vspace{0.3cm}
+
+    \parbox{\textwidth}{%
+        \centering
+        Diagrama de conexión de la placa mostrada en la imagen anterior:
+    }
+
+    \vspace{0.2cm}
+
+    % Diagramas de conexionado
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=8.5cm, width=\textwidth, keepaspectratio]{Imagenes/ProtoCables1.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[height=8.5cm, width=\textwidth, keepaspectratio]{Imagenes/protocables2.jpeg}
+    \end{minipage}
+
+    \caption{Placa perforada y diagrama de conexionado de los cables por color.}
     \Fuente{propia.}
+    \label{fig:conexionado_placa}
 \end{figure}
 
-Diagrama de conexión de la placa mostrada en la imagen anterior:
+% ================================================================
+% CAPÍTULO 3 — SOFTWARE Y SISTEMAS DE CONTROL
+% ================================================================
+\chapter{Implementación y Despliegue del Software de Control}
+\label{cha:software_control}
+
+\textit{Este capítulo describe la arquitectura del software de control local, la lógica de las rutinas de control implementadas, su integración con la plataforma de telemetría en la nube ThingSpeak, y la interfaz de usuario del sistema.}
+
+Este capítulo describe la arquitectura del software de control local, la lógica de las rutinas de control implementadas, su integración con la plataforma de telemetría en la nube ThingSpeak, y la interfaz de usuario del sistema.
+
+\section{Código}
+\label{sec:codigo}
+
+\subsection{Sistema operativo y lenguaje de desarrollo}
+\label{subsec:so_lenguaje}
+
+El software de control se ejecuta sobre Raspberry Pi OS (anteriormente denominado Raspbian), la distribución oficial de Linux basada en Debian mantenida por la Raspberry Pi Foundation para las computadoras de placa única de esta familia. La elección de este sistema operativo no fue una decisión de diseño independiente, sino una consecuencia directa de la selección de la Raspberry Pi 4 Model B como unidad de procesamiento central (Sección \ref{sec:raspberry_pi}): al tratarse de la distribución de referencia del fabricante, garantiza la compatibilidad completa con los periféricos de hardware embebido (GPIO, bus I2C) a través de sus bibliotecas oficiales, sin requerir capas de compatibilidad adicionales.
+
+Todo el software desarrollado --la lógica de adquisición y control, el registro de datos, la integración con la nube y la interfaz web de configuración-- se implementó íntegramente en Python. Esta elección aprovecha directamente las ventajas de concurrencia y gestión de librerías discutidas en la Sección \ref{sec:raspberry_pi}: Python cuenta con soporte oficial de primer nivel en Raspberry Pi OS, y dispone de bibliotecas maduras tanto para el acceso a hardware embebido (a través del proyecto Adafruit Blinka, que expone una capa de compatibilidad CircuitPython sobre los pines GPIO y el bus I2C de la Raspberry Pi) como para el desarrollo de servicios web (mediante el microframework Flask, utilizado para la interfaz de usuario de la Sección \ref{sec:interfaz_usuario}).
+
+\subsection{Organización modular del software}
+\label{subsec:organizacion_modular_real}
+
+Siguiendo el principio de separación de responsabilidades presentado en el Marco Teórico (Sección \ref{sec:modularidad}), el software del prototipo se organiza en seis módulos de Python, cada uno responsable de un único bloque funcional:
+
+\begin{itemize}
+    \item \texttt{models.py}: Define, mediante clases de datos (\textit{dataclasses}), la estructura de la configuración del sistema (\texttt{SystemConfig}, \texttt{MacetaConfig}, y las configuraciones anidadas de cada sensor y actuador) y la estructura del estado en tiempo de ejecución (\texttt{MacetaEstado}), sin contener ninguna lógica propia. Es la representación del estado descripta de forma genérica en el Marco Teórico.
+    \item \texttt{config\_loader.py}: Implementa la configuración externalizada (Sección \ref{subsec:config_externalizada_real}), leyendo el archivo de configuración y construyendo las estructuras de \texttt{models.py} a partir de él, además de validar su consistencia antes de iniciar el sistema.
+    \item \texttt{hardware.py}: Establece la capa de abstracción de hardware (Sección \ref{subsec:capa_hardware_real}), traduciendo operaciones de alto nivel (``leer humedad de suelo'', ``encender luz'') a las operaciones concretas de bus I2C y de pines GPIO.
+    \item \texttt{control.py}: Contiene la lógica de control propiamente dicha --las funciones de decisión de riego, ventilación y DLI presentadas en el Capítulo \ref{cha:hardware_control}--, sin conocer ningún detalle de cómo se leen los sensores ni de cómo se accionan los actuadores.
+    \item \texttt{main.py}: Se ocupa de la orquestación del sistema (Sección \ref{subsec:ciclo_orquestacion}): el ciclo principal que en cada iteración coordina la lectura de sensores, la invocación de la lógica de control, la actuación sobre el hardware, el registro persistente en CSV y el envío de telemetría a ThingSpeak.
+    \item \texttt{web.py}: Implementa la interfaz de salida de configuración remota (Sección \ref{sec:interfaz_usuario}), exponiendo un servidor web que permite consultar y modificar los parámetros del sistema sin necesidad de acceso directo a la Raspberry Pi.
+\end{itemize}
+
+Esta organización refleja de forma directa los seis bloques de separación de responsabilidades enumerados en el Marco Teórico: configuración (\texttt{config\_loader.py}), representación del estado (\texttt{models.py}), abstracción de hardware (\texttt{hardware.py}), lógica de control (\texttt{control.py}), orquestación (\texttt{main.py}) e interfaces de salida (\texttt{web.py}, junto con las rutinas de registro CSV y telemetría dentro de \texttt{main.py}).
+
+% Recuerda agregar esta línea en tu preámbulo (antes de \begin{document}):
+% \usepackage{float}
+
+La Figura \ref{fig:arquitectura_control} muestra las dependencias de importación reales entre los cuatro módulos que conforman el proceso de control (\texttt{indoor\_main.service}, Sección \ref{subsec:systemd}), junto con las funciones y clases principales que expone cada uno.
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/ProtoCables1.png}
-    \caption{Esquema de placa de pruebas simplificado con color de cables.}
-    \Fuente{propia.}
+\centering
+\begin{tikzpicture}[
+    modulo/.style={rectangle, draw=black, rounded corners, align=left, font=\footnotesize, text width=4cm, inner sep=6pt},
+    flujo/.style={-latex, thick},
+]
+
+% Aumentamos el valor Y para separar verticalmente (de 7.2 a 11.5)
+\node (models) [modulo, fill=blue!8] at (3.6,11.5) {\textbf{models.py}\\ \textit{Dataclasses:} SystemConfig, MacetaConfig, MacetaEstado, GlobalConfig};
+
+% Aumentamos el valor Y (de 5.2 a 8.0)
+\node (configloader) [modulo, fill=blue!8] at (3.6,8.0) {\textbf{config\_loader.py}\\ cargar\_configuracion()\\ \_validar\_configuracion()};
+
+% Lo movemos hacia la izquierda (X de 0 a -2) y ajustamos Y
+\node (hardware) [modulo, fill=orange!10, text width=3.9cm] at (-2,3.8) {\textbf{hardware.py}\\ \textit{HardwareManager:}\\ leer\_humedad\_raw()\\ leer\_lux(), leer\_dht()\\ set\_luz\_maceta()\\ set\_valvula\_maceta()\\ set\_ventilador\_maceta()};
+
+% Lo movemos hacia la derecha (X de 7.2 a 9.2) y ajustamos Y
+\node (control) [modulo, fill=orange!10, text width=3.9cm] at (9.2,3.8) {\textbf{control.py}\\ procesar\_maceta()\\ calcular\_y\_controlar\_dli()\\ decidir\_riego()\\ decidir\_ventilacion()};
+
+% Este se mantiene como base en Y=0
+\node (main) [modulo, fill=green!10] at (3.6,0) {\textbf{main.py}\\ main(): ciclo principal\\ ejecutar\_riego\_seguro()\\ guardar\_csv(), subir\_thingspeak()};
+
+% Las conexiones se mantienen iguales, TikZ las redibujará con las nuevas distancias
+\draw [flujo] (models) -- (configloader);
+\draw [flujo] (models.south) -| (hardware.north);
+\draw [flujo] (models.south) -| (control.north);
+\draw [flujo] (configloader) -- (main);
+\draw [flujo] (hardware) |- (main.west);
+\draw [flujo] (control) |- (main.east);
+
+\end{tikzpicture}
+\caption{Dependencias de importación entre los módulos del proceso de control (\texttt{indoor\_main.service}). Todas las flechas representan relaciones de código (\textit{import}): \texttt{main.py} depende de los tres módulos restantes, que a su vez comparten las estructuras de datos definidas en \texttt{models.py}.}
+\label{fig:arquitectura_control}
+\end{figure}
+
+Como contrapunto, la Figura \ref{fig:arquitectura_web} muestra que el proceso de configuración web (\texttt{indoor\_web.service}) --detallado en la Sección \ref{sec:interfaz_usuario}-- no importa ni depende de ningún código de los módulos anteriores: es un proceso de Python completamente independiente, que solo comparte con el proceso de control el archivo \texttt{config.toml} en disco. Esta ausencia deliberada de acoplamiento por código es consistente con la decisión de ejecutar ambos procesos como servicios de \texttt{systemd} separados y sin dependencias de arranque explícitas entre sí (Sección \ref{subsec:systemd}).
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+    modulo/.style={rectangle, draw=black, rounded corners, align=left, font=\footnotesize, text width=4cm, inner sep=6pt},
+    archivo/.style={rectangle, draw=black, dashed, rounded corners, align=center, font=\footnotesize, fill=gray!10, text width=2.2cm, inner sep=6pt},
+    servicio/.style={rectangle, draw=black, dotted, rounded corners, align=center, font=\scriptsize, fill=yellow!10, text width=2.8cm, inner sep=5pt},
+    flujoarch/.style={-latex, dashed, thick, gray!50!black},
+    flujo/.style={-latex, thick},
+]
+
+\node (mainproc) [servicio, fill=green!10] at (-0.6,2.6) {Proceso de control\\ (\texttt{indoor\_main.service})};
+
+\node (toml) [archivo] at (4.0,2.6) {config.toml};
+
+\node (web) [modulo, fill=purple!8] at (8.6,2.6) {\textbf{web.py}\\ Flask app\\ index() [GET/POST]};
+
+\node (ngrok) [servicio] at (8.6,5.2) {\texttt{ngrok.service}\\ (túnel inverso)};
+
+\node (template) [modulo, fill=purple!8] at (8.6,0.0) {\textbf{templates/index.html}\\ Formulario (Jinja2) +\\ gráficos ThingSpeak embebidos};
+
+\draw [flujoarch] (mainproc.east) -- node[above,font=\tiny,align=center]{escribe\\ DLI/estado} (toml.west);
+\draw [flujoarch] (toml.east) -- node[above,font=\tiny,align=center]{lee y\\ escribe} (web.west);
+\draw [flujoarch] (ngrok.south) -- node[right,font=\tiny]{expone puerto 5000} (web.north);
+\draw [flujo] (web.south) -- node[right,font=\tiny]{renderiza} (template.north);
+
+\end{tikzpicture}
+\caption{Relación entre el proceso de control y el proceso de configuración web (\texttt{indoor\_web.service}). A diferencia de la Figura \ref{fig:arquitectura_control}, aquí no existe ninguna dependencia de código Python entre ambos procesos: la única relación es el archivo \texttt{config.toml} compartido en disco (flechas punteadas), que cada proceso lee y/o escribe de forma independiente. El servicio \texttt{ngrok.service} tampoco depende del código de \texttt{web.py}; únicamente reenvía tráfico de red hacia el puerto que este último expone.}
+\label{fig:arquitectura_web}
+\end{figure}
+
+\subsection{Configuración externalizada}
+\label{subsec:config_externalizada_real}
+
+Todos los parámetros ajustables del sistema --umbrales de control, factores de luminaria, direcciones I2C, asignación de pines GPIO, credenciales de ThingSpeak, entre otros-- se externalizan en un único archivo de configuración en formato TOML (\texttt{config.toml}), aplicando directamente el patrón de configuración externalizada descripto en el Marco Teórico (Sección \ref{sec:config_persistencia}). A modo ilustrativo, la configuración de una maceta incluye:
+
+\begin{lstlisting}[title={Ejemplo de configuración para una maceta (config.toml)}]
+[macetas.maceta1]
+umbral_humedad_suelo_raw = 150
+umbral_humedad_ambiente_pct = 80.0
+umbral_temperatura_c = 30.0
+tiempo_riego_seg = 60.0
+hora_inicio_dia = 10
+hora_fin_dia = 22
+dli_objetivo = 15.0
+lux_foco = 6500
+factor_luminaria = 0.0887
+factor_luminaria_ambiente = 0.0185
+\end{lstlisting}
+
+El módulo \texttt{config\_loader.py} no se limita a parsear este archivo: antes de que el sistema comience a operar, ejecuta un conjunto de validaciones de consistencia sobre la configuración cargada, entre ellas: que los umbrales porcentuales se encuentren dentro del rango físicamente válido (0 a 100), que no existan direcciones I2C repetidas entre distintos conversores A/D, y que no haya dos actuadores o sensores distintos asignados al mismo pin GPIO. Esta validación temprana evita que un error de tipeo en el archivo de configuración --por ejemplo, dos actuadores compartiendo accidentalmente el mismo GPIO-- se manifieste recién en tiempo de ejecución como una falla de hardware difícil de diagnosticar.
+
+\subsection{Capa de abstracción de hardware}
+\label{subsec:capa_hardware_real}
+
+La clase \texttt{HardwareManager} centraliza todo el acceso físico a sensores y actuadores, exponiendo hacia el resto del sistema métodos de alto nivel (\texttt{leer\_humedad\_raw}, \texttt{leer\_lux}, \texttt{leer\_dht}, \texttt{set\_luz\_maceta}, \texttt{set\allowbreak\_valvula\allowbreak\_maceta}, \texttt{set\allowbreak\_ventilador\allowbreak\_maceta}, entre otros) que ocultan por completo los detalles de bus I2C y de numeración de pines GPIO al módulo de control. Dos aspectos de su implementación aplican directamente principios ya presentados en el Marco Teórico:
+
+En primer lugar, la lectura de humedad de sustrato (\texttt{leer\_humedad\_raw}) toma una primera lectura de descarte antes de comenzar el muestreo real, y luego promedia 5 lecturas sucesivas del conversor A/D. La lectura de descarte responde directamente al comportamiento del PCF8591 descripto en el Marco Teórico (Sección \ref{subsec:conversion_ad}): tras una condición de reinicio, o al cambiar de canal, el primer byte transmitido corresponde a una conversión anterior y no al canal actualmente seleccionado, por lo que se descarta explícitamente antes de tomar las muestras válidas. El promedio de las 5 lecturas posteriores implementa, a nivel de hardware, el sobremuestreo (\textit{oversampling}) también presentado en esa misma sección.
+
+En segundo lugar, la configuración de cada pin de salida (\texttt{\_configurar\_salida}) fija el nivel lógico seguro del actuador \textit{antes} de conmutar el pin al modo salida, evitando así un pulso errático de activación en el instante en que el microcontrolador toma control del pin --una precaución directamente relacionada con la lógica de activación por nivel bajo descripta en el Marco Teórico (Sección \ref{subsec:activo_bajo}), dado que un pin flotante o mal inicializado podría interpretarse transitoriamente como un nivel bajo y disparar el relé de forma no intencional durante el arranque del sistema.
+
+\subsection{Ciclo principal de orquestación}
+\label{subsec:ciclo_orquestacion}
+
+El módulo \texttt{main.py} ejecuta un ciclo continuo que, en cada iteración, repite la siguiente secuencia para cada maceta habilitada: lectura de sensores a través de \texttt{hardware.py}, procesamiento de esas lecturas mediante \texttt{control.py} (Capítulo \ref{cha:hardware_control}), y aplicación del nuevo estado resultante sobre los actuadores de luz y ventilación. A diferencia de un ciclo de control de período fijo, el intervalo real transcurrido entre iteraciones ($\Delta t$) se mide explícitamente en cada vuelta del ciclo, y es ese valor medido --no un valor nominal supuesto-- el que se utiliza para la integración del DLI (Ecuación \ref{eq:dli_ppfd} del Marco Teórico), evitando que una eventual demora en el ciclo de lectura introduzca un error sistemático en la acumulación diaria de luz. El acumulador de DLI, además, se reinicia automáticamente a cero al detectar un cambio de día calendario.
+
+El riego se gestiona de forma diferenciada del resto de los actuadores, mediante una rutina de ejecución segura (\texttt{ejecutar\_riego\_seguro}) que introduce una secuencia de enclavamiento explícita para evitar condiciones de riego simultáneo entre macetas --consistente con la disposición física de una única bomba y línea compartida descripta en la Sección \ref{sec:circuito_riego}--:
+
+\begin{enumerate}
+    \item Un indicador global de exclusión mutua impide que se inicie un nuevo riego mientras otro ya está en curso; si el sistema está ocupado, el pedido de riego de esa maceta queda pendiente para el siguiente ciclo.
+    \item Como medida preventiva, se cierran explícitamente las válvulas de todas las macetas antes de abrir la correspondiente a la maceta objetivo, evitando que un estado inconsistente previo deje dos válvulas abiertas a la vez.
+    \item Se abre la válvula de la maceta objetivo y se introduce una breve espera antes de encender la bomba, asegurando que el camino hidráulico ya esté disponible en el momento en que comienza a circular agua a presión.
+    \item Transcurrido el tiempo de riego configurado, la bomba se apaga antes que la válvula, y se introduce una segunda espera (el tiempo de despresurización configurado) antes de cerrar la válvula, evitando que la manguera quede presurizada tras el cierre.
+\end{enumerate}
+
+Esta secuencia se ejecuta dentro de un bloque de manejo de excepciones que garantiza el apagado de la bomba y el cierre de la válvula --y la liberación del indicador de exclusión mutua-- incluso si ocurriera un error durante el riego, evitando que una falla de software derive en una válvula o una bomba que permanezcan indefinidamente activas.
+
+Al finalizar el procesamiento de todas las macetas en cada ciclo, el sistema registra el estado completo en el archivo CSV local (Sección \ref{subsubsec:adquisicion_registro}) y transmite las variables relevantes a ThingSpeak (Sección \ref{subsec:thingspeak}), antes de aguardar el intervalo de lectura configurado e iniciar el siguiente ciclo. Ante una interrupción del programa --ya sea manual o por una excepción no controlada--, un bloque de finalización garantizado apaga todos los actuadores y libera los recursos de GPIO utilizados, evitando dejar relés activados tras la detención del sistema.
+
+\subsection{Despliegue y arranque automático: gestión mediante servicios de systemd}
+\label{subsec:systemd}
+
+Para garantizar que el sistema comience a operar de forma autónoma inmediatamente después de energizar la Raspberry Pi --sin requerir que un operador inicie manualmente ningún proceso--, los tres componentes de software que deben ejecutarse de forma continua (el ciclo de control principal, el servidor web de configuración, y el túnel inverso de acceso remoto) se gestionan como servicios del sistema mediante \texttt{systemd}, el gestor de servicios estándar de Raspberry Pi OS.
+
+Se definieron tres unidades de servicio independientes: \texttt{indoor\_main.service} (ejecuta el ciclo de orquestación de \texttt{main.py}, Sección \ref{subsec:ciclo_orquestacion}), \texttt{indoor\_web.service} (ejecuta el servidor Flask de \texttt{web.py}, Sección \ref{sec:interfaz_usuario}) y \texttt{ngrok.service} (ejecuta el túnel inverso presentado en el Marco Teórico, Sección \ref{sec:tunel_inverso}). Las tres unidades comparten la misma estructura de configuración:
+
+\begin{itemize}
+    \item \texttt{After=network.target}: cada servicio espera a que la interfaz de red del sistema esté disponible antes de iniciar su ejecución. Esto es particularmente relevante para \texttt{indoor\_main.service} (que depende de la red para la telemetría hacia ThingSpeak) y para \texttt{ngrok.service} (cuyo propósito es, precisamente, establecer una conexión de red saliente), evitando que intenten operar sobre una interfaz de red todavía no inicializada durante el arranque del sistema.
+    \item \texttt{Restart=always}: ante la finalización inesperada de cualquiera de los tres procesos --por ejemplo, por una excepción no controlada--, \texttt{systemd} lo reinicia automáticamente sin intervención humana. Esta política de reinicio automático es la que materializa, a nivel de infraestructura de despliegue, el requisito de operación autónoma de la capa de procesamiento local planteado en el Marco Teórico (Sección \ref{sec:arquitectura_capas}).
+    \item \texttt{WantedBy=multi-user.target}: habilita el arranque automático de los tres servicios durante el proceso de inicio del sistema operativo, sin requerir que un usuario inicie sesión ni ejecute manualmente ningún comando.
+\end{itemize}
+
+Los tres servicios se ejecutan como procesos independientes, sin una relación de dependencia u orden de arranque explícito entre ellos --ninguno declara al otro como requisito previo--. Esta independencia es intencional: el servidor de configuración web y el túnel de acceso remoto no requieren que el ciclo de control esté corriendo para cumplir su función (permitir la consulta y edición de la configuración, y exponer el puerto del servidor web hacia internet, respectivamente), por lo que acoplar su arranque al del proceso de control introduciría una dependencia innecesaria. Como contrapartida, no existe una garantía explícita de que \texttt{ngrok.service} inicie después de que \texttt{indoor\_web.service} ya esté escuchando en su puerto; en la práctica esto no representa un problema operativo relevante, dado que la política \texttt{Restart=always} y el propio comportamiento de reconexión de ngrok absorben cualquier intento de conexión fallido en los primeros segundos posteriores al arranque.
+\subsubsection{Adquisición de Datos y Registro Histórico del Sistema}
+\label{subsubsec:adquisicion_registro}
+
+Para la persistencia, estructuración y posterior análisis de las variables físicas recopiladas durante las campañas de ensayo, el sistema implementa la generación automática de archivos con formato de valores separados por comas. Este estándar abierto de texto plano almacena la información tabulada en filas y columnas mediante delimitadores, consolidando en cada registro una estampa temporal (timestamp) de alta resolución que integra de forma simultánea tanto las lecturas de los sensores como el estado operativo de los actuadores. Por un lado, se registran las variables de entrada procesadas por la red de captación (incluyendo parámetros microclimáticos como la temperatura ambiente, la humedad relativa, la iluminancia en luxes, el DLI acumulado y la humedad volumétrica del sustrato en ambas macetas). Por otro lado, se almacenan las variables lógicas binarias que representan la activación o desactivación de los elementos de control, tales como los módulos de iluminación artificial y las bombas de riego. La elección del formato .csv se fundamenta en su baja carga computacional, su eficiencia en el consumo de memoria en el microcontrolador y su elevada interoperabilidad, lo que permite importar e integrar el dataset histórico de manera directa en entornos de procesamiento como Python para la posterior reconstrucción y análisis estadístico del comportamiento del prototipo.
+
+\subsection{Telemetría y visualización en la nube: integración con ThingSpeak}
+\label{subsec:thingspeak}
+
+Para dotar al sistema de capacidades de monitoreo remoto propias del Internet de las Cosas (IoT), se implementó la plataforma en la nube ThingSpeak. Desarrollada por MathWorks, esta herramienta permite la agregación, visualización y análisis de flujos de datos en tiempo real.
+
+La elección de esta plataforma para el prototipo se fundamenta en múltiples ventajas operativas. En primer lugar, ofrece un nivel de uso gratuito y de libre acceso para proyectos académicos y de investigación, lo que elimina los costos de licenciamiento o alquiler de servidores privados. En segundo lugar, descentraliza la visualización de los datos; al enviar las lecturas críticas del entorno radicular y ambiental a la nube, el usuario adquiere la capacidad de auditar el estado del cultivo (humedad de suelo, iluminancia, temperatura y humedad relativa) desde cualquier dispositivo con acceso a Internet, independizándose de la red de área local donde opera el sistema. Esta arquitectura sienta las bases prácticas para la interconexión de múltiples granjas inteligentes en un futuro.
+
+\subsubsection{Arquitectura de transmisión de datos}
+
+El envío de la información hacia los servidores en la nube se ejecuta de manera cíclica en cada iteración del lazo de control principal del sistema. Para garantizar una comunicación eficiente y segura, el algoritmo de telemetría se estructuró en las siguientes etapas conceptuales:
+
+\begin{itemize}
+    \item \textbf{Autenticación y acondicionamiento:} El proceso inicia con la validación de credenciales mediante una clave de interfaz (API Key) única, la cual autoriza a la placa central a publicar información en su respectivo canal. Previo a la conformación del paquete de datos, las lecturas de los sensores sufren un proceso de acondicionamiento digital; los valores decimales son truncados para eliminar fluctuaciones minúsculas no representativas, optimizando así el ancho de banda y el peso de la trama de red enviada.
+    \item \textbf{Tolerancia a fallos y operación local:} El aspecto más crítico de la rutina de transmisión es su diseño orientado a la estabilidad. La comunicación con los servidores externos incorpora mecanismos de seguridad como la limitación del tiempo máximo de espera (\textit{timeout}) y el manejo seguro de excepciones ante caídas de conexión.
+    \item \textbf{Prioridad de control:} Estas medidas garantizan que, ante una eventual pérdida de acceso a Internet o latencia en los servidores remotos, el software no colapse ni detenga su ejecución. De este modo, la unidad central prioriza el control local, pudiendo continuar ininterrumpidamente con tareas críticas como la desactivación de la bomba de riego o el encendido de la iluminación, asegurando la integridad del cultivo sin importar el estado de las telecomunicaciones.
+\end{itemize}
+
+\section{Interfaz de usuario}
+\label{sec:interfaz_usuario}
+
+La interfaz de usuario se implementó como una aplicación web mínima construida con Flask, aplicando directamente el patrón cliente-servidor descripto en el Marco Teórico (Sección \ref{sec:cliente_servidor}): el servidor --ejecutado localmente en la Raspberry Pi y expuesto remotamente mediante el túnel inverso presentado en la Sección \ref{sec:tunel_inverso}-- concentra el acceso de lectura y escritura al archivo de configuración, mientras que cualquier navegador web actúa como cliente, sin necesidad de tener instalada ninguna dependencia del proyecto.
+
+La aplicación expone una única ruta que responde a dos métodos HTTP distintos. Ante una solicitud \texttt{GET}, el servidor lee el archivo de configuración vigente y renderiza una página que muestra los valores actuales de los parámetros editables de cada maceta. Ante una solicitud \texttt{POST} --generada al enviar el formulario de la página--, el servidor toma los nuevos valores ingresados, actualiza la estructura de configuración en memoria y la vuelve a escribir por completo sobre el archivo de configuración, sobrescribiendo la versión anterior. Los parámetros expuestos para edición remota por maceta son el umbral de humedad de sustrato, el umbral de humedad ambiente, el tiempo de riego y el DLI objetivo --es decir, precisamente los parámetros de umbral y calibración discutidos en el Capítulo \ref{cha:hardware_control}--, mientras que el resto de la configuración (asignación de pines, direcciones I2C, credenciales de ThingSpeak) permanece fija y solo es editable directamente sobre el archivo.
+
+Es importante remarcar que el código Python de \texttt{web.py} (Sección \ref{subsec:organizacion_modular_real}) resuelve únicamente la lectura y escritura del archivo de configuración y el enrutamiento HTTP; la estructura visual de la página --el formulario, sus etiquetas y estilos-- está definida por completo en un archivo de plantilla HTML separado (\texttt{templates/index.html}), siguiendo el patrón de plantillas de Flask basado en el motor Jinja2. Cada campo del formulario se vincula, mediante su atributo \texttt{name}, directamente con una clave del archivo de configuración: por ejemplo, el campo correspondiente al umbral de riego de la maceta 1 se declara en el HTML con \texttt{name="m1\_suelo"}, y es precisamente esa cadena la que \texttt{web.py} utiliza para leer el valor enviado y asignarlo a \texttt{config['macetas']\allowbreak['maceta1']\allowbreak['umbral\_humedad\_suelo\_raw']} antes de reescribir el archivo TOML. De manera análoga, cada campo se inicializa con el valor vigente en la configuración mediante una expresión de plantilla Jinja2 (por ejemplo, \texttt{\{\{\allowbreak config.macetas.maceta1.\allowbreak umbral\_humedad\_suelo\_raw \}\}}), de modo que la página siempre refleja el estado real del archivo al momento de cargarse, y no un valor por defecto codificado en el HTML.
+
+Más allá del formulario de configuración, la misma página incorpora una sección de monitoreo histórico que embebe directamente, mediante elementos \texttt{iframe}, los gráficos públicos generados por la plataforma ThingSpeak (Sección \ref{subsec:thingspeak}) para cada campo de cada canal. De esta forma, la interfaz cumple una doble función en una única página: permite tanto la edición remota de los parámetros de control como la visualización de la evolución histórica de las variables de cada maceta, sin necesidad de que el usuario abandone la página ni de que el propio servidor Flask genere ningún gráfico por su cuenta --esa tarea queda completamente delegada a ThingSpeak--. Cabe destacar que toda la interfaz se resuelve mediante renderizado del lado del servidor: no se emplea código JavaScript propio ni actualización asincrónica de datos, por lo que cada cambio de valores requiere un envío de formulario y una recarga completa de la página, una decisión de diseño consistente con el criterio general de simplicidad y bajo costo de mantenimiento adoptado en el resto del proyecto.
+
+Tras procesar una solicitud de guardado exitosa, el servidor redirige al usuario nuevamente a la página principal en lugar de responder directamente sobre la misma solicitud POST, evitando así que una recarga accidental de la página por parte del usuario reenvíe el mismo formulario y sobrescriba la configuración por segunda vez. Esta misma respuesta de redirección incluye una señal que la página utiliza para mostrar una confirmación visual de que los cambios se guardaron correctamente.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Imagenes/Screenshot 2026-08-09 203535.png}
+\caption{Vista de la interfaz de control desde el navegador web en una computadora: Formulario de ajuste de parámetros (\texttt{config.toml}). Fuente: Elaboración propia.}
+\label{fig:web_parametros}
 \end{figure}
 
 \begin{figure}[H]
-    \centering
-    \includegraphics[height=10cm, width=\textwidth, keepaspectratio]{Imagenes/protocables2.jpeg}
-    \caption{Conexión que recibe cada color de cable en relación al esquema anterior.}
-    \Fuente{propia.}
+\centering
+\includegraphics[width=0.95\textwidth]{Imagenes/Screenshot 2026-08-09 203555.png}
+\caption{Vista de la interfaz de monitoreo desde el navegador web en una computadora: Gráficos históricos de humedad de suelo e intensidad de luz. Fuente: Elaboración propia.}
+\label{fig:web_historico_1}
 \end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\textwidth]{Imagenes/Screenshot 2026-08-09 203609.png}
+\caption{Vista de la interfaz de monitoreo desde el navegador web en una computadora: Gráficos históricos de temperatura y humedad ambiente, desplegada mediante el túnel inverso en \url{https://democrat-unrobed-excess.ngrok-free.dev/?success=1}. Fuente: Elaboración propia.}
+\label{fig:web_historico_2}
+\end{figure}
+
+% ================================================================
+% SÍNTESIS DEL MARCO METODOLÓGICO
+% ================================================================
+\section*{Síntesis del marco metodológico}
+\addcontentsline{toc}{section}{Síntesis del marco metodológico}
+
+A lo largo de esta parte se reconstruyó el proceso completo de diseño, construcción y puesta en marcha del prototipo, siguiendo una progresión lógica desde la planificación hasta la operación autónoma del sistema. Se partió de un plan de trabajo y una selección de instrumentos que enmarcaron temporal y técnicamente el desarrollo; sobre esa base se definieron los criterios agronómicos, el hardware de procesamiento y la arquitectura mecánica del prototipo, resolviendo mediante iteraciones sucesivas los desafíos de impermeabilización, drenaje y modularidad. A partir de esa estructura física, se implementó el hardware de control --actuadores, etapas de potencia y esquemas de conexión-- dimensionado mediante cálculos específicos para los subsistemas de riego, iluminación y ventilación. Finalmente, el software desarrollado integró estos subsistemas bajo una arquitectura modular, dotando al prototipo de capacidad de control autónomo, registro histórico y monitoreo remoto.
+
+En conjunto, este recorrido metodológico --de la planificación al diseño físico, de este al hardware, y del hardware al software-- constituye el sustento técnico sobre el cual se evaluarán, en la siguiente parte, los resultados obtenidos durante la operación del prototipo.
