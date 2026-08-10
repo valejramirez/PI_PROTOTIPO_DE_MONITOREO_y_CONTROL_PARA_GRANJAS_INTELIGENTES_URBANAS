@@ -1,0 +1,38 @@
+\section{Fundamentos de dimensionamiento físico de actuadores}
+\label{sec:dimensionamiento_fisico}
+
+Antes de que la lógica de control (Sección \ref{sec:control_histeresis}) pueda decidir \textit{cuándo} activar un actuador, es necesario determinar \textit{cuánto} de cada recurso --luz, agua, aire-- ese actuador es capaz de entregar físicamente, y si esa capacidad resulta compatible con el requerimiento del cultivo. Esta sección desarrolla los fundamentos físicos empleados para dimensionar los tres subsistemas de actuación continua del prototipo: iluminación, riego y ventilación.
+
+\subsection{Geometría de emisión luminosa: ángulo de haz y huella iluminada}
+\label{subsec:geometria_luminica}
+
+Una fuente de luz artificial no irradia de forma uniforme en todas direcciones, sino que concentra su emisión dentro de un cono definido por el \textbf{ángulo de haz} (o ángulo de emisión), una característica constructiva de la luminaria que depende de su óptica y del arreglo de los emisores LED. Cuanto menor es el ángulo de haz, más concentrada --y por lo tanto más intensa en el eje central-- resulta la iluminación, a costa de cubrir una superficie menor a una distancia dada; cuanto mayor es el ángulo, la luminaria ilumina una superficie más amplia pero con menor intensidad promedio por unidad de área \FALTACITA{ángulo de haz y distribución de intensidad luminosa de fuentes LED}.
+
+La proyección de ese cono de emisión sobre un plano de trabajo situado a una distancia $h$ de la fuente define la \textbf{huella iluminada}: la región del plano que recibe luz directa de la luminaria. Para una fuente puntual y un plano perpendicular al eje óptico, el radio de esa huella crece con la distancia de instalación siguiendo una relación trigonométrica simple, ya que el semiángulo de haz determina la pendiente de expansión lateral del cono a medida que este se aleja de la fuente. En el caso de fuentes de emisión rectangular --como un panel LED, en contraposición a una fuente puntual-- esta expansión se suma a cada lado de las dimensiones físicas propias del panel, de modo que la huella final resulta siempre mayor que el tamaño físico de la luminaria, y esa diferencia crece con la altura de instalación \FALTACITA{proyección geométrica de haces cónicos sobre un plano de trabajo}.
+
+Este principio es el que permite, en la etapa de diseño, verificar si una luminaria de dimensiones y ángulo de haz conocidos --instalada a una altura dentro de un rango admisible para el cultivo-- es capaz de cubrir la totalidad de la superficie de una unidad de cultivo determinada, o si por el contrario deja zonas sin iluminación directa en los bordes.
+
+\subsection{Hidráulica básica: caudal, caudal en paralelo y lámina de riego}
+\label{subsec:hidraulica_riego}
+
+El \textbf{caudal} ($Q$) es la magnitud que cuantifica el volumen de fluido que atraviesa una sección determinada por unidad de tiempo, y constituye la variable central para dimensionar cualquier sistema de conducción de líquidos. Se expresa habitualmente en litros por hora o litros por minuto en aplicaciones de riego de pequeña escala \FALTACITA{definición de caudal en mecánica de fluidos aplicada}.
+
+Cuando varios emisores de riego --como los goteros de una misma línea de distribución-- se alimentan simultáneamente desde una única fuente de presión, cada uno demanda su propio caudal de forma independiente, y el caudal total exigido a la fuente es la suma de los caudales individuales de todos los emisores conectados en paralelo. Esta demanda combinada debe contrastarse siempre contra la capacidad máxima de la fuente de presión (la bomba): si la suma de caudales demandados por los emisores supera lo que la bomba puede entregar, es la bomba --y no el ajuste nominal de los emisores-- la que termina limitando el caudal real que efectivamente circula por el sistema. Este principio, de aplicación general en el diseño de redes hidráulicas ramificadas, se resume en que el caudal real de un sistema alimentado por una fuente de capacidad finita es siempre el mínimo entre la demanda total de la red y la capacidad máxima de la fuente \FALTACITA{caudal en sistemas ramificados y curva característica de bombas centrífugas}.
+
+Por otro lado, para expresar el volumen de agua entregado a una superficie de cultivo de forma comparable entre distintos tamaños de maceta o bandeja, es una práctica habitual en riego expresar ese volumen como una \textbf{lámina de agua equivalente}: el espesor que tendría una capa uniforme de agua distribuida sobre toda la superficie regada, si esta no se infiltrara ni escurriera. Dado que un litro de agua distribuido uniformemente sobre un metro cuadrado de superficie equivale exactamente a un milímetro de espesor, esta conversión permite comparar directamente el volumen aplicado por un sistema de riego con los valores de lámina recomendados en la práctica agronómica para un cultivo determinado \FALTACITA{lámina de riego como magnitud estándar en agronomía}.
+
+\subsection{Caudal de aire y tasa de renovación (ACH)}
+\label{subsec:caudal_aire_ach}
+
+De forma análoga al caudal de un líquido (Sección \ref{subsec:hidraulica_riego}), el \textbf{caudal de aire} ($Q_{aire}$) cuantifica el volumen de aire que un ventilador es capaz de desplazar por unidad de tiempo, y es el dato fundamental --generalmente expresado en pies cúbicos por minuto (CFM) o en metros cúbicos por hora-- que los fabricantes de ventiladores reportan en sus especificaciones técnicas \FALTACITA{caudal nominal de ventiladores axiales y su especificación en CFM}.
+
+Para evaluar si un ventilador es adecuado para renovar el aire de un volumen cerrado determinado, se emplea la \textbf{tasa de renovación de aire} (\textit{Air Changes per Hour}, ACH), definida como la cantidad de veces que el caudal nominal del ventilador permite reemplazar completamente el volumen total de aire de un recinto en una hora:
+
+\begin{equation}
+    ACH = \frac{Q_{aire}}{V_{recinto}}
+    \label{eq:ach}
+\end{equation}
+
+\noindent donde $Q_{aire}$ es el caudal nominal del ventilador y $V_{recinto}$ es el volumen de aire a renovar. De forma equivalente, el inverso de esta relación --escalado por unidad de tiempo-- permite estimar el \textbf{tiempo teórico de renovación}: el tiempo que tardaría el ventilador en desplazar un volumen de aire equivalente al del recinto considerado, operando a su caudal nominal. Cuanto mayor es la cantidad de renovaciones logradas dentro de un bloque de activación dado, mayor es la certeza de que el aire estancado --y la humedad o el calor acumulados en él-- fue efectivamente reemplazado por aire proveniente del exterior del recinto \FALTACITA{tasa de renovación de aire (ACH) en ventilación de recintos cerrados}.
+
+Es importante notar que este cálculo constituye una estimación teórica de caudal nominal en condiciones ideales, y no contempla pérdidas de carga por fricción en conductos, recirculaciones internas del flujo de aire, ni obstrucciones propias de una instalación real, todos factores que reducen el caudal efectivamente logrado por debajo del valor nominal reportado por el fabricante.
