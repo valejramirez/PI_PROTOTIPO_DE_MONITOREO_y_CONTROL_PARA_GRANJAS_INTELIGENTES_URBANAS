@@ -1,0 +1,142 @@
+\chapter*{Lista de símbolos y convenciones}
+\addcontentsline{toc}{chapter}{Lista de símbolos y convenciones}
+A continuación se detallan los símbolos, unidades de medida, siglas y acrónimos utilizados a lo largo del presente documento.
+
+\section*{Variables físicas generales}
+\begin{description}
+    \item[$T$] Temperatura. En el contexto del ciclo de trabajo (Sección \ref{subsec:duty_cycle}), $T$ representa el período de referencia considerado, y no una temperatura.
+    \item[$HR$] Humedad relativa del aire, definida como la relación porcentual entre la presión de vapor actual y la de saturación.
+    \item[$\theta$] Contenido volumétrico de agua del sustrato ($V_w / V_T$).
+    \item[$H_{\%}$] Humedad relativa del sustrato, obtenida por calibración e interpolación lineal de la lectura cruda del sensor capacitivo (no debe confundirse con $HR$).
+    \item[$E_v$ / $LUX$] Iluminancia.
+    \item[$t$] Tiempo (variable independiente genérica).
+    \item[$\Delta t$] Intervalo de tiempo transcurrido entre ciclos de control.
+    \item[$h$] Altura de instalación (por ejemplo, de una luminaria respecto del dosel vegetal).
+\end{description}
+
+\section*{Especies químicas (fotosíntesis)}
+\begin{description}
+    \item[$H_2O$, $CO_2$, $O_2$] Agua, dióxido de carbono y oxígeno, reactivos y productos de la reacción global de la fotosíntesis.
+    \item[ATP, NADP, NADPH] Adenosín trifosfato y nicotinamida adenín dinucleótido fosfato (formas oxidada y reducida), portadores de energía de la fase lumínica de la fotosíntesis.
+\end{description}
+
+\section*{Radiación, fotoperíodo y control lumínico}
+\begin{description}
+    \item[$PPFD$] Densidad de flujo de fotones fotosintéticos (subíndices $foco$, $ambiente$, $total$ según la fuente de luz considerada).
+    \item[$DLI$] Integral diaria de luz (subíndices $objetivo$, $acumulado$, $faltante$, $potencial$ según el algoritmo de control del fotoperíodo).
+    \item[$\Delta DLI$] Incremento de DLI acumulado en un ciclo de control.
+    \item[$F_L$] Factor de luminaria, para la conversión de lux a PPFD de una fuente artificial.
+    \item[$F_{L,\text{ambiente}}$] Factor de luminaria para la radiación solar natural.
+    \item[$T_i$] Fotoperíodo, o ventana horaria habilitada para la iluminación artificial.
+    \item[$S_{foco}$] Estado discreto del actuador LED ($1$ = encendido, $0$ = apagado).
+    \item[$L_{iluminado}$] Huella iluminada proyectada sobre el plano de cultivo.
+    \item[$L_{panel}$] Dimensión física del panel LED.
+\end{description}
+
+\section*{Hidráulica y riego}
+\begin{description}
+    \item[$Q$] Caudal (subíndices $total$, $bomba$, $real$, $min$, $max$ según corresponda).
+    \item[$V$] Volumen (de agua entregado, o de aire a renovar, según el subíndice; no debe confundirse con $V$ de tensión eléctrica, ver Unidades de Medida).
+    \item[$L$] Lámina de agua equivalente aplicada sobre la superficie de cultivo.
+    \item[$raw$] Lectura cruda del conversor A/D (subíndices $seco$, $mojado$, $umbral$, $promedio$).
+    \item[$riego_{pendiente}$] Variable booleana que indica si corresponde disparar un evento de riego.
+\end{description}
+
+\section*{Ventilación}
+\begin{description}
+    \item[$V_{aire}$] Volumen de aire a renovar en un nivel de cultivo.
+    \item[$Q_{aire}$ / $Q_{ventilador}$] Caudal de aire nominal del ventilador.
+    \item[$ACH$] Tasa de renovación de aire (\textit{Air Changes per Hour}).
+    \item[$t_{renovacion}$] Tiempo teórico de renovación de aire.
+\end{description}
+
+\section*{Potencia, energía y ciclo de trabajo}
+\begin{description}
+    \item[$P$] Potencia eléctrica (subíndices $nom$, $med$, $pico$, $total$).
+    \item[$V$] Tensión eléctrica (voltaje).
+    \item[$I$] Corriente eléctrica.
+    \item[$D$] Ciclo de trabajo (\textit{duty cycle}) de un actuador.
+    \item[$t_{on}$] Tiempo de activación de un actuador dentro de un período $T$.
+\end{description}
+
+\section*{Unidades de Medida (Sistema Internacional y de uso práctico)}
+\begin{description}
+    \item[$^\circ$C] Grados Celsius (temperatura).
+    \item[\%] Porcentaje (humedad relativa del aire y del sustrato).
+    \item[lx] Lux (iluminancia).
+    \item[nm] Nanómetro (longitud de onda).
+    \item[$\mu$mol$\cdot$m$^{-2}\cdot$s$^{-1}$] Micromol por metro cuadrado por segundo (unidad de PPFD).
+    \item[mol$\cdot$m$^{-2}\cdot$día$^{-1}$] Mol por metro cuadrado por día (unidad de DLI).
+    \item[V] Voltio (tensión eléctrica).
+    \item[VCA / VCC] Voltios en corriente alterna / corriente continua.
+    \item[A] Amperio (corriente eléctrica).
+    \item[W] Vatio o Watt (potencia eléctrica).
+    \item[kWh] Kilovatio-hora (energía eléctrica consumida).
+    \item[s / min / h] Segundo, minuto y hora (tiempo).
+    \item[l/h] Litros por hora (caudal de riego).
+    \item[l/min] Litros por minuto (caudal de bomba).
+    \item[bar] Unidad de presión (presión de trabajo de la bomba).
+    \item[mm] Milímetro (lámina de riego, altura de capa de impresión 3D).
+    \item[cm] Centímetro (dimensiones estructurales).
+    \item[m$^2$] Metro cuadrado (superficie de cultivo).
+    \item[m$^3$ / m$^3$/h] Metro cúbico y metro cúbico por hora (volumen y caudal de aire).
+    \item[CFM] Pies cúbicos por minuto (\textit{Cubic Feet per Minute}, caudal nominal de ventiladores).
+    \item[rpm] Revoluciones por minuto (velocidad de giro de ventiladores).
+    \item[dinas/cm] Unidad de tensión superficial (caracterización del poliagro).
+\end{description}
+
+\section*{Siglas y Acrónimos --- Informática, redes y comunicaciones}
+\begin{description}
+    \item[API] Interfaz de Programación de Aplicaciones (\textit{Application Programming Interface}).
+    \item[CSV] Valores Separados por Comas (\textit{Comma-Separated Values}).
+    \item[GET / POST] Métodos de solicitud del protocolo HTTP.
+    \item[GPIO] Pines de Entrada/Salida de Propósito General (\textit{General Purpose Input/Output}).
+    \item[HTTP] Protocolo de Transferencia de Hipertexto (\textit{HyperText Transfer Protocol}).
+    \item[I2C] Circuito Inter-Integrado (\textit{Inter-Integrated Circuit}), bus de comunicación serie de dos hilos.
+    \item[IoT] Internet de las Cosas (\textit{Internet of Things}).
+    \item[NAT] Traducción de Direcciones de Red (\textit{Network Address Translation}).
+    \item[SO / OS] Sistema Operativo (\textit{Operating System}).
+    \item[TOML] Formato de archivo de configuración de texto plano legible (\textit{Tom's Obvious, Minimal Language}).
+    \item[Wi-Fi] Tecnología de red inalámbrica.
+\end{description}
+
+\section*{Siglas y Acrónimos --- Electrónica e instrumentación}
+\begin{description}
+    \item[AC / DC] Corriente Alterna / Corriente Continua (\textit{Alternating Current / Direct Current}).
+    \item[ADC] Convertidor Analógico a Digital (\textit{Analog-to-Digital Converter}).
+    \item[ARM] Arquitectura de procesador de conjunto de instrucciones reducido (\textit{Advanced RISC Machine}).
+    \item[IP65] Grado de protección normalizado contra ingreso de polvo y agua.
+    \item[LDR] Fotorresistencia (\textit{Light Dependent Resistor}).
+    \item[LED] Diodo Emisor de Luz (\textit{Light-Emitting Diode}).
+    \item[NTC] Termistor de Coeficiente de Temperatura Negativo (\textit{Negative Temperature Coefficient}).
+    \item[PLA] Ácido Poliláctico (\textit{Polylactic Acid}), filamento de impresión 3D.
+    \item[PVC] Policloruro de Vinilo (\textit{Polyvinyl Chloride}).
+    \item[PWM] Modulación por Ancho de Pulso (\textit{Pulse Width Modulation}).
+    \item[SAR] Registro de Aproximaciones Sucesivas (\textit{Successive Approximation Register}), arquitectura de conversor A/D.
+    \item[SBC] Computadora de Placa Única (\textit{Single Board Computer}).
+    \item[SCL] Línea de reloj del bus I2C (\textit{Serial Clock}).
+    \item[SDA] Línea de datos del bus I2C (\textit{Serial Data}).
+    \item[SSR] Relé de Estado Sólido (\textit{Solid State Relay}).
+    \item[UV] Radiación ultravioleta.
+\end{description}
+
+\section*{Siglas y Acrónimos --- Biología, agronomía y ambiente}
+\begin{description}
+    \item[C3 / C4 / CAM] Vías metabólicas de fijación del carbono en plantas.
+    \item[CEA] Agricultura en Ambiente Controlado (\textit{Controlled Environment Agriculture}).
+    \item[DLI] Integral Diaria de Luz (\textit{Daily Light Integral}).
+    \item[EC] Conductividad Eléctrica (\textit{Electrical Conductivity}).
+    \item[PAR] Radiación Fotosintéticamente Activa (\textit{Photosynthetically Active Radiation}).
+    \item[pH] Potencial de hidrógeno.
+    \item[PPFD] Densidad de Flujo de Fotones Fotosintéticos (\textit{Photosynthetic Photon Flux Density}).
+    \item[RuBisCO] Ribulosa-1,5-bisfosfato carboxilasa/oxigenasa, enzima fijadora de CO\textsubscript{2}.
+\end{description}
+
+\section*{Siglas y Acrónimos --- Institucionales y de proyecto}
+\begin{description}
+    \item[AUP] Agricultura Urbana y Periurbana.
+    \item[LIADE] Laboratorio de Investigación Aplicada y Desarrollo Electrónico.
+    \item[ODS] Objetivos de Desarrollo Sostenible.
+    \item[ONU] Organización de las Naciones Unidas.
+    \item[PPS] Práctica Profesional Supervisada.
+\end{description}
